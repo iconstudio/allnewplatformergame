@@ -2,6 +2,9 @@
   "resources": [
     {"id":{"name":"roomMain","path":"rooms/roomMain/roomMain.yy",},"order":1,},
     {"id":{"name":"oInit","path":"objects/oInit/oInit.yy",},"order":0,},
+    {"id":{"name":"Object3","path":"objects/Object3/Object3.yy",},"order":2,},
+    {"id":{"name":"Object4","path":"objects/Object4/Object4.yy",},"order":3,},
+    {"id":{"name":"Object2","path":"objects/Object2/Object2.yy",},"order":1,},
     {"id":{"name":"roomInit","path":"rooms/roomInit/roomInit.yy",},"order":0,},
   ],
   "Options": [
