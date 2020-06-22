@@ -17,7 +17,9 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oGraviton","path":"objects/oGraviton/oGraviton.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
@@ -25,7 +27,7 @@
     "path": "folders/객체.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Object2",
+  "name": "oGraviton",
   "tags": [],
   "resourceType": "GMObject",
 }
