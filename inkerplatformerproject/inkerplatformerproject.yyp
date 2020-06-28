@@ -2,9 +2,13 @@
   "resources": [
     {"id":{"name":"roomMain","path":"rooms/roomMain/roomMain.yy",},"order":1,},
     {"id":{"name":"oInit","path":"objects/oInit/oInit.yy",},"order":0,},
+    {"id":{"name":"sEnemy","path":"sprites/sEnemy/sEnemy.yy",},"order":2,},
+    {"id":{"name":"sItem","path":"sprites/sItem/sItem.yy",},"order":3,},
     {"id":{"name":"Object3","path":"objects/Object3/Object3.yy",},"order":2,},
+    {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},"order":0,},
     {"id":{"name":"Object4","path":"objects/Object4/Object4.yy",},"order":3,},
     {"id":{"name":"oGraviton","path":"objects/oGraviton/oGraviton.yy",},"order":1,},
+    {"id":{"name":"sSolid","path":"sprites/sSolid/sSolid.yy",},"order":1,},
     {"id":{"name":"Scripts","path":"scripts/Scripts/Scripts.yy",},"order":0,},
     {"id":{"name":"roomInit","path":"rooms/roomInit/roomInit.yy",},"order":0,},
   ],

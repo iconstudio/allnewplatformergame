@@ -5,6 +5,17 @@ fysix = {
 	grav: global.gravity_normal
 }
 
+step = function() {
+	if xvel != 0 {
+		
+	}
+
+	if yvel != 0 {
+		
+	}
+}
+
+
 push = function() {
 	
 }
