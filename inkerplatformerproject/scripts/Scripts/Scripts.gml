@@ -16,5 +16,5 @@ function io_check_ok() {
 }
 
 function instance_create(obj, nx, ny, nlayer) {
-	return instance_create_layer(2 < argument_count ? nx : 0, 2 < argument_count ? ny : 0, 3 < argument_count ? nlayer : layer, obj)
+	return instance_create_layer(2 < argument_count ? argument[1] : 0, 2 < argument_count ? argument[2] : 0, 3 < argument_count ? argument[3] : layer, obj)
 }
