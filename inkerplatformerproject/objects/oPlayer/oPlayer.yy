@@ -1,13 +1,16 @@
 {
   "spriteId": {
-    "name": "sSolid",
-    "path": "sprites/sSolid/sSolid.yy",
+    "name": "sPlayer",
+    "path": "sprites/sPlayer/sPlayer.yy",
   },
-  "solid": true,
+  "solid": false,
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "oGraviton",
+    "path": "objects/oGraviton/oGraviton.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -28,7 +31,7 @@
     "path": "folders/객체.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oSolid",
+  "name": "oPlayer",
   "tags": [],
   "resourceType": "GMObject",
 }
