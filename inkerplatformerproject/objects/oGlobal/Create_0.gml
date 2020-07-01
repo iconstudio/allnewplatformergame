@@ -15,15 +15,18 @@ global.io_pressed_skill_1 = false
 global.io_pressed_skill_2 = false
 global.io_pressed_skill_3 = false
 global.io_pressed_skill_4 = false
-global.io_pressed_inventory = false
 global.io_pressed_status = false
+global.io_pressed_inventory = false
 
 global.io_pressed_menu = false
 global.io_pressed_yes = false
 global.io_pressed_no = false
 global.io_pressed_back = false
 
+key_q = ord("Q")
+key_w = ord("W")
 key_e = ord("E")
+key_r = ord("R")
 key_i = ord("I")
 key_s = ord("S")
 keys_status = [ord("@"), ord("%"), ord("="), ord("`")]

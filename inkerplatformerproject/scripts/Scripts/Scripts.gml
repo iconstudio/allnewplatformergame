@@ -15,6 +15,7 @@ function io_check_ok() {
 	or keyboard_check_pressed(vk_space)
 }
 
-function instance_create(obj, nx, ny, nlayer) {
-	return instance_create_layer(2 < argument_count ? argument[1] : 0, 2 < argument_count ? argument[2] : 0, 3 < argument_count ? argument[3] : layer, obj)
+///@function instance_create(obj, [nx], [ny], [nlayer])
+function instance_create(obj) {
+	return instance_create_layer(1 < argument_count ? argument[1] : 0, 2 < argument_count ? argument[2] : 0, 3 < argument_count ? argument[3] : layer, obj)
 }
