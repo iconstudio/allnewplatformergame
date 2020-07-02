@@ -1,4 +1,6 @@
 /// @description 초기화
+global.timescale = 1.00
+
 global.gravity_normal = 20 / seconds(1)
 global.friction_air = 5 / seconds(1)
 global.friction_ground = 95 / seconds(1)

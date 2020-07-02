@@ -47,7 +47,6 @@ update = function() {
 			yvel = global.yvel_max
 		}
 	}
-	can_jump = yvel == 0 and (now_on_ground or was_on_ground)
 }
 
 /* 좌우 부딫힘 */

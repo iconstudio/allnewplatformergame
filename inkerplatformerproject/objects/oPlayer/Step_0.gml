@@ -1,15 +1,25 @@
 event_inherited()
+can_jump = yvel == 0 and (now_on_ground or was_on_ground)
+
+var was_left = move_key_peek == LEFT, was_right = move_key_peek == RIGHT
 if !global.io_left and !global.io_right {
 	move_key_peek = NONE
-} else if (global.io_pressed_left and global.io_right and move_key_peek == RIGHT) or (global.io_left and !global.io_right) or (!global.io_pressed_right and global.io_left and move_key_peek == LEFT) {
+}
+else if (global.io_pressed_left and global.io_right and was_right)
+or (global.io_left and !global.io_right)
+or (!global.io_pressed_right and global.io_left and was_left) {
 	move_key_peek = LEFT
-} else if (global.io_pressed_right and global.io_left and move_key_peek == LEFT) or (global.io_right and !global.io_left) or (!global.io_pressed_left and global.io_right and move_key_peek == RIGHT) {
+}
+else if (global.io_pressed_right and global.io_left and was_left)
+or (global.io_right and !global.io_left)
+or (!global.io_pressed_left and global.io_right and was_right) {
 	move_key_peek = RIGHT
-} else {
+}
+else {
 	move_key_peek = NONE
 }
 
-var mover = (move_key_peek == RIGHT ? 1 : (move_key_peek == LEFT ? -1 : 0))
+var mover = select(move_key_peek == RIGHT, 1, select(move_key_peek == LEFT, -1, 0))
 /*
 if global.io_left xor global.io_right {
 	move_dir = global.io_right - global.io_left
