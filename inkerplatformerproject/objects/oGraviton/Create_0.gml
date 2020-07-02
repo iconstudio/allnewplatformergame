@@ -1,13 +1,6 @@
 /// @description 초기화
 event_user(15)
 
-function update_friction(on_ground) {
-	if on_ground
-		fric = global.friction_ground
-	else
-		fric = global.friction_air
-}
-
 update = function() {
 	was_on_ground = false
 	var on_ground = wall_on_underneath(yvel)
@@ -54,7 +47,7 @@ update = function() {
 			yvel = global.yvel_max
 		}
 	}
-	can_jump = now_on_ground or was_on_ground
+	can_jump = yvel == 0 and (now_on_ground or was_on_ground)
 }
 
 /* 좌우 부딫힘 */
@@ -64,11 +57,16 @@ push = function() {
 
 /* 천장 부딫힘 */
 pop = function() {
-	move_outside_solid(270, 1)
+	if yvel < 0 {
+		move_outside_solid(270, 1)
+		yvel = 0
+	}
 }
 
 /* 바닥 부딫힘 */
 thud = function() {
-	yvel = 0
-	move_outside_solid(90, 1)
+	if 0 < yvel {
+		move_outside_solid(90, 1)
+		yvel = 0
+	}
 }

@@ -25,6 +25,8 @@ function wall_on_underneath(distance) {
 	var fy
 	if distance < 0
 		return false
+	else if distance == 0
+		fy = y + 1 
 	else
 		fy = y + distance
 
@@ -33,8 +35,10 @@ function wall_on_underneath(distance) {
 
 function wall_on_top(distance) {
 	var fy
-	if 0 <= distance
+	if distance < 0
 		return false
+	else if distance == 0
+		fy = y - 1 
 	else
 		fy = y - distance
 
@@ -100,4 +104,11 @@ function move_vertical(range) {
 		}
 	}
 	return NONE
+}
+
+function update_friction(on_ground) {
+	if on_ground
+		fric = global.friction_ground
+	else
+		fric = global.friction_air
 }

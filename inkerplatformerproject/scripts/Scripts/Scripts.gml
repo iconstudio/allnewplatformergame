@@ -19,3 +19,48 @@ function io_check_ok() {
 function instance_create(obj) {
 	return instance_create_layer(1 < argument_count ? argument[1] : 0, 2 < argument_count ? argument[2] : 0, 3 < argument_count ? argument[3] : layer, obj)
 }
+
+///@function timer(duration, [predicate], [destructor])
+function timer(duration, proc, dest) constructor {
+	parent = other.id
+	time = 0
+	period = duration
+	predicate = 1 < argument_count ? argument[1] : -1
+	destructor = 2 < argument_count ? argument[2] : -1
+
+	set = function(count) {
+		time = count
+		return get()
+	}
+
+	get = function() {
+		return time / period
+	}
+
+	update = function() {
+		if predicate != -1 and instance_exists(parent) {
+			var proc = predicate
+			with parent
+				proc()
+		}
+
+		if time < period
+			time++
+
+		if period < time // debug
+			time = period
+
+		return get()
+	}
+
+	finish = function() {
+		if destructor != -1 and instance_exists(parent) {
+			var proc = destructor
+			with parent
+				proc()
+		}
+
+		set(period)
+		return 1
+	}
+}

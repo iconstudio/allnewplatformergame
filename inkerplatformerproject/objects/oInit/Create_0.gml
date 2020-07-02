@@ -1,7 +1,7 @@
 /// @description 초기화
 global.gravity_normal = 20 / seconds(1)
-global.friction_air = 14 / seconds(1)
-global.friction_ground = 64 / seconds(1)
+global.friction_air = 5 / seconds(1)
+global.friction_ground = 95 / seconds(1)
 global.yvel_max = 256 / seconds(1)
 
 #macro NONE -1
