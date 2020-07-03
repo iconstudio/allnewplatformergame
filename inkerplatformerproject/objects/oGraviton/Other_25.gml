@@ -16,6 +16,20 @@ function ground_at(position_x, position_y) {
 	return solid_at(position_x, position_y) or instance_place(position_x, position_y, oPlatform)
 }
 
+function ground_at_precise(position_x, position_y) {
+	var condition = solid_at(position_x, position_y)
+	var in_platform = instance_place(x, y, oPlatform)
+	if in_platform == noone {
+		var on_platform = instance_place(position_x, position_y, oPlatform)
+		if on_platform != noone {
+			if collision_line(bbox_left, bbox_bottom + 1, bbox_right - 1, bbox_bottom + 1, oPlatform, true, true)
+				condition = true
+		}
+	}
+
+	return condition
+}
+
 function wall_on_horizontal(distance) {
 	var fx = x + distance + sign(distance)
 	return solid_at(fx, y)
@@ -30,7 +44,7 @@ function wall_on_underneath(distance) {
 	else
 		fy = y + distance
 
-	return ground_at(x, fy)
+	return ground_at_precise(x, fy)
 }
 
 function wall_on_top(distance) {

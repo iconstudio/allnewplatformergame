@@ -2,13 +2,17 @@ function select(condition, value_true, value_false) {
 	return condition ? value_true : value_false
 }
 
+function argument_select(arg, def) {
+	return select(is_undefined(arg), def, arg)
+}
+
 ///@function timer(duration, [predicate], [destructor])
 function timer(duration, proc, dest) constructor {
 	parent = other.id
 	time = 0
 	period = duration
-	predicate = select(1 < argument_count, argument[1], -1)
-	destructor = select(2 < argument_count, argument[2], -1)
+	predicate = argument_select(argument[1], -1)
+	destructor = argument_select(argument[2], -1)
 
 	set = function(count) {
 		time = count
@@ -65,8 +69,8 @@ function io_check_ok() {
 }
 
 ///@function instance_create(obj, [nx], [ny], [nlayer])
-function instance_create(obj) {
-	return instance_create_layer(select(1 < argument_count, argument[1], 0)
-	, select(2 < argument_count, argument[2], 0)
-	, select(3 < argument_count, argument[3], layer), obj)
+function instance_create(obj, nx, ny, nlayer) {
+	return instance_create_layer(argument_select(argument[1], 0), argument_select(argument[2], 0), argument_select(argument[3], layer), obj)
 }
+
+
