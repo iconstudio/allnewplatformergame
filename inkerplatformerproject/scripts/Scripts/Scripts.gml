@@ -51,6 +51,43 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
+function skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) constructor {
+	cooldown = new timer(cooltime)
+	next = _upgrade_next
+	predicate = -1
+
+	//info = new skill_info(name, icon, description, tooltip)
+	info = {
+		name: _name
+		icon: _icon
+		description: _description
+		tooltip: _tooltip
+	}
+
+	attach = function(predicate) {
+		self.predicate = predicate
+	}
+
+	update = function() {
+		cooldown.update()
+	}
+}
+
+function skill_predicate(shortcut, condition, execute_once, procedure) constructor {
+	self.shortcut = shortcut
+	self.condition = select(condition != -1, condition, function() {
+		return true
+	})
+	self.initializer = execute_once
+	self.procedure = procedure
+
+	cast = function() {
+		if condition() {
+			initializer()
+		}
+	}
+}
+
 function seconds(time) {
 	return max(1, time * room_speed)
 }
