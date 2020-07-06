@@ -4,19 +4,23 @@ global.skills = {
 	database: ds_map_create()
 }
 
-function skill(name, icon, description, tooltip, cooltime) constructor {
+function skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) constructor {
 	cooldown = new timer(cooltime)
+	next = _upgrade_next
+
+	//info = new skill_info(name, icon, description, tooltip)
+	info = {
+		name: _name
+		icon: _icon
+		description: _description
+		tooltip: _tooltip
+	}
+
+	
 
 	update = function() {
 		cooldown.update()
 	}
-}
-
-function skill_info(name, icon, description, tooltip) constructor {
-	self.name = name
-	self.icon = icon
-	self.description = description
-	self.tooltip = tooltip
 }
 
 function skill_predicate(shortcut, condition, execute_once, procedure) constructor {

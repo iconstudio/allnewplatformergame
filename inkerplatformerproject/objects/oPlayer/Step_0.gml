@@ -1,6 +1,20 @@
 event_inherited()
 can_jump = yvel == 0 and (now_on_ground or was_on_ground)
 
+// ** 일반 공격 **
+if global.io_pressed_skill_1 {
+	
+}
+
+// ** 특수 기술 **
+if global.io_pressed_skill_2 {
+	
+} else if global.io_pressed_skill_3 {
+	
+} else if global.io_pressed_skill_4 {
+	
+}
+
 var was_left = move_key_peek == LEFT, was_right = move_key_peek == RIGHT
 if !global.io_left and !global.io_right {
 	move_key_peek = NONE
