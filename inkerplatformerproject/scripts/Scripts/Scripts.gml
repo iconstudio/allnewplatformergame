@@ -39,6 +39,10 @@ function timer(duration, proc, dest) constructor {
 		return get()
 	}
 
+	reset = function() {
+		set(0)
+	}
+
 	finish = function() {
 		if destructor != -1 and instance_exists(parent) {
 			var proc = destructor
@@ -51,8 +55,43 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
-function skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) constructor {
+function skill(cooltime, shortcut, execute_once, execute) {
+	running = false
+	self.shortcut = shortcut
 	cooldown = new timer(cooltime)
+	initializer = execute_once
+	predicate = execute
+
+	get_cooldown = function() {
+		return cooldown.get()
+	}
+
+	cast = function() {
+		if condition() {
+			initializer()
+		}
+	}
+
+	update = function() {
+		if running {
+			cooldown.update()
+			if predicate!= -1
+				predicate()
+
+			if predicate!= -1 and 1 <= get_cooldown() {
+				running = false
+				cooldown.reset()
+			}
+		} else if shortcut() {
+			
+		}
+	}
+}
+
+
+function _skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) constructor {
+	cooldown = new timer(cooltime)
+	cooldown.finish()
 	next = _upgrade_next
 	predicate = -1
 
@@ -68,8 +107,19 @@ function skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) c
 		self.predicate = predicate
 	}
 
+	get_time = function() {
+		return cooldown.get()
+	}
+
 	update = function() {
 		cooldown.update()
+
+		if predicate!= -1 and 1 <= get_time() {
+			if predicate.shortcut() {
+				predicate.cast()
+				cooldown.reset()
+			}
+		}
 	}
 }
 
