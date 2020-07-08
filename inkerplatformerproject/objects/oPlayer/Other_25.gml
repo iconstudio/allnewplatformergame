@@ -2,8 +2,9 @@ event_inherited()
 
 move_key_peek = RIGHT
 move_dir = 0
-move_spd = 92 / seconds(1)
-move_spd_fast = 92 / seconds(1)
+move_spd_normal = 92 / seconds(1)
+move_spd_fast = 122 / seconds(1)
+move_spd = move_spd_normal
 move_acc = move_spd / seconds(0.05)
 
 jumping = false
