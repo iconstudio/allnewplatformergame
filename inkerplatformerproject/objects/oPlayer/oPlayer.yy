@@ -8,8 +8,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oGraviton",
-    "path": "objects/oGraviton/oGraviton.yy",
+    "name": "oEntity",
+    "path": "objects/oEntity/oEntity.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,

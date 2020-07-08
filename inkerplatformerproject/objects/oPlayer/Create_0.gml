@@ -1,10 +1,11 @@
 event_inherited()
 
-skill_attributes = array_create(4, -1)
-
-
-var attack = new skill(seconds(0.1), function() {
-	
+attack = new skill(seconds(0.3), function() {
+	return global.io_pressed_skill_1
 }, function() {
-	
+	repeat 3
+		effect_create_above(ef_smoke, x, y, 0, $ffffff)
 }, -1)
+
+skills = array_create(4, -1)
+skills[0] = attack

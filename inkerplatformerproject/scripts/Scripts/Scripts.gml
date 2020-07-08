@@ -8,7 +8,7 @@ function argument_select(arg, def) {
 
 ///@function timer(duration, [predicate], [destructor])
 function timer(duration, proc, dest) constructor {
-	parent = other.id
+	parent = other
 	time = 0
 	period = duration
 	predicate = argument_select(argument[1], -1)
@@ -55,10 +55,11 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
-function skill(cooltime, shortcut, execute_once, execute) {
+function skill(cooltime, shortcut, execute_once, execute) constructor {
+	parent = other
 	running = false
 	self.shortcut = shortcut
-	cooldown = new timer(cooltime)
+	cooldown = new timer(cooltime, -1)
 	initializer = execute_once
 	predicate = execute
 
@@ -67,23 +68,30 @@ function skill(cooltime, shortcut, execute_once, execute) {
 	}
 
 	cast = function() {
-		if condition() {
-			initializer()
+		if initializer != -1 and !running {
+			running = true
+			
+			with parent
+				other.initializer()
 		}
 	}
 
 	update = function() {
+		if shortcut != -1 and shortcut() {
+			cast()
+		}
+
 		if running {
 			cooldown.update()
-			if predicate!= -1
-				predicate()
+			if predicate != -1 {
+				with parent
+					other.predicate()
+			}
 
-			if predicate!= -1 and 1 <= get_cooldown() {
+			if 1 <= get_cooldown() {
 				running = false
 				cooldown.reset()
 			}
-		} else if shortcut() {
-			
 		}
 	}
 }
@@ -97,9 +105,9 @@ function _skill(_name, _icon, _description, _tooltip, _cooltime, _upgrade_next) 
 
 	//info = new skill_info(name, icon, description, tooltip)
 	info = {
-		name: _name
-		icon: _icon
-		description: _description
+		name: _name,
+		icon: _icon,
+		description: _description,
 		tooltip: _tooltip
 	}
 

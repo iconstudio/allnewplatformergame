@@ -1,7 +1,13 @@
 event_inherited()
 can_jump = yvel == 0 and (now_on_ground or was_on_ground)
 
+for (var i = 0; i < 4; ++i) {
+	if skills[i] != -1
+		skills[i].update()
+}
+
 // ** 일반 공격 **
+/*
 if global.io_pressed_skill_1 {
 	
 }
@@ -13,7 +19,7 @@ if global.io_pressed_skill_2 {
 	
 } else if global.io_pressed_skill_4 {
 	
-}
+}*/
 
 var was_left = move_key_peek == LEFT, was_right = move_key_peek == RIGHT
 if !global.io_left and !global.io_right {
@@ -61,17 +67,14 @@ if mover != 0 {
 var check_top = wall_on_top(1)
 if can_jump and !jumping and !check_top {
 	if global.io_pressed_jump {
-		jumping = true
-		jump.set(0)
+		jump()
 	}
 }
 
 if jumping {
 	if check_top {
-		jumping = false
-		jump.finish()
+		jump_end()
 	} else if jump.update() == 1 or global.io_released_jump {
-		jumping = false
-		jump.finish()
+		jump_end()
 	}
 }

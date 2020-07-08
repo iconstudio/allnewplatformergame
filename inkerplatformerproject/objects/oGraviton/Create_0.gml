@@ -7,7 +7,7 @@ update = function() {
 	update_friction(on_ground)
 
 	if xvel != 0 {
-		show_debug_message("xvel")
+		//show_debug_message("xvel")
 		var xresult = move_horizontal(xvel)
 		if xresult != NONE {
 			push()

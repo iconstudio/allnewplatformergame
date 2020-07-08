@@ -18,13 +18,16 @@ function ground_at(position_x, position_y) {
 
 function ground_at_precise(position_x, position_y) {
 	var condition = solid_at(position_x, position_y)
+
 	var in_platform = instance_place(x, y, oPlatform)
 	if in_platform == noone {
 		var on_platform = instance_place(position_x, position_y, oPlatform)
-		if on_platform != noone {
-			if collision_line(bbox_left, bbox_bottom + 1, bbox_right - 1, bbox_bottom + 1, oPlatform, true, true)
-				condition = true
-		}
+		if on_platform != noone
+			condition = true
+	} else {
+		var under_platform = collision_line(bbox_left, bbox_bottom + 1, bbox_right - 1, bbox_bottom + 1, oPlatform, true, true)
+		if under_platform != noone and in_platform != under_platform
+			condition = true
 	}
 
 	return condition
