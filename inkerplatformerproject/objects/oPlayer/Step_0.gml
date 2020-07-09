@@ -1,5 +1,4 @@
 event_inherited()
-can_jump = yvel == 0 and (now_on_ground or was_on_ground)
 
 for (var i = 0; i < 4; ++i) {
 	if skills[i] != -1
@@ -64,9 +63,23 @@ if mover != 0 {
 	move_dir = 0
 }
 
+jump_fore_predicate.update()
+jump_cliffoff_predicate.update()
+
+if global.io_pressed_jump {
+	jump_fore_predicate.reset()
+}
+
+if was_on_ground {
+	jump_cliffoff_predicate.reset() // 계속 초기화
+	was_on_ground = false
+}
+
+can_jump = yvel == 0 or jump_cliffoff_predicate.get() < 1
+
 var check_top = wall_on_top(1)
 if can_jump and !jumping and !check_top {
-	if global.io_pressed_jump {
+	if jump_fore_predicate.get() < 1 {
 		jump()
 	}
 }
@@ -74,7 +87,7 @@ if can_jump and !jumping and !check_top {
 if jumping {
 	if check_top {
 		jump_end()
-	} else if jump.update() == 1 or global.io_released_jump {
+	} else if jump_predicate.update() == 1 or global.io_released_jump {
 		jump_end()
 	}
 }

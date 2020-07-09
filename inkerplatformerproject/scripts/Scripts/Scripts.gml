@@ -55,24 +55,27 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
-function skill(cooltime, shortcut, execute_once, execute) constructor {
+function skill(cooltime, shortcut, execute_once, execute, execute_end) constructor {
 	parent = other
 	running = false
 	self.shortcut = shortcut
 	cooldown = new timer(cooltime, -1)
-	initializer = execute_once
-	predicate = execute
+	initializer = argument_select(argument[2], -1)
+	predicate = argument_select(argument[3], -1) 
+	destructor = argument_select(argument[4], -1)
 
 	get_cooldown = function() {
 		return cooldown.get()
 	}
 
 	cast = function() {
-		if initializer != -1 and !running {
+		if !running {
 			running = true
-			
-			with parent
-				other.initializer()
+
+			if initializer != -1 {
+				with parent
+					other.initializer()
+			}
 		}
 	}
 
@@ -91,6 +94,10 @@ function skill(cooltime, shortcut, execute_once, execute) constructor {
 			if 1 <= get_cooldown() {
 				running = false
 				cooldown.reset()
+				if destructor != -1 {
+					with parent
+						other.destructor()
+				}
 			}
 		}
 	}
