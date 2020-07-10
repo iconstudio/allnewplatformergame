@@ -16,4 +16,11 @@ global.skills = {
 #macro UP 1
 #macro DOWN 3
 
+enum entity_state {
+	normal = 0,
+	stunned = 90,
+	dead
+}
+
+
 alarm[0] = 1

@@ -24,6 +24,11 @@ if keyboard_check_pressed(vk_numpad1) {
 
 global.io_pressed_jump = keyboard_check_pressed(vk_space)
 global.io_released_jump = keyboard_check_released(vk_space)
+
+global.io_skill_1 = keyboard_check(key_q)
+global.io_skill_2 = keyboard_check(key_w)
+global.io_skill_3 = keyboard_check(key_e)
+global.io_skill_4 = keyboard_check(key_r)
 global.io_pressed_skill_1 = keyboard_check_pressed(key_q)
 global.io_pressed_skill_2 = keyboard_check_pressed(key_w)
 global.io_pressed_skill_3 = keyboard_check_pressed(key_e)

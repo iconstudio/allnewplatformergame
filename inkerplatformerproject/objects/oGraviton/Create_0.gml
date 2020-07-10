@@ -7,46 +7,21 @@ update = function() {
 	update_friction(on_ground)
 
 	if xvel != 0 {
-		//show_debug_message("xvel")
-		var xresult = move_horizontal(xvel)
-		if xresult != NONE {
-			push()
-		} else {
-			if abs(xvel) <= fric {
-				xvel = 0
-			} else {
-				if xvel < 0
-					xvel += fric
-				else
-					xvel -= fric
-			}
-		}
+		update_x()
 	}
 
 	if yvel != 0 {
-		//show_debug_message("yvel")
-		var yresult = move_vertical(yvel)
-		if yresult != NONE {
-			if yresult == UP
-				pop()
-			else if yresult == DOWN
-				thud()
-		}
+		update_y()
 	}
 
 	now_on_ground = wall_on_underneath(yvel)
 	if !now_on_ground and on_ground
 		was_on_ground = true
 
-	if !now_on_ground and !was_on_ground {
-		//show_debug_message("grav: " + string(yvel))
-		yvel += grav
+	update_yvel()
 
-		if global.yvel_max < yvel {
-			//show_debug_message("limit")
-			yvel = global.yvel_max
-		}
-	}
+	// ** 스텝 **
+	event_user(14)
 }
 
 /* 좌우 부딫힘 */

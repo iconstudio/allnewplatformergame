@@ -1,15 +1,15 @@
 {
   "spriteId": {
-    "name": "sSolid",
-    "path": "sprites/sSolid/sSolid.yy",
+    "name": "sOrc",
+    "path": "sprites/sOrc/sOrc.yy",
   },
-  "solid": true,
+  "solid": false,
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oBlockParent",
-    "path": "objects/oBlockParent/oBlockParent.yy",
+    "name": "oEnemyParent",
+    "path": "objects/oEnemyParent/oEnemyParent.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -24,7 +24,7 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oSolid","path":"objects/oSolid/oSolid.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":24,"eventType":7,"collisionObjectId":null,"parent":{"name":"oOrc","path":"objects/oOrc/oOrc.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -33,7 +33,7 @@
     "path": "folders/객체.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oSolid",
+  "name": "oOrc",
   "tags": [],
   "resourceType": "GMObject",
 }

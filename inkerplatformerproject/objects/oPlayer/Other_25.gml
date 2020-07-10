@@ -1,3 +1,4 @@
+/// @description 속성 초기화
 event_inherited()
 
 move_key_peek = RIGHT

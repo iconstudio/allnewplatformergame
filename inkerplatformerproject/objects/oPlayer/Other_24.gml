@@ -1,5 +1,4 @@
-event_inherited()
-
+/// @description 스텝 이벤트
 for (var i = 0; i < 4; ++i) {
 	if skills[i] != -1
 		skills[i].update()
@@ -39,10 +38,6 @@ else {
 }
 
 var mover = select(move_key_peek == RIGHT, 1, select(move_key_peek == LEFT, -1, 0))
-/*
-if global.io_left xor global.io_right {
-	move_dir = global.io_right - global.io_left
-*/
 if mover != 0 {
 	move_dir = mover
 	if move_dir == -1 { // 왼쪽
@@ -58,10 +53,11 @@ if mover != 0 {
 				xvel = move_spd
 		}
 	}
-	//xvel = move_dir * move_spd
 } else {
 	move_dir = 0
 }
+if xvel != 0
+	img_xscale = sign(xvel)
 
 jump_fore_predicate.update()
 jump_cliffoff_predicate.update()
@@ -76,7 +72,6 @@ if was_on_ground {
 }
 
 can_jump = yvel == 0 or jump_cliffoff_predicate.get() < 1
-
 var check_top = wall_on_top(1)
 if can_jump and !jumping and !check_top {
 	if jump_fore_predicate.get() < 1 {
