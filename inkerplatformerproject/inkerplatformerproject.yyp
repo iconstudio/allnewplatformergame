@@ -9,6 +9,7 @@
     {"id":{"name":"oTrapParent","path":"objects/oTrapParent/oTrapParent.yy",},"order":11,},
     {"id":{"name":"sSpike","path":"sprites/sSpike/sSpike.yy",},"order":1,},
     {"id":{"name":"sElemantal","path":"sprites/sElemantal/sElemantal.yy",},"order":3,},
+    {"id":{"name":"oBrick","path":"objects/oBrick/oBrick.yy",},"order":6,},
     {"id":{"name":"sItem","path":"sprites/sItem/sItem.yy",},"order":1,},
     {"id":{"name":"oSolid","path":"objects/oSolid/oSolid.yy",},"order":4,},
     {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},"order":0,},
