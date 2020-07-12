@@ -26,8 +26,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "객체",
-    "path": "folders/객체.yy",
+    "name": "System",
+    "path": "folders/System.yy",
   },
   "resourceVersion": "1.0",
   "name": "oGlobal",

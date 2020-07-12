@@ -29,8 +29,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "객체",
-    "path": "folders/객체.yy",
+    "name": "Block",
+    "path": "folders/Block.yy",
   },
   "resourceVersion": "1.0",
   "name": "oSolid",

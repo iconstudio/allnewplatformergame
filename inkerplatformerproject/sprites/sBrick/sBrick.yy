@@ -2,7 +2,7 @@
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
-  "origin": 4,
+  "origin": 0,
   "preMultiplyAlpha": false,
   "edgeFiltering": false,
   "collisionTolerance": 0,
@@ -24,12 +24,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"1ec78ba4-4b3d-4355-a177-bdc533499237","path":"sprites/sItem/sItem.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"1ec78ba4-4b3d-4355-a177-bdc533499237","path":"sprites/sItem/sItem.yy",},"LayerId":{"name":"5075ae8e-f3af-479d-9a5a-64e29eb84ba4","path":"sprites/sItem/sItem.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sItem","path":"sprites/sItem/sItem.yy",},"resourceVersion":"1.0","name":"1ec78ba4-4b3d-4355-a177-bdc533499237","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"6ec03a3b-8fc7-4942-ba30-a28076611875","path":"sprites/sBrick/sBrick.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"6ec03a3b-8fc7-4942-ba30-a28076611875","path":"sprites/sBrick/sBrick.yy",},"LayerId":{"name":"f9acfede-daad-4d4d-bf1a-400438f32abb","path":"sprites/sBrick/sBrick.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sBrick","path":"sprites/sBrick/sBrick.yy",},"resourceVersion":"1.0","name":"6ec03a3b-8fc7-4942-ba30-a28076611875","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
-    "spriteId": {"name":"sItem","path":"sprites/sItem/sItem.yy",},
+    "spriteId": {"name":"sBrick","path":"sprites/sBrick/sBrick.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -41,7 +41,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"ef539a22-5a54-4db4-acda-966650973b2e","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1ec78ba4-4b3d-4355-a177-bdc533499237","path":"sprites/sItem/sItem.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"eadc570f-3352-4c37-b02b-3bff2426d5ae","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"6ec03a3b-8fc7-4942-ba30-a28076611875","path":"sprites/sBrick/sBrick.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
     "visibleRange": null,
@@ -54,25 +54,25 @@
     "backdropHeight": 768,
     "backdropXOffset": 0.0,
     "backdropYOffset": 0.0,
-    "xorigin": 8,
-    "yorigin": 8,
+    "xorigin": 0,
+    "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sItem","path":"sprites/sItem/sItem.yy",},
+    "parent": {"name":"sBrick","path":"sprites/sBrick/sBrick.yy",},
     "resourceVersion": "1.3",
-    "name": "sItem",
+    "name": "sBrick",
     "tags": [],
     "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"5075ae8e-f3af-479d-9a5a-64e29eb84ba4","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f9acfede-daad-4d4d-bf1a-400438f32abb","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Block",
+    "path": "folders/Block.yy",
   },
   "resourceVersion": "1.0",
-  "name": "sItem",
+  "name": "sBrick",
   "tags": [],
   "resourceType": "GMSprite",
 }

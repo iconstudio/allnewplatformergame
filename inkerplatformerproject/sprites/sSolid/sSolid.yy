@@ -1,7 +1,6 @@
 {
   "bboxMode": 0,
   "collisionKind": 1,
-  "separateMasks": false,
   "type": 0,
   "origin": 0,
   "preMultiplyAlpha": false,
@@ -69,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"b02a7135-d9f8-4615-998f-4506081b89ae","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "스프라이트",
-    "path": "folders/스프라이트.yy",
+    "name": "Block",
+    "path": "folders/Block.yy",
   },
   "resourceVersion": "1.0",
   "name": "sSolid",

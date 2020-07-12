@@ -42,13 +42,13 @@ if mover != 0 {
 	move_dir = mover
 	if move_dir == -1 { // 왼쪽
 		if -move_spd < xvel {
-			xvel -= move_acc
+			xvel -= move_spd / move_acc_ratio
 			if xvel < -move_spd
 				xvel = -move_spd
 		}
 	} else { // 오른쪽
 		if xvel < move_spd {
-			xvel += move_acc
+			xvel += move_spd / move_acc_ratio
 			if move_spd < xvel
 				xvel = move_spd
 		}

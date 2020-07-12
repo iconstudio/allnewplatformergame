@@ -127,22 +127,31 @@ function attribute() constructor {
 	}
 }
 
-
-function skill(cooltime, condition, execute_once, execute, execute_end) constructor {
+///@function skill(ooltime, period, condition, [execute_once], [execute], [execute_end])
+function skill(cooltime, period, condition, execute_once, execute, execute_end) constructor {
 	parent = other
 	running = false
+	if cooltime <= 0
+		throw "재사용 대기시간은 0 이하일 수 없습니다."
+	cooldown = new timer(cooltime).finish()
+	duration = new timer(period).finish()
 	shortcut = condition
-	cooldown = new timer(cooltime, -1)
-	initializer = argument_select(argument[2], -1)
-	predicate = argument_select(argument[3], -1) 
-	destructor = argument_select(argument[4], -1)
+	initializer = argument_select(execute_once, -1)
+	predicate = argument_select(execute, -1) 
+	destructor = argument_select(execute_end, -1)
 
 	get_cooldown = function() {
 		return cooldown.get()
 	}
 
+	get_duration = function() {
+		return duration.get()
+	}
+
 	cast = function() {
-		if !running {
+		if !running and get_cooldown() == 1 {
+			cooldown.reset()
+			duration.reset()
 			running = true
 
 			if initializer != -1 {
@@ -153,23 +162,26 @@ function skill(cooltime, condition, execute_once, execute, execute_end) construc
 	}
 
 	update = function() {
+		cooldown.update()
+
 		if shortcut != -1 and shortcut() {
 			cast()
 		}
 
 		if running {
-			cooldown.update()
+			duration.update()
 			if predicate != -1 {
 				with parent
 					other.predicate()
 			}
 
-			if 1 <= get_cooldown() {
+			if get_duration() == 1 {
 				running = false
-				cooldown.reset()
+
 				if destructor != -1 {
+					var proc = destructor
 					with parent
-						other.destructor()
+						proc()
 				}
 			}
 		}

@@ -68,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"77d59f73-8c3f-43b6-8fa7-6990f49509a7","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "스프라이트",
-    "path": "folders/스프라이트.yy",
+    "name": "Entity",
+    "path": "folders/Entity.yy",
   },
   "resourceVersion": "1.0",
   "name": "sElemantal",
