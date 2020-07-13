@@ -68,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f9acfede-daad-4d4d-bf1a-400438f32abb","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Block",
-    "path": "folders/Block.yy",
+    "name": "Sprites",
+    "path": "folders/Block/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "sBrick",

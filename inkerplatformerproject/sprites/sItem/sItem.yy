@@ -68,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"5075ae8e-f3af-479d-9a5a-64e29eb84ba4","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Sprites",
+    "path": "folders/Entity/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "sItem",

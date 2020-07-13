@@ -4,7 +4,7 @@ event_inherited()
 attack = new skill(seconds(0.3), -1, function() {
 	return global.io_skill_1
 }, function() {
-	effect_create_below(ef_smoke, x, y, 0, $ffffff)
+	effect_create_below(ef_smoke, x + img_xscale * 16, y, 0, $ffffff)
 	//show_debug_message("1")
 }, -1)
 

@@ -62,16 +62,18 @@ if xvel != 0
 jump_fore_predicate.update()
 jump_cliffoff_predicate.update()
 
-if global.io_pressed_jump {
-	jump_fore_predicate.reset()
+if !jumping {
+	if global.io_pressed_jump {
+		jump_fore_predicate.reset()
+	}
+
+	if was_on_ground {
+		jump_cliffoff_predicate.reset() // 계속 초기화
+		was_on_ground = false
+	}
 }
 
-if was_on_ground {
-	jump_cliffoff_predicate.reset() // 계속 초기화
-	was_on_ground = false
-}
-
-can_jump = yvel == 0 or jump_cliffoff_predicate.get() < 1
+can_jump = now_on_ground or jump_cliffoff_predicate.get() < 1
 var check_top = wall_on_top(1)
 if can_jump and !jumping and !check_top {
 	if jump_fore_predicate.get() < 1 {

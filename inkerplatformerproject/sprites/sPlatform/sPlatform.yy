@@ -68,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"104d6895-0bf8-43b6-a2b6-9cdfc0909cc6","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Block",
-    "path": "folders/Block.yy",
+    "name": "Sprites",
+    "path": "folders/Block/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "sPlatform",
