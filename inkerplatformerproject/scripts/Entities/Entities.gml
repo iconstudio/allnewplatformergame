@@ -106,6 +106,14 @@ function attribute() constructor {
 		return mp
 	}
 
+	function get_health_max() {
+		return maxhp
+	}
+
+	function get_mana_max() {
+		return maxmp
+	}
+
 	function get_health_ratio() {
 		return hp / maxhp
 	}
@@ -218,6 +226,15 @@ function wall_on_horizontal(distance) {
 	return solid_at(fx, y)
 }
 
+function wall_on_position(x_distance, y_distance) {
+	var fx = x + x_distance + sign(x_distance)
+	var fy = y + y_distance + sign(y_distance)
+	if y <= fy
+		return ground_at(fx, fy)
+	else
+		return solid_at(fx, fy)
+}
+
 function wall_on_underneath(distance) {
 	var fy
 	if distance < 0
@@ -250,6 +267,31 @@ function move_horizontal(range) {
 		} else if 0 < range {
 			move_contact_solid(0, abs(range) + 1)
 			return RIGHT
+		}
+	} else {
+		x += range
+	}
+	return NONE
+}
+
+function move_horizontal_correction(range) {
+	if wall_on_horizontal(range) {
+		if !wall_on_position(range, 1) {
+			y += 1
+		} else if !wall_on_position(range, -1) {
+			if !wall_on_position(range, -2) {
+				y -= 2
+			} else {
+				y -= 1
+			}
+		} else {
+			if range < 0 {
+				move_contact_solid(180, abs(range) + 1)
+				return LEFT
+			} else if 0 < range {
+				move_contact_solid(0, abs(range) + 1)
+				return RIGHT
+			}
 		}
 	} else {
 		x += range

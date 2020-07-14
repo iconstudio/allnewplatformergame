@@ -9,8 +9,9 @@ was_on_ground = false
 now_on_ground = false
 
 // ** 일반적인 이동 함수 **
+mover_x = move_horizontal_correction
 update_x_normal = function() {
-	var xresult = move_horizontal(xvel)
+	var xresult = mover_x(xvel)
 	if xresult != NONE {
 		push()
 	} else if fric != 0 {
