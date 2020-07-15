@@ -56,7 +56,7 @@ if mover != 0 {
 } else {
 	move_dir = 0
 }
-if xvel != 0
+if xvel != 0 and !instance_exists(attack_slash)
 	img_xscale = sign(xvel)
 
 jump_fore_predicate.update()

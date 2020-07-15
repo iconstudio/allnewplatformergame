@@ -28,12 +28,16 @@ global.io_pressed_yes = false
 global.io_pressed_no = false
 global.io_pressed_back = false
 
+
 key_q = ord("Q")
 key_w = ord("W")
 key_e = ord("E")
 key_r = ord("R")
 key_i = ord("I")
+key_a = ord("A")
 key_s = ord("S")
+key_d = ord("D")
+key_f = ord("E")
 keys_status = [ord("@"), ord("%"), ord("="), ord("`")]
 keys_inventory = [key_i, ord("/"), vk_tab]
 key_comma = ord(",")

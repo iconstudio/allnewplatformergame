@@ -80,8 +80,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f0ff76bd-947d-4d0e-831e-d00d6289a71e","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Trap",
-    "path": "folders/Entity/Trap.yy",
+    "name": "Sprites",
+    "path": "folders/Entity/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "sSlash",

@@ -1,11 +1,12 @@
 /// @description 속성 초기화
 event_inherited()
 
+attack_slash = noone
 attack = new skill(seconds(0.3), -1, function() {
 	return global.io_skill_1
 }, function() {
-	effect_create_below(ef_smoke, x + img_xscale * 16, y, 0, $ffffff)
-	//show_debug_message("1")
+	attack_slash = instance_create(oSlash, x, y)
+	attack_slash.parent = id
 }, -1)
 
 teleport = new skill(seconds(8), -1, function() {
@@ -62,11 +63,11 @@ jump_predicate = new timer(seconds(0.2), function() { // 2.5칸까지 점프
 })
 
 // ** 점프를 이르거나 늦게 눌렀을 때도 가능하게 **
-jump_fore_predicate = new timer(seconds(0.08))
+jump_fore_predicate = new timer(seconds(0.05))
 jump_fore_predicate.finish()
 
 // ** 점프를 땅 위에서 내려가면서 눌렀을 때도 가능하게 **
-jump_cliffoff_predicate = new timer(seconds(0.05))
+jump_cliffoff_predicate = new timer(seconds(0.09))
 jump_cliffoff_predicate.finish()
 
 function jump() {
