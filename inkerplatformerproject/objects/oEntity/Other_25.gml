@@ -37,3 +37,5 @@ function jump() {
 
 img_xscale = 1
 img_angle = 0
+
+knockback = new countdown()

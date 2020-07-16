@@ -68,6 +68,57 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
+///@function countdown([predicate], [destructor])
+function countdown(proc, dest) constructor {
+	parent = other
+	time = -1
+	predicate = argument_select(proc, -1)
+	destructor = argument_select(dest, -1)
+
+	set =	function(count) {
+		time = count
+		return self
+	}
+
+	get =	function() {
+		return time
+	}
+
+	update = function() {
+		if 0 < time {
+			if predicate != -1 and instance_exists(parent) {
+				var proc = predicate
+				with parent
+					proc()
+			}
+
+			time--
+		} else {
+			if time != -1 {
+				finish()
+			}
+		}
+
+		return get()
+	}
+
+	reset =	function() {
+		set(-1)
+		return self
+	}
+
+	finish = function() {
+		if destructor != -1 and instance_exists(parent) {
+			var proc = destructor
+			with parent
+				proc()
+		}
+
+		set(-1)
+		return self
+	}
+}
+
 function seconds(time) {
 	return max(1, time * room_speed)
 }

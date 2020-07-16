@@ -1,6 +1,12 @@
 /// @description 속성 초기화
 event_inherited()
 
+property.set_name("Character")
+property.set_title("UNBREAKABLE")
+property.init_status(entity_state.normal)
+property.init_health(10)
+property.init_mana(3)
+
 attack_slash = noone
 attack = new skill(seconds(0.3), -1, function() {
 	return global.io_skill_1

@@ -20,17 +20,15 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oTrapParent","path":"objects/oTrapParent/oTrapParent.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Trap",
-    "path": "folders/Trap.yy",
+    "name": "Entity",
+    "path": "folders/Entity.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oTrapParent",
+  "name": "oPlayerDamage",
   "tags": [],
   "resourceType": "GMObject",
 }

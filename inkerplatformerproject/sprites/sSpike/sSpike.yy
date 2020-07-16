@@ -69,7 +69,7 @@
   ],
   "parent": {
     "name": "Trap",
-    "path": "folders/Entity/Trap.yy",
+    "path": "folders/Trap.yy",
   },
   "resourceVersion": "1.0",
   "name": "sSpike",
