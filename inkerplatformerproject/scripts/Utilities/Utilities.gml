@@ -141,6 +141,10 @@ function instance_create(obj, nx, ny, nlayer) {
 	return instance_create_layer(argument_select(nx, 0), argument_select(ny, 0), argument_select(nlayer, layer), obj)
 }
 
+function make_percent_caption(title, value, value_max) {
+	return title + ": " + string(value) + " / " + value_max
+}
+
 globalvar ease;
 ease = new (function() constructor {
 	static c1 = 1.70158;
