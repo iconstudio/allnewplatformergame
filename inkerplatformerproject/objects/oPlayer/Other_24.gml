@@ -88,3 +88,6 @@ if jumping {
 		jump_end()
 	}
 }
+
+global.playerpos = [x, y]
+global.playerpos_visible = [x, y]

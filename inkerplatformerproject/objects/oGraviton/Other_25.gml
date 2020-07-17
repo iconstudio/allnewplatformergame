@@ -2,7 +2,8 @@
 xvel = 0
 yvel = 0
 grav = global.gravity_normal
-fric = global.friction_ground
+xfric = global.friction_ground
+yfric = 0
 
 can_jump = false
 was_on_ground = false
@@ -14,14 +15,14 @@ update_x_normal = function() {
 	var xresult = mover_x(xvel)
 	if xresult != NONE {
 		push()
-	} else if fric != 0 {
-		if abs(xvel) <= fric {
+	} else if xfric != 0 {
+		if abs(xvel) <= xfric {
 			xvel = 0
 		} else {
 			if xvel < 0
-				xvel += fric
+				xvel += xfric
 			else
-				xvel -= fric
+				xvel -= xfric
 		}
 	}
 }
@@ -40,20 +41,31 @@ update_y_normal = function() {
 update_x_flee = function() {
 	x += xvel
 
-	if fric != 0 {
-		if abs(xvel) <= fric {
+	if xfric != 0 {
+		if abs(xvel) <= xfric {
 			xvel = 0
 		} else {
 			if xvel < 0
-				xvel += fric
+				xvel += xfric
 			else
-				xvel -= fric
+				xvel -= xfric
 		}
 	}
 }
 
 update_y_flee = function() {
 	y += yvel
+
+	if yfric != 0 {
+		if abs(yvel) <= yfric {
+			yvel = 0
+		} else {
+			if yvel < 0
+				yvel += yfric
+			else
+				yvel -= yfric
+		}
+	}
 }
 
 // ** 중력 갱신 함수 **
@@ -67,7 +79,7 @@ update_yvel_normal = function() {
 	}
 }
 
-update_yvel_flee = function() {}
+update_yvel_flee = FUNC_NULL
 
 update_yvel = update_yvel_normal
 
@@ -75,9 +87,19 @@ update_yvel = update_yvel_normal
 update_x = update_x_normal
 update_y = update_y_normal
 
+function set_friction_x(value) {
+	xfric = value
+	return self
+}
+
+function set_friction_y(value) {
+	yfric = value
+	return self
+}
+
 function update_friction(on_ground) {
 	if on_ground
-		fric = global.friction_ground
+		set_friction_x(global.friction_ground)
 	else
-		fric = global.friction_air
+		set_friction_x(global.friction_air)
 }

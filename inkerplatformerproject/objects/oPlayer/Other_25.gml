@@ -1,8 +1,8 @@
 /// @description 속성 초기화
 event_inherited()
 
-property.set_name("Character")
-property.set_title("UNBREAKABLE")
+set_name("Character")
+set_title("UNBREAKABLE")
 property.init_status(entity_state.normal)
 property.init_health(10)
 property.init_mana(3)
@@ -57,7 +57,6 @@ move_spd_normal = 95 / seconds(1)
 move_spd_fast = 140 / seconds(1)
 move_spd = move_spd_normal
 move_acc_ratio = seconds(0.05)
-move_acc = move_spd / move_acc_ratio
 
 jumping = false
 jump_predicate = new timer(seconds(0.2), function() { // 2.5칸까지 점프
@@ -69,11 +68,11 @@ jump_predicate = new timer(seconds(0.2), function() { // 2.5칸까지 점프
 })
 
 // ** 점프를 이르거나 늦게 눌렀을 때도 가능하게 **
-jump_fore_predicate = new timer(seconds(0.05))
+jump_fore_predicate = new timer(seconds(0.05));
 jump_fore_predicate.finish()
 
 // ** 점프를 땅 위에서 내려가면서 눌렀을 때도 가능하게 **
-jump_cliffoff_predicate = new timer(seconds(0.09))
+jump_cliffoff_predicate = new timer(seconds(0.09));
 jump_cliffoff_predicate.finish()
 
 function jump() {
@@ -93,10 +92,10 @@ function jump_end() {
 function update_friction(on_ground) {
 	if on_ground {
 		if move_dir != 0
-			fric = 0
+			set_friction_x(0)
 		else
-			fric = global.friction_ground
+			set_friction_x(global.friction_ground)
 	} else {
-		fric = global.friction_air
+		set_friction_x(global.friction_air)
 	}
 }

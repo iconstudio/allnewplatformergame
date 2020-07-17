@@ -2,10 +2,17 @@
 // ** 물리 속성 상속 **
 event_inherited()
 
+img_xscale = 1
+img_angle = 0
 property = new attribute()
+property.init_status(entity_state.normal)
 
 function make_flyer() {
 	property.set_flyable(true)
+}
+
+function make_ghost() {
+	property.set_move_through_blocks(true)
 }
 
 function levitation() {
@@ -35,7 +42,17 @@ function jump() {
 	yvel = -320 / seconds(1)
 }
 
-img_xscale = 1
-img_angle = 0
+function stun(duration) {
+	property.set_status(entity_state.stunned)
+	prop_stun.set(duration)
+}
 
-knockback = new countdown()
+function reprise_status() {
+	property.set_status(property.get_status_previous())
+}
+
+function is_awake() {
+	return property.get_status() < entity_state.stunned
+}
+
+prop_stun = new countdown(-1, reprise_status)
