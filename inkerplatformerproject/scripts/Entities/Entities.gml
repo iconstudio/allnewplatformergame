@@ -1,40 +1,45 @@
-function attribute() constructor {
-	status = entity_state.normal
-	status_previous = status
+// ** 데이터베이스 용 속성 **
+///@function entity(name, [title])
+function entity(nname, ntitle) constructor {
+	version = GM_version
+
+	sprite = -1
+	sprite_icon = -1
+	name = nname
+	title = argument_select(ntitle, "")
+
 	can_fly = false // 지금 날고있지 않더라도 날 수 있음
-	flying = false // 날아 다님
-	move_through = false // 블록을 통과 가능 (날지 못하면 좌우로만 가능)
+	can_move_through = false // 블록을 통과 가능 (날지 못하면 좌우로만 가능)
+	can_swim_level = swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
+	flying = false // 날고있는 상태
 
+	hd = 0 // 레벨
 	maxhp = 1 // 체력
-	hp = 1
 	maxmp = 0 // 마력
-	mp = 0
-
-	ac = 0 // 방어
+	ac = 0 // 물리 방어
+	er = array_create(10, 0) // 속성 저항
+	mr = 0 // 상태 저항
 	ev = 0 // 회피
 	sh = 0 // 패링
 
-	function init_status(value) {
-		status = value
-		status_previous = value
+#region 메서드
+	function set_image(value) {
+		sprite = value
 		return self
 	}
 
-	function init_health(value) {
-		maxhp = value
-		hp = value
+	function set_icon(value) {
+		sprite_icon = value
 		return self
 	}
 
-	function init_mana(value) {
-		maxmp = value
-		mp = value
+	function set_name(caption) {
+		name = caption
 		return self
 	}
 
-	function set_status(value) {
-		status_previous = status
-		status = value
+	function set_title(caption) {
+		title = caption
 		return self
 	}
 
@@ -43,28 +48,48 @@ function attribute() constructor {
 		return self
 	}
 
+	function set_movable_through_blocks(value) {
+		can_move_through = value
+		return self
+	}
+
+	function set_swimming_level(value) {
+		can_swim_level = value
+		return self
+	}
+
 	function set_flying(value) {
 		flying = value
 		return self
 	}
 
-	function set_move_through_blocks(value) {
-		move_through = value
+	function set_level(value) {
+		hd = value
 		return self
 	}
 
-	function set_health(value) {
-		hp = value
+	function set_health_max(value) {
+		maxhp = value
 		return self
 	}
 
-	function set_mana(value) {
-		mp = value
+	function set_mana_max(value) {
+		maxmp = value
 		return self
 	}
 
 	function set_armour(value) {
 		ac = value
+		return self
+	}
+
+	function set_element_resistance(type, value) {
+		er[type] = value
+		return self
+	}
+
+	function set_magic_resistance(value) {
+		mr = value
 		return self
 	}
 
@@ -78,32 +103,44 @@ function attribute() constructor {
 		return self
 	}
 
-	function get_status() {
-		return status
+	function get_version() {
+		return version
 	}
 
-	function get_status_previous() {
-		return status_previous
+	function get_image() {
+		return sprite
+	}
+
+	function get_icon() {
+		return sprite_icon
+	}
+
+	function get_name(caption) {
+		return name
+	}
+
+	function get_title(caption) {
+		return title
 	}
 
 	function get_flyable() {
 		return can_fly
 	}
 
+	function get_movable_through_blocks() {
+		return can_move_through
+	}
+
+	function get_swimming_level() {
+		return can_swim_level
+	}
+
 	function get_flying() {
 		return flying
 	}
 
-	function get_move_through_blocks() {
-		return move_through
-	}
-
-	function get_health() {
-		return hp
-	}
-
-	function get_mana() {
-		return mp
+	function get_level() {
+		return hd
 	}
 
 	function get_health_max() {
@@ -114,16 +151,16 @@ function attribute() constructor {
 		return maxmp
 	}
 
-	function get_health_ratio() {
-		return hp / maxhp
-	}
-
-	function get_mana_ratio() {
-		return mp / maxmp
-	}
-
 	function get_armour() {
 		return ac
+	}
+
+	function get_element_resistance(type) {
+		return er[type]
+	}
+
+	function get_magic_resistance() {
+		return mr
 	}
 
 	function get_evasion() {
@@ -133,6 +170,165 @@ function attribute() constructor {
 	function get_shield() {
 		return sh
 	}
+#endregion
+}
+
+///@function attribute(name, [title])
+function attributes(nname, ntitle): entity(nname, ntitle) constructor {
+	status = entity_states.normal
+	status_previous = status
+
+	hp = 1
+	mp = 0
+
+#region 메서드
+	function init_status(value) {
+		status = value
+		status_previous = value
+		return self
+	}
+
+	function init_health(value) {
+		set_health_max(value)
+		set_health(value)
+		return self
+	}
+
+	function init_mana(value) {
+		set_mana_max(value)
+		set_mana(value)
+		return self
+	}
+
+	function set_status(value) {
+		status_previous = status
+		status = value
+		return self
+	}
+
+	function set_movable_through_blocks(value) {
+		can_move_through = value
+		return self
+	}
+
+	function set_health(value) {
+		hp = value
+		return self
+	}
+
+	function set_mana(value) {
+		mp = value
+		return self
+	}
+
+	function get_status() {
+		return status
+	}
+
+	function get_status_previous() {
+		return status_previous
+	}
+
+	function get_health() {
+		return hp
+	}
+
+	function get_mana() {
+		return mp
+	}
+
+	function get_health_ratio() {
+		return hp / maxhp
+	}
+
+	function get_mana_ratio() {
+		return mp / maxmp
+	}
+
+	function add_health(value) {
+		hp += value
+		if maxhp < hp
+			hp = maxhp
+		return hp
+	}
+
+	function add_mana(value) {
+		mp += value
+		if maxmp < mp
+			mp = maxmp
+		return mp
+	}
+
+	function reprise_status() {
+		set_status(get_status_previous())
+	}
+#endregion
+}
+
+///@function get_resistance_ratio(element_type, target_attribute)
+function get_resistance_ratio(element, attr) {
+	var er, result = 0
+	try {
+		er = attr.get_element_resistance(element) // 저항 수준
+	} catch(_) {
+		show_debug_message("저항 속성을 찾을 수 없습니다.")
+		er = 0
+	}
+	result = element_get_resistance_ratios(element, er)
+
+	return result
+}
+
+///@function calculate_damage(damage, damage_element, target_attribute)
+function calculate_damage(damage, element, attr) {
+	if damage == 0 {
+		return 0
+	} else if damage < 0 { // 회복
+		return damage
+	}
+
+	var result = damage
+	var resist = get_resistance_ratio(element, attr)
+	result -= result * resist
+	result = floor(result)
+	if result < 0
+		result = 0
+
+	return result
+}
+
+function attack_try(target) {
+	
+}
+
+function attack_process(target) {
+	var type = 0, damage = 0
+	if type == damage_types.physical
+		property.add_health(-damage)
+	else if type == damage_types.magical
+		property.add_health(-damage)
+}
+
+function attributes_load(target, serial) {
+	var properties = entity_find(serial)
+	target.set_image(properties.get_image())
+	target.set_icon(properties.get_icon())
+	target.set_name(properties.get_name())
+	target.set_title(properties.get_title())
+	target.set_flyable(properties.get_flyable())
+	target.set_movable_through_blocks(properties.get_movable_through_blocks())
+	target.set_swimming_level(properties.get_swimming_level())
+	target.set_flying(properties.get_flying())
+
+	target.set_level(properties.get_level())
+	target.init_health(properties.get_health_max())
+	target.init_mana(properties.get_mana_max())
+	target.set_magic_resistance(properties.get_magic_resistance())
+	target.set_armour(properties.get_armour())
+	target.set_shield(properties.get_shield())
+	target.set_evasion(properties.get_evasion())
+	show_debug_message("Name:" + string(target.get_name()))
+	show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
 }
 
 ///@function skill(ooltime, period, condition, [execute_once], [execute], [execute_end])
@@ -194,153 +390,4 @@ function skill(cooltime, period, condition, execute_once, execute, execute_end) 
 			}
 		}
 	}
-}
-
-function solid_at(position_x, position_y) {
-	return !place_free(position_x, position_y)
-}
-
-function ground_at(position_x, position_y) {
-	return solid_at(position_x, position_y) or instance_place(position_x, position_y, oPlatform)
-}
-
-function ground_at_precise(position_x, position_y) {
-	var condition = solid_at(position_x, position_y)
-
-	var in_platform = instance_place(x, y, oPlatform)
-	if in_platform == noone {
-		var on_platform = instance_place(position_x, position_y, oPlatform)
-		if on_platform != noone
-			condition = true
-	} else {
-		var under_platform = collision_line(bbox_left, bbox_bottom + 1, bbox_right - 1, bbox_bottom + 1, oPlatform, true, true)
-		if under_platform != noone and in_platform != under_platform
-			condition = true
-	}
-
-	return condition
-}
-
-function wall_on_horizontal(distance) {
-	var fx = x + distance + sign(distance)
-	return solid_at(fx, y)
-}
-
-function wall_on_position(x_distance, y_distance) {
-	var fx = x + x_distance + sign(x_distance)
-	var fy = y + y_distance + sign(y_distance)
-	if y <= fy
-		return ground_at(fx, fy)
-	else
-		return solid_at(fx, fy)
-}
-
-function wall_on_underneath(distance) {
-	var fy
-	if distance < 0
-		return false
-	else if distance == 0
-		fy = y + 1 
-	else
-		fy = y + distance
-
-	return ground_at_precise(x, fy)
-}
-
-function wall_on_top(distance) {
-	var fy
-	if distance < 0
-		return false
-	else if distance == 0
-		fy = y - 1 
-	else
-		fy = y - distance
-
-	return solid_at(x, fy)
-}
-
-function move_horizontal(range) {
-	if wall_on_horizontal(range) {
-		if range < 0 {
-			move_contact_solid(180, abs(range) + 1)
-			return LEFT
-		} else if 0 < range {
-			move_contact_solid(0, abs(range) + 1)
-			return RIGHT
-		}
-	} else {
-		x += range
-	}
-	return NONE
-}
-
-function move_horizontal_correction(range) {
-	if wall_on_horizontal(range) {
-		if !wall_on_position(range, 1) {
-			y += 1
-		} else if !wall_on_position(range, -1) {
-			if !wall_on_position(range, -2) {
-				y -= 2
-			} else {
-				y -= 1
-			}
-		} else {
-			if range < 0 {
-				move_contact_solid(180, abs(range) + 1)
-				return LEFT
-			} else if 0 < range {
-				move_contact_solid(0, abs(range) + 1)
-				return RIGHT
-			}
-		}
-	} else {
-		x += range
-	}
-	return NONE
-}
-
-function move_vertical(range) {
-	var distance = floor(abs(range))
-	var surplus = frac(abs(range))
-	if range == 0 {
-		return NONE
-	} else {
-		
-	}
-
-	if range < 0 {
-		for (;0 < distance; distance--) {
-			if wall_on_top(1) {
-				move_contact_solid(90, 1)
-				return UP
-			} else {
-				y--
-			}
-		}
-
-		if surplus != 0 {
-			if wall_on_top(surplus) {
-				move_contact_solid(90, 1)
-				return UP
-			} else {
-				y -= surplus
-			}
-		}
-	} else if 0 < range {
-		for (;0 < distance; distance--) {
-			if wall_on_underneath(1) {
-				return DOWN
-			} else {
-				y++
-			}
-		}
-
-		if surplus != 0 {
-			if wall_on_underneath(surplus)
-				return DOWN
-			else
-				y += surplus
-		}
-	}
-	return NONE
 }

@@ -18,6 +18,7 @@ update = function() {
 	if !now_on_ground and on_ground
 		was_on_ground = true
 
+	// ** 중력 **
 	update_yvel()
 
 	// ** 스텝 **

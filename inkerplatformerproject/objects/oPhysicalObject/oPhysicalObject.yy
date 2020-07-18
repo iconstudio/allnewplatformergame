@@ -20,17 +20,15 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":25,"eventType":7,"collisionObjectId":null,"parent":{"name":"oEnemyParent","path":"objects/oEnemyParent/oEnemyParent.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Enemy",
-    "path": "folders/Entity/Enemy.yy",
+    "name": "Entity",
+    "path": "folders/Entity.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oEnemyParent",
+  "name": "oPhysicalObject",
   "tags": [],
   "resourceType": "GMObject",
 }

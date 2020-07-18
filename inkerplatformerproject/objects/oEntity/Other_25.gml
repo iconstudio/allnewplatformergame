@@ -4,21 +4,21 @@ event_inherited()
 
 img_xscale = 1
 img_angle = 0
-property = new attribute()
-property.init_status(entity_state.normal)
+property = new attributes()
+property.init_status(entity_states.normal)
 
 function make_flyer() {
 	property.set_flyable(true)
 }
 
 function make_ghost() {
-	property.set_move_through_blocks(true)
+	property.set_movable_through_blocks(true)
 }
 
 function levitation() {
 	if property.get_flyable() and !property.get_flying() {
 		property.set_flying(true)
-		if property.get_move_through_blocks() {
+		if property.get_movable_through_blocks() {
 			update_x = update_x_flee
 			update_y = update_y_flee
 		}
@@ -29,7 +29,7 @@ function levitation() {
 function land() {
 	if property.get_flying() {
 		property.set_flying(false)
-		if property.get_move_through_blocks() {
+		if property.get_movable_through_blocks() {
 			update_x = update_x_normal
 			update_y = update_y_normal
 		}
@@ -37,22 +37,30 @@ function land() {
 	}
 }
 
-
 function jump() {
 	yvel = -320 / seconds(1)
 }
 
 function stun(duration) {
-	property.set_status(entity_state.stunned)
+	property.set_status(entity_states.stunned)
 	prop_stun.set(duration)
 }
 
-function reprise_status() {
-	property.set_status(property.get_status_previous())
+///@function hurt(damage)
+function hurt(damage) {
+	var point = property.add_health(-damage)
+
+	if point <= 0
+		event_user(0)
+}
+
+function knockback(power) {
+	
 }
 
 function is_awake() {
-	return property.get_status() < entity_state.stunned
+	return property.get_status() < entity_states.stunned
 }
 
-prop_stun = new countdown(-1, reprise_status)
+prop_invincible = new countdown()
+prop_stun = new countdown(-1, function() {property.reprise_status()})

@@ -1,13 +1,13 @@
 /// @description 초기화
-name = ""
-title = ""
+sid = ""
 
-function set_name(caption) {
-	name = caption
+function set_serial_number(caption) {
+	sid = caption
+	return self
 }
 
-function set_title(caption) {
-	title = caption
+function get_serial_number(caption) {
+	return sid
 }
 
 event_inherited()

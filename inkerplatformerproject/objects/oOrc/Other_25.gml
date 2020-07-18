@@ -1,5 +1,5 @@
 /// @description 초기화
+set_serial_number("ent-orc-pawn")
+
 event_inherited()
 
-parent = noone
-image_speed = 4 / seconds(0.1)

@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "sOrc",
-    "path": "sprites/sOrc/sOrc.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
@@ -23,10 +20,7 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":24,"eventType":7,"collisionObjectId":null,"parent":{"name":"oOrc","path":"objects/oOrc/oOrc.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":25,"eventType":7,"collisionObjectId":null,"parent":{"name":"oOrc","path":"objects/oOrc/oOrc.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
@@ -34,7 +28,7 @@
     "path": "folders/Entity/Enemy.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oOrc",
+  "name": "oEnemyGeneral",
   "tags": [],
   "resourceType": "GMObject",
 }

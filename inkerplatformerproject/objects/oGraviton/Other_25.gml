@@ -2,7 +2,7 @@
 xvel = 0
 yvel = 0
 grav = global.gravity_normal
-xfric = global.friction_ground
+xfric = get_friction_ground()
 yfric = 0
 
 can_jump = false
@@ -99,7 +99,7 @@ function set_friction_y(value) {
 
 function update_friction(on_ground) {
 	if on_ground
-		set_friction_x(global.friction_ground)
+		set_friction_x(get_friction_ground())
 	else
-		set_friction_x(global.friction_air)
+		set_friction_x(get_friction_air())
 }

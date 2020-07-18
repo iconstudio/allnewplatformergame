@@ -1,3 +1,4 @@
 /// @description 구조체 정리
 delete property
-delete jump
+delete prop_stun
+delete prop_invincible

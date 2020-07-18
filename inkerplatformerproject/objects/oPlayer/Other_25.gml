@@ -1,9 +1,9 @@
 /// @description 속성 초기화
 event_inherited()
 
-set_name("Character")
-set_title("UNBREAKABLE")
-property.init_status(entity_state.normal)
+property.set_name("Character")
+property.set_title("UNBREAKABLE")
+property.init_status(entity_states.normal)
 property.init_health(10)
 property.init_mana(3)
 
@@ -94,8 +94,8 @@ function update_friction(on_ground) {
 		if move_dir != 0
 			set_friction_x(0)
 		else
-			set_friction_x(global.friction_ground)
+			set_friction_x(get_friction_ground())
 	} else {
-		set_friction_x(global.friction_air)
+		set_friction_x(get_friction_air())
 	}
 }

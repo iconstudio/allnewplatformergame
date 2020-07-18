@@ -1,4 +1,6 @@
-/// @description 속성 초기화
+/// @description 초기화
+set_serial_number("ent-elemental-small")
+
 event_inherited()
 
 set_friction_y(xfric)
