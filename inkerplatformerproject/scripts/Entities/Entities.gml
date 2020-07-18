@@ -22,6 +22,9 @@ function entity(nname, ntitle) constructor {
 	ev = 0 // 회피
 	sh = 0 // 패링
 
+	skill_number = 0
+	skills = []
+
 #region 메서드
 	function set_image(value) {
 		sprite = value
