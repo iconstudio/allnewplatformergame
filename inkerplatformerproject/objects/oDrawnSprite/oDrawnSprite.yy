@@ -21,8 +21,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "inkerplatformerproject",
+    "path": "inkerplatformerproject.yyp",
   },
   "resourceVersion": "1.0",
   "name": "oDrawnSprite",

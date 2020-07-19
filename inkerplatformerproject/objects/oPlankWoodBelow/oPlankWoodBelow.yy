@@ -1,12 +1,15 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "sPlankWoodBelow",
+    "path": "sprites/sPlankWoodBelow/sPlankWoodBelow.yy",
+  },
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oDrawnSprite",
-    "path": "objects/oDrawnSprite/oDrawnSprite.yy",
+    "name": "oPlatform",
+    "path": "objects/oPlatform/oPlatform.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -20,17 +23,15 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oPlayerDamage","path":"objects/oPlayerDamage/oPlayerDamage.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Block",
+    "path": "folders/Block.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oPlayerDamage",
+  "name": "oPlankWoodBelow",
   "tags": [],
   "resourceType": "GMObject",
 }

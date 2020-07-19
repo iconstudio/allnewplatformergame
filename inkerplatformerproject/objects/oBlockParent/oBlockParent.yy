@@ -26,8 +26,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Block",
+    "path": "folders/Block.yy",
   },
   "resourceVersion": "1.0",
   "name": "oBlockParent",

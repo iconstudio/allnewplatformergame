@@ -1,5 +1,5 @@
 /// @description 스텝 이벤트
-if 0 <= prop_stun.get()
+if 0 < prop_stun.get()
 	exit
 
 var dist = distance_to_point(global.playerpos[0], global.playerpos[1])

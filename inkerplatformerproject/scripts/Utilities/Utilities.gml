@@ -22,7 +22,7 @@ function timer(duration, proc, dest) constructor {
 	}
 
 	get =	function() {
-		if period <= 0
+		if period < 0
 			return 1
 		return time / period
 	}
@@ -55,7 +55,7 @@ function timer(duration, proc, dest) constructor {
 
 	finish = function() {
 		if running or period <= 0 {
-			//show_debug_message("te")
+			show_debug_message("te")
 			if destructor != -1 and instance_exists(parent) {
 				var proc = destructor
 				with parent
@@ -72,16 +72,23 @@ function timer(duration, proc, dest) constructor {
 function countdown(proc, dest) constructor {
 	parent = other
 	time = -1
+	time_max = -1
+	closing = false
 	predicate = argument_select(proc, -1)
 	destructor = argument_select(dest, -1)
 
 	set =	function(count) {
 		time = count
+		time_max = count
 		return self
 	}
 
 	get =	function() {
 		return time
+	}
+
+	get_max =	function() {
+		return time_max
 	}
 
 	update = function() {
@@ -93,17 +100,18 @@ function countdown(proc, dest) constructor {
 			}
 
 			time--
-		} else {
-			if time != -1 {
-				finish()
-			}
+			if time <= 0
+				closing = true
+		} else if closing {
+			show_debug_message("ce")
+			finish()
 		}
 
 		return get()
 	}
 
 	reset =	function() {
-		set(-1)
+		set(time_max)
 		return self
 	}
 
@@ -115,6 +123,7 @@ function countdown(proc, dest) constructor {
 		}
 
 		set(-1)
+		closing = false
 		return self
 	}
 }

@@ -53,8 +53,8 @@ skills[3] = ultimate
 
 move_key_peek = RIGHT
 move_dir = 0
-move_spd_normal = 95 / seconds(1)
-move_spd_fast = 140 / seconds(1)
+move_spd_normal = 130 / seconds(1)
+move_spd_fast = 160 / seconds(1)
 move_spd = move_spd_normal
 move_acc_ratio = seconds(0.05)
 
@@ -63,19 +63,19 @@ jump_predicate = new timer(seconds(0.2), function() { // 2.5칸까지 점프
 	yvel = -220 / seconds(1)
 	//show_debug_message("js")
 }, function() {
-	yvel = -80 / seconds(1)
+	yvel = -100 / seconds(1)
 	//show_debug_message("je")
 })
 
 // ** 점프를 이르거나 늦게 눌렀을 때도 가능하게 **
-jump_fore_predicate = new timer(seconds(0.05));
+jump_fore_predicate = new timer(seconds(0.05))
 jump_fore_predicate.finish()
 
 // ** 점프를 땅 위에서 내려가면서 눌렀을 때도 가능하게 **
-jump_cliffoff_predicate = new timer(seconds(0.09));
+jump_cliffoff_predicate = new timer(seconds(0.09))
 jump_cliffoff_predicate.finish()
 
-function jump() {
+function do_jump() {
 	jumping = true
 	jump_predicate.reset()
 	jump_fore_predicate.finish()

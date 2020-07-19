@@ -21,7 +21,7 @@ function element_get_resistance_ratios(type, level) {
 
 	switch type {
 		case elements.none:
-			return level / 10
+			return level * 0.2
 
 		case elements.fire:
 		case elements.cold:

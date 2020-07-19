@@ -206,6 +206,7 @@ function attributes(nname, ntitle): entity(nname, ntitle) constructor {
 	function set_status(value) {
 		status_previous = status
 		status = value
+		//show_debug_message(status)
 		return self
 	}
 
@@ -282,34 +283,58 @@ function get_resistance_ratio(element, attr) {
 	return result
 }
 
-///@function calculate_damage(damage, damage_element, target_attribute)
-function calculate_damage(damage, element, attr) {
+///@function calculate_damage_resistedby_element(damage, damage_element, target_attribute)
+function calculate_damage_resistedby_element(damage, element, attr) {
+	if damage == 0 {
+		return 0
+	} else if damage < 0 { // 회복
+		return damage
+	} else if element == elements.none {
+		return damage
+	}
+
+	var resist = get_resistance_ratio(element, attr)
+	damage -= damage * resist
+	damage = floor(damage)
+	if damage < 0
+		damage = 0
+
+	return damage
+}
+
+///@function calculate_damage_resistedby_armour(damage, type, target_attribute)
+function calculate_damage_resistedby_armour(damage, type, attr) {
 	if damage == 0 {
 		return 0
 	} else if damage < 0 { // 회복
 		return damage
 	}
 
-	var result = damage
-	var resist = get_resistance_ratio(element, attr)
-	result -= result * resist
-	result = floor(result)
-	if result < 0
-		result = 0
+	var gdr = get_resistance_ratio(elements.none, attr)
+	var armour = attr.get_armour()
+	if type == damage_types.physical {
+		damage -= armour * gdr
+	}
+	damage -= irandom(armour)
 
-	return result
+	damage = floor(damage)
+	if damage < 0
+		damage = 0
+
+	return damage
 }
 
-function attack_try(target) {
-	
-}
+function hit_try(target, damage, type, element) {
+	if target.is_invincible() {
+		return false
+	} else {
+		var attr = target.property
+		var damage_processed = calculate_damage_resistedby_element(damage, element, attr)
+		damage_processed = calculate_damage_resistedby_armour(damage_processed, type, attr)
 
-function attack_process(target) {
-	var type = 0, damage = 0
-	if type == damage_types.physical
-		property.add_health(-damage)
-	else if type == damage_types.magical
-		property.add_health(-damage)
+		target.do_hurt(damage_processed)
+		return true
+	}
 }
 
 function attributes_load(target, serial) {

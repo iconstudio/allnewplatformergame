@@ -77,7 +77,7 @@ can_jump = now_on_ground or jump_cliffoff_predicate.get() < 1
 var check_top = wall_on_top(1)
 if can_jump and !jumping and !check_top {
 	if jump_fore_predicate.get() < 1 {
-		jump()
+		do_jump()
 	}
 }
 

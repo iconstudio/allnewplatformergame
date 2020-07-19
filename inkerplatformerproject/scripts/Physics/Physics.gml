@@ -106,15 +106,15 @@ function move_vertical(range) {
 	var surplus = frac(abs(range))
 	if range == 0 {
 		return NONE
-	} else {
-		
 	}
 
+	var result = NONE
 	if range < 0 {
 		for (;0 < distance; distance--) {
 			if wall_on_top(1) {
 				move_contact_solid(90, 1)
-				return UP
+				result = UP
+				break
 			} else {
 				y--
 			}
@@ -123,7 +123,7 @@ function move_vertical(range) {
 		if surplus != 0 {
 			if wall_on_top(surplus) {
 				move_contact_solid(90, 1)
-				return UP
+				result = UP
 			} else {
 				y -= surplus
 			}
@@ -131,20 +131,33 @@ function move_vertical(range) {
 	} else if 0 < range {
 		for (;0 < distance; distance--) {
 			if wall_on_underneath(1) {
-				return DOWN
+				result = DOWN
+				break
 			} else {
 				y++
 			}
 		}
 
 		if surplus != 0 {
-			if wall_on_underneath(surplus)
-				return DOWN
-			else
+			if wall_on_underneath(surplus) {
+				result = DOWN
+			} else {
 				y += surplus
+			}
 		}
 	}
-	return NONE
+
+	if ground_at(x, y) {
+		for (var i = 1; i <= 2; ++i) {
+			if ground_at(x, y -	1) {
+				break
+			} else {
+				y--
+			}
+		}
+	}
+
+	return result
 }
 
 function get_friction_ground() {
