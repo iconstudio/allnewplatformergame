@@ -8,48 +8,51 @@ property.init_health(10)
 property.init_mana(3)
 
 attack_slash = noone
-attack = new skill(seconds(0.3), -1, function() {
+attack_info = new skill_strings()
+attack_info.name = "칼질"
+attack = new skill(attack_info, new ability(seconds(0.3), -1, function() {
 	return global.io_skill_1
 }, function() {
 	attack_slash = instance_create(oSlash, x, y)
 	attack_slash.parent = id
-}, -1)
+}))
 
-teleport = new skill(seconds(8), -1, function() {
+teleport_distance = 48
+teleport_info = new skill_strings()
+teleport_info.name = "점멸"
+teleport = new skill(teleport_info, new ability(seconds(8), -1, function() {
 	return global.io_pressed_skill_2
 }, function() {
 	effect_create_below(ef_smoke, x, y, 0, $ffffff)
-	if img_xscale == 1 {
+	if img_xscale == 1
 		move_contact_solid(0, teleport_distance)
-	} else {
+	else
 		move_contact_solid(180, teleport_distance)
-	}
-	effect_create_below(ef_smoke, x, y, 0, $ffffff)
-	//show_debug_message("2")
-}, -1)
-teleport_distance = 48
 
-runaway = new skill(seconds(6), seconds(2), function() {
+	effect_create_below(ef_smoke, x, y, 0, $ffffff)
+}))
+
+runaway_info = new skill_strings()
+runaway_info.name = "신속"
+runaway = new skill(runaway_info, new ability(seconds(6), seconds(2), function() {
 	return global.io_pressed_skill_3
 }, function() {
 	move_spd = move_spd_fast
-	//show_debug_message("3s")
 }, -1, function() {
 	move_spd = move_spd_normal
-	//show_debug_message("3e")
-})
+}))
 
-ultimate = new skill(seconds(5), 0, function() {
+ultimate_info = new skill_strings()
+ultimate_info.name = "궁극"
+ultimate = new skill(ultimate_info, new ability(seconds(5), 0, function() {
 	return global.io_pressed_skill_4
 }, function() {
 	
-}, -1)
+}))
 
-skills = array_create(4, -1)
-skills[0] = attack
-skills[1] = runaway
-skills[2] = teleport
-skills[3] = ultimate
+skills = ds_list_create()
+ds_list_add(skills, attack, teleport)
+skill_number = ds_list_size(skills)
 
 move_key_peek = RIGHT
 move_dir = 0

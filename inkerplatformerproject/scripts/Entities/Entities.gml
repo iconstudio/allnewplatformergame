@@ -359,8 +359,53 @@ function attributes_load(target, serial) {
 	show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
 }
 
-///@function skill(ooltime, period, condition, [execute_once], [execute], [execute_end])
-function skill(cooltime, period, condition, execute_once, execute, execute_end) constructor {
+function skill_set() constructor {
+	skills = ds_list_create()
+
+	add = function(sk) {
+		ds_list_add(skills, sk)
+	}
+
+	get = function(level) {
+		return skills[| level]
+	}
+
+	destroy = function() {
+		ds_list_destroy(skills)
+	}
+}
+
+function skill(info, abt) constructor {
+	level = 0
+	datas = []
+	information = info
+	procedure = abt
+
+	update = function() {
+		procedure.update()
+	}
+
+	get_name = function() {
+		return information.name
+	}
+
+	get_description = function() {
+		return information.description
+	}
+
+	get_tooltip = function() {
+		return information.tooltip
+	}
+}
+
+function skill_strings() constructor {
+	name = ""
+	description = ""
+	tooltip = ""
+}
+
+///@function ability(cooltime, period, condition, [execute_once], [execute], [execute_end])
+function ability(cooltime, period, condition, execute_once, execute, execute_end) constructor {
 	parent = other
 	running = false
 	if cooltime <= 0
@@ -371,6 +416,12 @@ function skill(cooltime, period, condition, execute_once, execute, execute_end) 
 	initializer = argument_select(execute_once, -1)
 	predicate = argument_select(execute, -1) 
 	destructor = argument_select(execute_end, -1)
+
+	copy = function() {
+		var result = new ability(cooldown, duration, shortcut, initializer, predicate, destructor)
+		result.parent = other.parent
+		return result
+	}
 
 	get_cooldown = function() {
 		return cooldown.get()

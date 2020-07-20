@@ -1,3 +1,3 @@
 event_inherited()
 
-skills = 0
+ds_list_destroy(skills)

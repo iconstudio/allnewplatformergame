@@ -1,8 +1,22 @@
 /// @description 초기화
+global.flag_debug = false
+global.flag_is_mobile = (os_type == os_android or os_type == os_ios) // 하지만 안드로이드만 지원
+global.flag_is_browser = (os_browser != browser_not_a_browser)
+global.flag_is_desktop = (os_type == os_windows or os_type == os_macosx or os_type == os_linux) and !global.flag_is_browser
+
 application_surface_enable(true)
 application_surface_draw_enable(false)
 device_mouse_dbclick_enable(false)
 
+display_reset(0, false)
+display_set_timing_method(tm_countvsyncs)
+gpu_set_ztestenable(true)
+gpu_set_zwriteenable(true)
+
+if global.flag_is_mobile {
+	window_set_fullscreen(true)
+	os_powersave_enable(false)
+}
 global.client = {
 	width: 960,
 	height: 640,
@@ -21,7 +35,6 @@ global.client = {
 
 window_set_size(global.client.width, global.client.height)
 surface_resize(application_surface, global.client.game_width, global.client.game_height)
-//display_set_gui_size(global.client.width, global.client.height)
 
 #macro NONE -1
 #macro LEFT 0
@@ -58,5 +71,23 @@ event_user(1)
 global.__entity_list = ds_list_create()
 global.__entity_db = ds_map_create()
 event_user(2)
+
+audio_loaded = true
+if global.flag_is_mobile {
+	audio_channel_num(16)
+} else if global.flag_is_browser {
+	audio_channel_num(4)
+} else {
+	audio_channel_num(32)
+}
+//if !audio_group_is_loaded(audiogroup_everthing) {
+//	audio_group_load(audiogroup_everthing)
+//	audio_loaded = false
+//}
+
+global.shader_supported = shaders_are_supported()
+if !global.shader_supported {
+	throw "Shaders are not supported on this device."
+}
 
 alarm[0] = 1

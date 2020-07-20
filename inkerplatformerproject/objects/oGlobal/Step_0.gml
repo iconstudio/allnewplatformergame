@@ -25,14 +25,29 @@ if keyboard_check_pressed(vk_numpad1) {
 global.io_pressed_jump = keyboard_check_pressed(vk_space)
 global.io_released_jump = keyboard_check_released(vk_space)
 
-global.io_skill_1 = keyboard_check(key_a)
-global.io_skill_2 = keyboard_check(key_s)
-global.io_skill_3 = keyboard_check(key_d)
-global.io_skill_4 = keyboard_check(key_f)
-global.io_pressed_skill_1 = keyboard_check_pressed(key_a)
-global.io_pressed_skill_2 = keyboard_check_pressed(key_s)
-global.io_pressed_skill_3 = keyboard_check_pressed(key_d)
-global.io_pressed_skill_4 = keyboard_check_pressed(key_f)
+global.io_z = keyboard_check(key_z)
+global.io_x = keyboard_check(key_x)
+global.io_c = keyboard_check(key_c)
+global.io_v = keyboard_check(key_v)
+
+global.io_pressed_a = keyboard_check_pressed(key_a)
+global.io_pressed_s = keyboard_check_pressed(key_s)
+global.io_pressed_d = keyboard_check_pressed(key_d)
+global.io_pressed_f = keyboard_check_pressed(key_f)
+
+global.io_pressed_z = keyboard_check_pressed(key_z)
+global.io_pressed_x = keyboard_check_pressed(key_x)
+global.io_pressed_c = keyboard_check_pressed(key_c)
+global.io_pressed_v = keyboard_check_pressed(key_v)
+
+global.io_skill_1 = global.io_z
+global.io_skill_2 = global.io_x
+global.io_skill_3 = global.io_c
+global.io_skill_4 = global.io_v
+global.io_pressed_skill_1 = global.io_pressed_z
+global.io_pressed_skill_2 = global.io_pressed_x
+global.io_pressed_skill_3 = global.io_pressed_c
+global.io_pressed_skill_4 = global.io_pressed_v
 /*
 global.io_skill_1 = keyboard_check(key_q)
 global.io_skill_2 = keyboard_check(key_w)
