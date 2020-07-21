@@ -22,27 +22,29 @@ sk_icon_width = sk_icon_org_width + sk_icon_padding
 sk_icons_width = sk_icon_width * 4 - sk_icon_padding
 sk_x_begin = (global.client.panel_width - sk_icons_width) * 0.5
 
-skill_icon = function(sp, si, nx, ny) constructor {
+skill_indicators = ds_list_create()
+
+skill_icon = function(sp, nx, ny) constructor {
 	sprite = sp
-	skill_index = si
 	x = nx
 	y = ny
 	width = other.sk_icon_org_width
 	height = other.sk_icon_org_height
 
-	function draw() {
+	function draw(sk_ind) {
 		//draw_sprite(sprite, 0, x, y)
 		draw_sprite(sSkillIcon, 0, x, y)
 
-		draw_set_halign(1)
-		draw_set_valign(0)
-		draw_text(x + width * 0.5, y + height, skill_index.get_name())
+		if sk_ind != -1 {
+			draw_set_halign(1)
+			draw_set_valign(0)
+			draw_text(x + width * 0.5, y + height, sk_ind.get_name())
+		}
 	}
 }
-skill_icons = array_create(4, -1)
 
 var nx = sk_x_begin
 for (var i = 0; i < 4; ++i) {
-	skill_icons[i] = new skill_icon(sSkillIcon, parent.skills[i], nx, y_draw_begin)
+	ds_list_add(skill_indicators, new skill_icon(sSkillIcon, nx, y_draw_begin))
 	nx += sk_icon_width
 }

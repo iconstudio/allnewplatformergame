@@ -137,10 +137,10 @@ function color_get_random() {
 }
 
 function struct_exists(struct) {
-	return !is_undefined(instanceof(struct))
+	return is_struct(struct) //!is_undefined(instanceof(struct))
 }
 
-///@function select_more(index, arguments...)
+///@function select_more(index, ...)
 function select_more(index) {
 	if index + 1 < argument_count
 		return argument[index + 1]

@@ -55,9 +55,6 @@ global.playerpos_visible = [0, 0]
 
 global.__function_null = function() {}
 #macro FUNC_NULL global.__function_null
-global.skills = {
-	database: ds_map_create()
-}
 
 global.__lengthdir_cashed = array_create(361, [0, 0])
 for (var i = 0; i <= 360; ++i) {

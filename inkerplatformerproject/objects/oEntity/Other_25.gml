@@ -6,6 +6,7 @@ img_xscale = 1
 img_angle = 0
 property = new attributes()
 property.init_status(entity_states.normal)
+skills = -1
 
 function make_flyer() {
 	property.set_flyable(true)

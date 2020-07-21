@@ -1,4 +1,6 @@
 /// @description 속성 초기화
+set_serial_number("player-default")
+
 event_inherited()
 
 property.set_name("Character")
@@ -24,11 +26,7 @@ teleport = new skill(teleport_info, new ability(seconds(8), -1, function() {
 	return global.io_pressed_skill_2
 }, function() {
 	effect_create_below(ef_smoke, x, y, 0, $ffffff)
-	if img_xscale == 1
-		move_contact_solid(0, teleport_distance)
-	else
-		move_contact_solid(180, teleport_distance)
-
+	move_horizontal_correction(teleport_distance * img_xscale)
 	effect_create_below(ef_smoke, x, y, 0, $ffffff)
 }))
 
@@ -50,16 +48,16 @@ ultimate = new skill(ultimate_info, new ability(seconds(5), 0, function() {
 	
 }))
 
-skills = ds_list_create()
-ds_list_add(skills, attack, teleport)
-skill_number = ds_list_size(skills)
+skills_test = new skill_set(attack, teleport)
+//skills = make_skillset_owned(skills_test)
+//skills = new skill_set(attack, teleport)//skills_test//make_skillset_owned(skills_test)
 
 move_key_peek = RIGHT
 move_dir = 0
 move_spd_normal = 130 / seconds(1)
 move_spd_fast = 160 / seconds(1)
 move_spd = move_spd_normal
-move_acc_ratio = seconds(0.05)
+move_acc_ratio = seconds(0.12)
 
 jumping = false
 jump_predicate = new timer(seconds(0.2), function() { // 2.5칸까지 점프

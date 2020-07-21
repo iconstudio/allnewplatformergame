@@ -22,8 +22,7 @@ function entity(nname, ntitle) constructor {
 	ev = 0 // 회피
 	sh = 0 // 패링
 
-	skill_number = 0
-	skills = []
+	skills_original = -1
 
 #region 메서드
 	function set_image(value) {
@@ -355,31 +354,87 @@ function attributes_load(target, serial) {
 	target.set_armour(properties.get_armour())
 	target.set_shield(properties.get_shield())
 	target.set_evasion(properties.get_evasion())
+
+	// ** 스킬 모음 상속 **
+	if properties.skills_original != -1 {
+		skills = make_skillset_owned(properties.skills_original)
+	}
+
 	show_debug_message("Name:" + string(target.get_name()))
 	show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
 }
 
-function skill_set() constructor {
-	skills = ds_list_create()
+///@function make_skillset_owned(skill_original)
+function make_skillset_owned(skset_org) {
+	return skset_org.copy()
+}
 
-	add = function(sk) {
-		ds_list_add(skills, sk)
+///@function skill_set([skill_0], [skill_1], ...)
+function skill_set(args) constructor {
+	skills = []
+	number = 0
+
+	copy = function() {
+		//show_debug_message("A skillset is copied: " + string(self))
+		if 0 < number {
+			var result = new skill_set()
+			for (var i = 0; i < number; ++i) {
+				result.add(skills[i].copy())
+			}
+			return result
+		} else {
+			return new skill_set() // 빈 스킬 모음 반환
+		}
 	}
 
-	get = function(level) {
-		return skills[| level]
+	update = function() {
+		if 0 < number {
+			for (var i = 0; i < number; ++i) {
+				skills[i].update() // 재귀 형태가 될 수 있다.
+			}
+		}
+	}
+
+	set = function(index, sk) {
+		skills[index] = sk
+		return self
+	}
+
+	add = function(sk) {
+		set(number, sk)
+		return number++
+	}
+
+	get = function(index) {
+		if number <= index
+			throw "능력의 정보 번호가 잘못됐습니다."
+		return skills[index]
+	}
+
+	get_number = function() {
+		return number
 	}
 
 	destroy = function() {
-		ds_list_destroy(skills)
+		skills = 0
+	}
+
+	if 0 < argument_count {
+		for (var i = 0; i < argument_count; ++i)
+			add(argument[i])
 	}
 }
 
 function skill(info, abt) constructor {
+	original = -1
 	level = 0
 	datas = []
 	information = info
 	procedure = abt
+
+	copy = function() {
+		return new skill(information, procedure.copy())
+	}
 
 	update = function() {
 		procedure.update()
@@ -389,7 +444,7 @@ function skill(info, abt) constructor {
 		return information.name
 	}
 
-	get_description = function() {
+	get_description = function () {
 		return information.description
 	}
 
@@ -398,14 +453,14 @@ function skill(info, abt) constructor {
 	}
 }
 
-function skill_strings() constructor {
+function skill_strings() constructor { // 복사 불가
 	name = ""
 	description = ""
 	tooltip = ""
 }
 
 ///@function ability(cooltime, period, condition, [execute_once], [execute], [execute_end])
-function ability(cooltime, period, condition, execute_once, execute, execute_end) constructor {
+function ability(cooltime, period, condition, execute_once, execute, execute_end) constructor { // 복사 가능
 	parent = other
 	running = false
 	if cooltime <= 0
@@ -418,9 +473,7 @@ function ability(cooltime, period, condition, execute_once, execute, execute_end
 	destructor = argument_select(execute_end, -1)
 
 	copy = function() {
-		var result = new ability(cooldown, duration, shortcut, initializer, predicate, destructor)
-		result.parent = other.parent
-		return result
+		return new ability(cooldown, duration, shortcut, initializer, predicate, destructor)
 	}
 
 	get_cooldown = function() {

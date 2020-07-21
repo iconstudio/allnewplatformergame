@@ -1,9 +1,4 @@
 /// @description 스텝 이벤트
-for (var i = 0; i < 4; ++i) {
-	if skills[i] != -1
-		skills[i].update()
-}
-
 // ** 일반 공격 **
 /*
 if global.io_pressed_skill_1 {
