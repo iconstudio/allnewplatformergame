@@ -4,3 +4,9 @@ entity_register("", entity_default)
 var entity_new = new entity("Orc")
 entity_new.set_health_max(3)
 entity_register("ent-orc-pawn", entity_new)
+
+entity_new = new entity("Player", "The Unbreakable")
+entity_new.set_health_max(10)
+entity_new.set_mana_max(0)
+
+entity_register("player-default", entity_new)

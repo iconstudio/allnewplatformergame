@@ -356,26 +356,44 @@ function attributes_load(target, serial) {
 	target.set_evasion(properties.get_evasion())
 
 	// ** 스킬 모음 상속 **
-	if properties.skills_original != -1 {
-		skills = make_skillset_owned(properties.skills_original)
+	var original = properties.skills_original
+	if original != -1 {
+		skills = make_skillset_owned(original)
 	}
 
-	show_debug_message("Name:" + string(target.get_name()))
-	show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
+	//show_debug_message("Name:" + string(target.get_name()))
+	//show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
 }
 
-///@function make_skillset_owned(skill_original)
+///@function make_skillset_owned(skillset_original)
 function make_skillset_owned(skset_org) {
-	return skset_org.copy()
+	var result = skset_org.copy()
+	show_debug_message(result)
+
+	return result
 }
 
 ///@function skill_set([skill_0], [skill_1], ...)
-function skill_set(args) constructor {
+function skill_set() constructor {
 	skills = []
 	number = 0
 
+	toString = function() {
+		if 0 < number {
+			var result = ""
+			for (var i = 0; i < number; ++i) {
+				result += string(skills[i])
+				if i < number - 1
+					result += ", "
+			}
+
+			return result
+		} else {
+			return "A empty set of skill"
+		}
+	}
+
 	copy = function() {
-		//show_debug_message("A skillset is copied: " + string(self))
 		if 0 < number {
 			var result = new skill_set()
 			for (var i = 0; i < number; ++i) {
@@ -428,16 +446,31 @@ function skill_set(args) constructor {
 function skill(info, abt) constructor {
 	original = -1
 	level = 0
-	datas = []
+	data = 0
 	information = info
 	procedure = abt
 
+	toString = function() {
+		return "Skill name: " + get_name() + select(get_description() != "", ", " + get_description(), "")
+	}
+
 	copy = function() {
-		return new skill(information, procedure.copy())
+		var copied = new skill(information, procedure.copy())
+		copied.original = self
+		return copied 
 	}
 
 	update = function() {
 		procedure.update()
+	}
+
+	set_data = function(value) {
+		data = value
+		return self
+	}
+
+	get_data = function() {
+		return data
 	}
 
 	get_name = function() {
@@ -453,10 +486,15 @@ function skill(info, abt) constructor {
 	}
 }
 
-function skill_strings() constructor { // 복사 불가
-	name = ""
-	description = ""
-	tooltip = ""
+///@function skill_strings([name], [description], [tooltip])
+function skill_strings(nname, ndescription, ntooltip) constructor { // 복사 불가
+	name = argument_select(nname, "")
+	description = argument_select(ndescription, "")
+	tooltip = argument_select(ntooltip, "")
+
+	toString = function() {
+		return name
+	}
 }
 
 ///@function ability(cooltime, period, condition, [execute_once], [execute], [execute_end])
@@ -473,7 +511,7 @@ function ability(cooltime, period, condition, execute_once, execute, execute_end
 	destructor = argument_select(execute_end, -1)
 
 	copy = function() {
-		return new ability(cooldown, duration, shortcut, initializer, predicate, destructor)
+		return new ability(cooldown.period, duration.period, shortcut, initializer, predicate, destructor)
 	}
 
 	get_cooldown = function() {

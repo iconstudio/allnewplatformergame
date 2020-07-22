@@ -1,4 +1,5 @@
 /// @description 스텝 이벤트
+global.playerid = id
 // ** 일반 공격 **
 /*
 if global.io_pressed_skill_1 {

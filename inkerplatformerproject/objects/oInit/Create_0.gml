@@ -50,6 +50,7 @@ global.friction_ground = 95 / seconds(1)
 global.yvel_max = 256 / seconds(1)
 global.speed_interpolation = 1 / sqrt(2)
 
+global.playerid = noone
 global.playerpos = [0, 0]
 global.playerpos_visible = [0, 0]
 
