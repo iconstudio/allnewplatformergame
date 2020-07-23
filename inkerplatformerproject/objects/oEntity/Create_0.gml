@@ -6,7 +6,7 @@ function set_serial_number(caption) {
 	return self
 }
 
-function get_serial_number(caption) {
+function get_serial_number() {
 	return sid
 }
 

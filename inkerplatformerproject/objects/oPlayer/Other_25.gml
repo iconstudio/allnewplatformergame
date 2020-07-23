@@ -10,7 +10,7 @@ attack = new skill(attack_info, new ability(seconds(0.3), -1, function() {
 }, function() {
 	attack_slash = instance_create(oSlash, x, y)
 	attack_slash.parent = id
-})).set_data(noone)
+}))
 
 blink_distance = 48
 blink_info = new skill_strings("점멸")
@@ -39,8 +39,6 @@ ultimate = new skill(ultimate_info, new ability(seconds(5), 0, function() {
 }))
 
 skills_test = new skill_set(attack, blink)
-//show_debug_message("Data of attack skill: " + string(attack_test))
-//show_debug_message("Data of blink skill: " + string(blink_test))
 
 skills = make_skillset_owned(skills_test)
 //show_debug_message("Data of skill set: " + string(skills))

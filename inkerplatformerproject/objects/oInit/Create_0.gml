@@ -4,19 +4,14 @@ global.flag_is_mobile = (os_type == os_android or os_type == os_ios) // 하지�
 global.flag_is_browser = (os_browser != browser_not_a_browser)
 global.flag_is_desktop = (os_type == os_windows or os_type == os_macosx or os_type == os_linux) and !global.flag_is_browser
 
+device_mouse_dbclick_enable(false)
 application_surface_enable(true)
 application_surface_draw_enable(false)
-device_mouse_dbclick_enable(false)
-
 display_reset(0, false)
 display_set_timing_method(tm_countvsyncs)
 gpu_set_ztestenable(true)
 gpu_set_zwriteenable(true)
 
-if global.flag_is_mobile {
-	window_set_fullscreen(true)
-	os_powersave_enable(false)
-}
 global.client = {
 	width: 960,
 	height: 640,
@@ -53,6 +48,33 @@ global.speed_interpolation = 1 / sqrt(2)
 global.playerid = noone
 global.playerpos = [0, 0]
 global.playerpos_visible = [0, 0]
+
+global.inventory_item_preset = function() constructor {
+	
+}
+
+global.inventory_item = (function() constructor {
+	
+})
+
+global.inventory = new (function() constructor {
+	opened = false
+	
+	/*
+		GUI에 표시됨 (터치 가능)
+			첫번째 칸은 무기
+			두번째 칸은 장비 혹은 소모품
+			세번째 칸은 장비 혹은 소모품
+			네번째 칸은 장비 혹은 소모품
+			다섯번째 칸은 장비 혹은 소모품
+			여섯번째 칸은 장비 혹은 소모품
+
+		인벤토리를 열어야 보임
+			다음 여덟칸은 가방
+	*/
+	number = 6 + 8
+	datas = array_create(number, noone)
+})()
 
 global.__function_null = function() {}
 #macro FUNC_NULL global.__function_null
