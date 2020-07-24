@@ -1,6 +1,7 @@
 function entity_register(serial, item) {
 	ds_list_add(global.__entity_list, item)
 	ds_map_add(global.__entity_db, serial, item)
+
 	show_debug_message(string(item))
 }
 
@@ -12,13 +13,17 @@ function entity_find(serial) {
 		return result
 }
 
+function entity_read(map_parsed) {
+	
+}
+
 // ** 데이터베이스 용 속성 **
 ///@function entity(name, [title])
 function entity(nname, ntitle) constructor {
 	version = GM_version
 
-	sprite = -1
-	sprite_icon = -1
+	sprite = -1 // 실제 스프라이트가 아님
+	sprite_icon = -1 // 편집기 혹은 지도에 표시해 줄 아이콘
 	name = nname
 	title = argument_select(ntitle, "")
 
@@ -27,11 +32,14 @@ function entity(nname, ntitle) constructor {
 	can_swim_level = swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
 	flying = false // 날고있는 상태
 
+	category = 0 // 엔티티의 종류
+	intelligence = 0 // 엔티티의 지능
+
 	hd = 0 // 레벨
 	maxhp = 1 // 체력
 	maxmp = 0 // 마력
 	ac = 0 // 물리 방어
-	er = array_create(10, 0) // 속성 저항
+	er = 0//array_create(10, 0) // 속성 저항 (0이면 전부 0이라는 뜻)
 	mr = 0 // 상태 저항
 	ev = 0 // 회피
 	sh = 0 // 패링
@@ -39,6 +47,10 @@ function entity(nname, ntitle) constructor {
 	skills_original = -1
 
 #region 메서드
+	function toString() {
+		return name
+	}
+
 	function set_image(value) {
 		sprite = value
 		return self
@@ -84,6 +96,16 @@ function entity(nname, ntitle) constructor {
 		return self
 	}
 
+	function set_category(value) {
+		category = value
+		return self
+	}
+
+	function set_intelligence(value) {
+		intelligence = value
+		return self
+	}
+
 	function set_health_max(value) {
 		maxhp = value
 		return self
@@ -100,6 +122,8 @@ function entity(nname, ntitle) constructor {
 	}
 
 	function set_element_resistance(type, value) {
+		if !is_array(er)
+			er = array_create(10, 0)
 		er[type] = value
 		return self
 	}
@@ -155,6 +179,14 @@ function entity(nname, ntitle) constructor {
 		return flying
 	}
 
+	function get_category() {
+		return category
+	}
+
+	function get_intelligence() {
+		return intelligence
+	}
+
 	function get_level() {
 		return hd
 	}
@@ -172,6 +204,9 @@ function entity(nname, ntitle) constructor {
 	}
 
 	function get_element_resistance(type) {
+		if !is_array(er)
+			return 0
+
 		return er[type]
 	}
 
@@ -185,6 +220,10 @@ function entity(nname, ntitle) constructor {
 
 	function get_shield() {
 		return sh
+	}
+
+	function get_skills_original() {
+		return skills_original
 	}
 #endregion
 }

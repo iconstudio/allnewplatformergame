@@ -5,9 +5,8 @@ event_inherited()
 img_xscale = 1
 img_angle = 0
 property = new attributes()
-property.init_status(entity_states.normal)
 skills = -1
-attributes_load(property, get_serial_number())
+property_load(property, get_serial_number())
 
 attacking = false
 

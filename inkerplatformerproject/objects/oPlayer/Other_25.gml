@@ -40,7 +40,7 @@ ultimate = new skill(ultimate_info, new ability(seconds(5), 0, function() {
 
 skills_test = new skill_set(attack, blink)
 
-skills = make_skillset_owned(skills_test)
+skills = skills_test.copy()
 //show_debug_message("Data of skill set: " + string(skills))
 
 move_key_peek = RIGHT

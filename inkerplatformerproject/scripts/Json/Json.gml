@@ -1,9 +1,8 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function json_stringify(struct){
 	var _str = "";
 	if (is_struct(struct)) {
 		var _iter = new Iterator(struct);
+
 		switch (struct.type) {
 			case ds_type_list:
 				_str += "[";
@@ -11,6 +10,7 @@ function json_stringify(struct){
 					if (_iter.key > 0) {
 						_str += ",";
 					}
+
 					var v = _iter.value();
 					if (is_struct(v)) {
 						v = json_stringify(v);
@@ -21,8 +21,10 @@ function json_stringify(struct){
 					}
 					_str += v;
 				}
+
 				_str += "]";
 			break;
+
 			case ds_type_map:
 				_str += "{";
 				while(_iter.next() != undefined) {
@@ -34,12 +36,14 @@ function json_stringify(struct){
 					} else {
 						v = string(v);	
 					}
+
 					_str += "\"" + string(_iter.key) + "\":";
 					_str += string(v);
 					if (_iter.key != _iter.last()) {
 						_str += ",";
 					}
 				}
+
 				_str += "}";
 			break;
 		}

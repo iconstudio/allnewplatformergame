@@ -159,41 +159,42 @@ function hit_try(target, damage, type, element) {
 	}
 }
 
-function attributes_load(target, serial) {
-	var properties = entity_find(serial)
-	target.set_image(properties.get_image())
-	target.set_icon(properties.get_icon())
-	target.set_name(properties.get_name())
-	target.set_title(properties.get_title())
-	target.set_flyable(properties.get_flyable())
-	target.set_movable_through_blocks(properties.get_movable_through_blocks())
-	target.set_swimming_level(properties.get_swimming_level())
-	target.set_flying(properties.get_flying())
+function attributes_import(target, source) {
+	target.set_image(source.get_image())
+	target.set_icon(source.get_icon())
+	target.set_name(source.get_name())
+	target.set_title(source.get_title())
 
-	target.set_level(properties.get_level())
-	target.init_health(properties.get_health_max())
-	target.init_mana(properties.get_mana_max())
-	target.set_magic_resistance(properties.get_magic_resistance())
-	target.set_armour(properties.get_armour())
-	target.set_shield(properties.get_shield())
-	target.set_evasion(properties.get_evasion())
+	target.set_flyable(source.get_flyable())
+	target.set_movable_through_blocks(source.get_movable_through_blocks())
+	target.set_swimming_level(source.get_swimming_level())
+	target.set_flying(source.get_flying())
+	target.set_category(source.get_category())
+	target.set_intelligence(source.get_intelligence())
 
-	// ** 스킬 모음 상속 **
-	var original = properties.skills_original
-	if original != -1 {
-		skills = make_skillset_owned(original)
-	}
+	target.init_status(entity_states.normal)
+	target.set_level(source.get_level())
+	target.init_health(source.get_health_max())
+	target.init_mana(source.get_mana_max())
+	target.set_magic_resistance(source.get_magic_resistance())
+	target.set_armour(source.get_armour())
+	target.set_shield(source.get_shield())
+	target.set_evasion(source.get_evasion())
 
-	//show_debug_message("Name:" + string(target.get_name()))
-	//show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
+	target.skills_original = source.get_skills_original()
 }
 
-///@function make_skillset_owned(skillset_original)
-function make_skillset_owned(skset_org) {
-	var result = skset_org.copy()
-	show_debug_message(result)
+function property_load(target, serial) {
+	var original = entity_find(serial)
+	attributes_import(target, original)
 
-	return result
+	// ** 스킬 모음 복사 **
+	var sks_org = original.get_skills_original()
+	if sks_org != -1 {
+		skills = sks_org.copy()
+	}
+	//show_debug_message("Name:" + string(target.get_name()))
+	//show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
 }
 
 ///@function skill_set([skill_0], [skill_1], ...)
@@ -201,7 +202,7 @@ function skill_set() constructor {
 	skills = []
 	number = 0
 
-	toString = function() {
+	function toString() {
 		if 0 < number {
 			var result = ""
 			for (var i = 0; i < number; ++i) {
