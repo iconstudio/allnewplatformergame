@@ -1,5 +1,5 @@
-///@function attribute(name, [title])
-function attributes(nname, ntitle): entity(nname, ntitle) constructor {
+///@function Attribute(name, [title])
+function Attribute(nname, ntitle): Entity(nname, ntitle) constructor {
 	status = entity_states.normal
 	status_previous = status
 
@@ -87,6 +87,10 @@ function attributes(nname, ntitle): entity(nname, ntitle) constructor {
 
 	function reprise_status() {
 		set_status(get_status_previous())
+	}
+
+	function load(source) {
+		
 	}
 #endregion
 }
@@ -191,7 +195,7 @@ function attributes_import(target, source) {
 
 function property_load(serial) {
 	var original = entity_find(serial)
-	var result = attributes_import(new attribute(), original)
+	var result = attributes_import(new Attribute(), original)
 
 	// ** 스킬 모음 복사 **
 	self.skills = -1

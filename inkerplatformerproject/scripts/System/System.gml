@@ -18,8 +18,8 @@ function entity_read(map_parsed) {
 }
 
 // ** 데이터베이스 용 속성 **
-///@function entity(name, [title])
-function entity(nname, ntitle) constructor {
+///@function Entity(name, [title])
+function Entity(nname, ntitle) constructor {
 	version = GM_version
 
 	sprite = -1 // 실제 스프라이트가 아님
