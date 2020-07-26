@@ -1,8 +1,5 @@
 event_inherited()
 
-if struct_exists(skills) {
-	skills.update()
-}
-
+skills_update()
 prop_invincible.update()
 prop_stun.update()

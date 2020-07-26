@@ -4,11 +4,18 @@ event_inherited()
 
 img_xscale = 1
 img_angle = 0
-property = new attributes()
-skills = -1
-property_load(property, get_serial_number())
+property = property_load(get_serial_number())
 
-attacking = false
+function get_skills() {
+	return skills
+}
+
+function skills_update() {
+	var sk = get_skills()
+	if sk != -1 and struct_exists(sk) {
+		sk.update()
+	}
+}
 
 function make_flyer() {
 	property.set_flyable(true)

@@ -176,25 +176,32 @@ function attributes_import(target, source) {
 	target.set_level(source.get_level())
 	target.init_health(source.get_health_max())
 	target.init_mana(source.get_mana_max())
+	if is_array(source.er)
+		array_copy(target.er, 0, source.er, 10)
+	else
+		target.er = 0
 	target.set_magic_resistance(source.get_magic_resistance())
 	target.set_armour(source.get_armour())
 	target.set_shield(source.get_shield())
 	target.set_evasion(source.get_evasion())
 
 	target.skills_original = source.get_skills_original()
+	return target
 }
 
-function property_load(target, serial) {
+function property_load(serial) {
 	var original = entity_find(serial)
-	attributes_import(target, original)
+	var result = attributes_import(new attribute(), original)
 
 	// ** 스킬 모음 복사 **
+	self.skills = -1
 	var sks_org = original.get_skills_original()
 	if sks_org != -1 {
 		skills = sks_org.copy()
 	}
 	//show_debug_message("Name:" + string(target.get_name()))
 	//show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
+	return result
 }
 
 ///@function skill_set([skill_0], [skill_1], ...)
