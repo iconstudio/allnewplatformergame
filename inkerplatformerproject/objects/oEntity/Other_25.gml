@@ -4,7 +4,13 @@ event_inherited()
 
 img_xscale = 1
 img_angle = 0
-property = property_load(get_serial_number())
+skills = -1
+property = new Property(get_serial_number())
+
+function set_skills(value) {
+	skills = value
+	return self
+}
 
 function get_skills() {
 	return skills

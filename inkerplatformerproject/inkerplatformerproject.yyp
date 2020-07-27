@@ -25,6 +25,7 @@
     {"id":{"name":"sPlayerMask","path":"sprites/sPlayerMask/sPlayerMask.yy",},"order":2,},
     {"id":{"name":"sItem","path":"sprites/sItem/sItem.yy",},"order":3,},
     {"id":{"name":"oIgnore","path":"objects/oIgnore/oIgnore.yy",},"order":2,},
+    {"id":{"name":"GameLogics","path":"scripts/GameLogics/GameLogics.yy",},"order":6,},
     {"id":{"name":"oSolid","path":"objects/oSolid/oSolid.yy",},"order":2,},
     {"id":{"name":"oPlayerHUD","path":"objects/oPlayerHUD/oPlayerHUD.yy",},"order":1,},
     {"id":{"name":"roomStage001","path":"rooms/roomStage001/roomStage001.yy",},"order":3,},

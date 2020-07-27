@@ -1,3 +1,268 @@
+function entity_register(serial, item) {
+	ds_list_add(global.__entity_list, item)
+	ds_map_add(global.__entity_db, serial, item)
+
+	show_debug_message(string(item))
+}
+
+function entity_find(serial) {
+	var result = ds_map_find_value(global.__entity_db, serial)
+	if is_undefined(result)
+		return global.__entity_db[? ""]
+	else
+		return result
+}
+
+function entity_read(map_parsed) {
+	
+}
+
+// ** 데이터베이스 용 속성 **
+///@function Entity(name, [title])
+function Entity(nname, ntitle) constructor {
+	version = GM_version
+
+	sprite = -1 // 실제 스프라이트가 아님
+	sprite_icon = -1 // 편집기 혹은 지도에 표시해 줄 아이콘
+	name = nname
+	title = argument_select(ntitle, "")
+
+	can_fly = false // 지금 날고있지 않더라도 날 수 있음
+	can_move_through = false // 블록을 통과 가능 (날지 못하면 좌우로만 가능)
+	can_swim_level = swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
+	flying = false // 날고있는 상태
+
+	category = 0 // 엔티티의 종류
+	intelligence = 0 // 엔티티의 지능
+
+	hd = 0 // 레벨
+	maxhp = 1 // 체력
+	maxmp = 0 // 마력
+	ac = 0 // 물리 방어
+	er = 0//array_create(10, 0) // 속성 저항 (0이면 전부 0이라는 뜻)
+	mr = 0 // 상태 저항
+	ev = 0 // 회피
+	sh = 0 // 패링
+
+	skills_original = -1
+
+#region 메서드
+	function toString() {
+		return name
+	}
+
+	function set_image(value) {
+		sprite = value
+		return self
+	}
+
+	function set_icon(value) {
+		sprite_icon = value
+		return self
+	}
+
+	function set_name(caption) {
+		name = caption
+		return self
+	}
+
+	function set_title(caption) {
+		title = caption
+		return self
+	}
+
+	function set_flyable(value) {
+		can_fly = value
+		return self
+	}
+
+	function set_movable_through_blocks(value) {
+		can_move_through = value
+		return self
+	}
+
+	function set_swimming_level(value) {
+		can_swim_level = value
+		return self
+	}
+
+	function set_flying(value) {
+		flying = value
+		return self
+	}
+
+	function set_level(value) {
+		hd = value
+		return self
+	}
+
+	function set_category(value) {
+		category = value
+		return self
+	}
+
+	function set_intelligence(value) {
+		intelligence = value
+		return self
+	}
+
+	function set_health_max(value) {
+		maxhp = value
+		return self
+	}
+
+	function set_mana_max(value) {
+		maxmp = value
+		return self
+	}
+
+	function set_armour(value) {
+		ac = value
+		return self
+	}
+
+	function set_element_resistance(type, value) {
+		if !is_array(er)
+			er = array_create(10, 0)
+		er[type] = value
+		return self
+	}
+
+	function set_magic_resistance(value) {
+		mr = value
+		return self
+	}
+
+	function set_evasion(value) {
+		ev = value
+		return self
+	}
+
+	function set_shield(value) {
+		sh = value
+		return self
+	}
+
+	function get_version() {
+		return version
+	}
+
+	function get_image() {
+		return sprite
+	}
+
+	function get_icon() {
+		return sprite_icon
+	}
+
+	function get_name(caption) {
+		return name
+	}
+
+	function get_title(caption) {
+		return title
+	}
+
+	function get_flyable() {
+		return can_fly
+	}
+
+	function get_movable_through_blocks() {
+		return can_move_through
+	}
+
+	function get_swimming_level() {
+		return can_swim_level
+	}
+
+	function get_flying() {
+		return flying
+	}
+
+	function get_category() {
+		return category
+	}
+
+	function get_intelligence() {
+		return intelligence
+	}
+
+	function get_level() {
+		return hd
+	}
+
+	function get_health_max() {
+		return maxhp
+	}
+
+	function get_mana_max() {
+		return maxmp
+	}
+
+	function get_armour() {
+		return ac
+	}
+
+	function get_element_resistance(type) {
+		if !is_array(er)
+			return 0
+
+		return er[type]
+	}
+
+	function get_magic_resistance() {
+		return mr
+	}
+
+	function get_evasion() {
+		return ev
+	}
+
+	function get_shield() {
+		return sh
+	}
+
+	function get_skills_original() {
+		return skills_original
+	}
+#endregion
+}
+
+///@function Property(serial_number)
+function Property(serial): Attribute() constructor {
+	source = entity_find(serial)
+	set_image(source.get_image())
+	set_icon(source.get_icon())
+	set_name(source.get_name())
+	set_title(source.get_title())
+
+	set_flyable(source.get_flyable())
+	set_movable_through_blocks(source.get_movable_through_blocks())
+	set_swimming_level(source.get_swimming_level())
+	set_flying(source.get_flying())
+	set_category(source.get_category())
+	set_intelligence(source.get_intelligence())
+
+	init_status(entity_states.normal)
+	set_level(source.get_level())
+	init_health(source.get_health_max())
+	init_mana(source.get_mana_max())
+	if is_array(source.er)
+		array_copy(er, 0, source.er, 0, 10)
+	else
+		er = 0
+	set_magic_resistance(source.get_magic_resistance())
+	set_armour(source.get_armour())
+	set_shield(source.get_shield())
+	set_evasion(source.get_evasion())
+
+	// ** 스킬 모음 복사 **
+	var sks_org = source.get_skills_original()
+	if sks_org != -1 {
+		other.set_skills(sks_org.copy())
+	}
+}
+
 ///@function Attribute(name, [title])
 function Attribute(nname, ntitle): Entity(nname, ntitle) constructor {
 	status = entity_states.normal
@@ -29,11 +294,6 @@ function Attribute(nname, ntitle): Entity(nname, ntitle) constructor {
 		status_previous = status
 		status = value
 		//show_debug_message(status)
-		return self
-	}
-
-	function set_movable_through_blocks(value) {
-		can_move_through = value
 		return self
 	}
 
@@ -88,124 +348,7 @@ function Attribute(nname, ntitle): Entity(nname, ntitle) constructor {
 	function reprise_status() {
 		set_status(get_status_previous())
 	}
-
-	function load(source) {
-		
-	}
 #endregion
-}
-
-///@function get_resistance_ratio(element_type, target_attribute)
-function get_resistance_ratio(element, attr) {
-	var er, result = 0
-	try {
-		er = attr.get_element_resistance(element) // 저항 수준
-	} catch(_) {
-		show_debug_message("저항 속성을 찾을 수 없습니다.")
-		er = 0
-	}
-	result = element_get_resistance_ratios(element, er)
-
-	return result
-}
-
-///@function calculate_damage_resistedby_element(damage, damage_element, target_attribute)
-function calculate_damage_resistedby_element(damage, element, attr) {
-	if damage == 0 {
-		return 0
-	} else if damage < 0 { // 회복
-		return damage
-	} else if element == elements.none {
-		return damage
-	}
-
-	var resist = get_resistance_ratio(element, attr)
-	damage -= damage * resist
-	damage = floor(damage)
-	if damage < 0
-		damage = 0
-
-	return damage
-}
-
-///@function calculate_damage_resistedby_armour(damage, type, target_attribute)
-function calculate_damage_resistedby_armour(damage, type, attr) {
-	if damage == 0 {
-		return 0
-	} else if damage < 0 { // 회복
-		return damage
-	}
-
-	var gdr = get_resistance_ratio(elements.none, attr)
-	var armour = attr.get_armour()
-	if type == damage_types.physical {
-		damage -= armour * gdr
-	}
-	damage -= irandom(armour)
-
-	damage = floor(damage)
-	if damage < 0
-		damage = 0
-
-	return damage
-}
-
-function hit_try(target, damage, type, element) {
-	if target.is_invincible() {
-		return false
-	} else {
-		var attr = target.property
-		var damage_processed = calculate_damage_resistedby_element(damage, element, attr)
-		damage_processed = calculate_damage_resistedby_armour(damage_processed, type, attr)
-
-		target.do_hurt(damage_processed)
-		return true
-	}
-}
-
-function attributes_import(target, source) {
-	target.set_image(source.get_image())
-	target.set_icon(source.get_icon())
-	target.set_name(source.get_name())
-	target.set_title(source.get_title())
-
-	target.set_flyable(source.get_flyable())
-	target.set_movable_through_blocks(source.get_movable_through_blocks())
-	target.set_swimming_level(source.get_swimming_level())
-	target.set_flying(source.get_flying())
-	target.set_category(source.get_category())
-	target.set_intelligence(source.get_intelligence())
-
-	target.init_status(entity_states.normal)
-	target.set_level(source.get_level())
-	target.init_health(source.get_health_max())
-	target.init_mana(source.get_mana_max())
-	if is_array(source.er)
-		array_copy(target.er, 0, source.er, 10)
-	else
-		target.er = 0
-	target.set_magic_resistance(source.get_magic_resistance())
-	target.set_armour(source.get_armour())
-	target.set_shield(source.get_shield())
-	target.set_evasion(source.get_evasion())
-
-	target.skills_original = source.get_skills_original()
-	return target
-}
-
-function property_load(serial) {
-	var original = entity_find(serial)
-	var result = attributes_import(new Attribute(), original)
-
-	// ** 스킬 모음 복사 **
-	self.skills = -1
-	var sks_org = original.get_skills_original()
-	if sks_org != -1 {
-		skills = sks_org.copy()
-	}
-	//show_debug_message("Name:" + string(target.get_name()))
-	//show_debug_message("Level:" + string(target.get_level()) + ", Max HP: " + string(target.get_health_max()) + ", HP: " + string(target.get_health()) + ", MP: " + string(target.get_mana()))
-	return result
 }
 
 ///@function skill_set([skill_0], [skill_1], ...)
