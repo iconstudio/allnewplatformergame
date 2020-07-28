@@ -4,6 +4,7 @@ enum damage_types {
 	magical
 }
 
+#macro element_number 10
 enum elements {
 	none = 0, // 0, 무속성 (기본 방어율)
 	fire,

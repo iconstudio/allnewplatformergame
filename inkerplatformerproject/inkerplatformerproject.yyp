@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"oEnemyGeneral","path":"objects/oEnemyGeneral/oEnemyGeneral.yy",},"order":1,},
     {"id":{"name":"sSkillIcon","path":"sprites/sSkillIcon/sSkillIcon.yy",},"order":0,},
+    {"id":{"name":"sFireElemental","path":"sprites/sFireElemental/sFireElemental.yy",},"order":6,},
     {"id":{"name":"oPlayerDamage","path":"objects/oPlayerDamage/oPlayerDamage.yy",},"order":5,},
     {"id":{"name":"oOrc","path":"objects/oOrc/oOrc.yy",},"order":2,},
     {"id":{"name":"fontUI","path":"fonts/fontUI/fontUI.yy",},"order":0,},

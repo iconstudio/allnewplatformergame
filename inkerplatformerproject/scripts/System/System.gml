@@ -6,7 +6,7 @@ function element_get_resistance_ratios(type, level) {
 		level = 4
 
 	switch type {
-		case elements.none:
+		case elements.none: // 최소 물리 방어율 (GDR)
 			return level * 0.2
 
 		case elements.fire:
