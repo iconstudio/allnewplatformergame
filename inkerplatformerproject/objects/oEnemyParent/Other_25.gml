@@ -1,14 +1,39 @@
 /// @description 적 초기화
 event_inherited()
 
+hierarchy = noone // 부모
 target = noone
+
+ai_pattern = -1
+
 
 thorny = false // 플레이어와 접촉으로 피해 입히기
 thorns = -1
-collide_damage = 1
 
-///@function make_thorny([flag])
-function make_thorny(flag) {
+function get_thorny() {
+	return thorny
+}
+
+///@function make_thorny([flag], [damage])
+function make_thorny(flag, dmg) {
 	var value = argument_select(flag, true)
-	
+	thorny = value
+
+	if value {
+		var value_dmg = argument_select(dmg, 1)
+		if struct_exists(thorns) {
+			thorns.damage = value_dmg
+		} else {
+			thorns = {
+				type: elements.none,
+				damage: value_dmg,
+				consistency: false
+			}
+		}
+		return thorns
+	} else {
+		if struct_exists(thorns) {
+			delete thorns
+		}
+	}
 }
