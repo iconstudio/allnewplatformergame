@@ -5,7 +5,7 @@ hierarchy = noone // 부모
 target = noone
 
 ai_pattern = -1
-
+walk_speed = 48 / seconds(1)
 
 thorny = false // 플레이어와 접촉으로 피해 입히기
 thorns = -1
@@ -27,7 +27,7 @@ function make_thorny(flag, dmg) {
 			thorns = {
 				type: elements.none,
 				damage: value_dmg,
-				consistency: false
+				consistency: false // 무적 시간을 주지 않고 지속적으로 피해를 주는가
 			}
 		}
 		return thorns

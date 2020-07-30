@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sElemantal",
-    "path": "sprites/sElemantal/sElemantal.yy",
+    "name": "sFireElemental",
+    "path": "sprites/sFireElemental/sFireElemental.yy",
   },
   "solid": false,
   "visible": true,
@@ -24,8 +24,8 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":25,"eventType":7,"collisionObjectId":null,"parent":{"name":"oElemental","path":"objects/oElemental/oElemental.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":24,"eventType":7,"collisionObjectId":null,"parent":{"name":"oElemental","path":"objects/oElemental/oElemental.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":25,"eventType":7,"collisionObjectId":null,"parent":{"name":"oFireElemental","path":"objects/oFireElemental/oFireElemental.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":24,"eventType":7,"collisionObjectId":null,"parent":{"name":"oFireElemental","path":"objects/oFireElemental/oFireElemental.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -34,7 +34,7 @@
     "path": "folders/Entity/Enemy.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oElemental",
+  "name": "oFireElemental",
   "tags": [],
   "resourceType": "GMObject",
 }

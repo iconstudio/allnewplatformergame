@@ -39,7 +39,7 @@
     {"id":{"name":"oBlockParent","path":"objects/oBlockParent/oBlockParent.yy",},"order":1,},
     {"id":{"name":"oEntity","path":"objects/oEntity/oEntity.yy",},"order":2,},
     {"id":{"name":"oDirt","path":"objects/oDirt/oDirt.yy",},"order":4,},
-    {"id":{"name":"oElemental","path":"objects/oElemental/oElemental.yy",},"order":3,},
+    {"id":{"name":"oFireElemental","path":"objects/oFireElemental/oFireElemental.yy",},"order":3,},
     {"id":{"name":"sPlankWood","path":"sprites/sPlankWood/sPlankWood.yy",},"order":4,},
     {"id":{"name":"oEnemyParent","path":"objects/oEnemyParent/oEnemyParent.yy",},"order":0,},
     {"id":{"name":"oPlankWood","path":"objects/oPlankWood/oPlankWood.yy",},"order":6,},
