@@ -29,17 +29,19 @@ function Entity(nname, ntitle) constructor {
 
 	can_fly = false // 지금 날고있지 않더라도 날 수 있음
 	can_move_through = false // 블록을 통과 가능 (날지 못하면 좌우로만 가능)
-	can_swim_level = swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
+	can_swim_level = mob_swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
 	flying = false // 날고있는 상태
 
-	category = 0 // 엔티티의 종류
-	intelligence = 0 // 엔티티의 지능
+	category = mob_category.none // 엔티티의 종류
+	intelligence = mob_intelligences.normal // 엔티티의 지능
+	ai_move = mob_ai_movings.nothing
+	ai_attack_pattern = mob_ai_attack_patterns.normal
 
 	hd = 0 // 레벨
 	maxhp = 1 // 체력
 	maxmp = 0 // 마력
 	ac = 0 // 물리 방어
-	er = 0//array_create(element_number, 0) // 속성 저항 (0이면 전부 0이라는 뜻)
+	er = 0 //array_create(element_number, 0) // 속성 저항 (0이면 전부 0이라는 뜻)
 	mr = 0 // 상태 저항
 	ev = 0 // 회피
 	sh = 0 // 패링
@@ -103,6 +105,16 @@ function Entity(nname, ntitle) constructor {
 
 	function set_intelligence(value) {
 		intelligence = value
+		return self
+	}
+
+	function set_ai_moving(value) {
+		ai_move = value
+		return self
+	}
+
+	function set_ai_attack_pattern(value) {
+		ai_attack_pattern = value
 		return self
 	}
 
@@ -185,6 +197,14 @@ function Entity(nname, ntitle) constructor {
 
 	function get_intelligence() {
 		return intelligence
+	}
+
+	function get_ai_move() {
+		return ai_move
+	}
+
+	function get_ai_attack_pattern() {
+		return ai_attack_pattern 
 	}
 
 	function get_level() {

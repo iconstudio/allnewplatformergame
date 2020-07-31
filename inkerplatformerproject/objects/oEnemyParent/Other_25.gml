@@ -4,8 +4,7 @@ event_inherited()
 hierarchy = noone // 부모
 target = noone
 
-ai_pattern = -1
-walk_speed = 48 / seconds(1)
+move_speed = 48 / seconds(1)
 
 thorny = false // 플레이어와 접촉으로 피해 입히기
 thorns = -1
