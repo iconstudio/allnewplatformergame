@@ -1,5 +1,5 @@
 event_inherited()
 
-skills_update()
+update()
 prop_invincible.update()
 prop_stun.update()

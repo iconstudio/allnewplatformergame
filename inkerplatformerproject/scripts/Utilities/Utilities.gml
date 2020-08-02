@@ -55,7 +55,6 @@ function timer(duration, proc, dest) constructor {
 
 	finish = function() {
 		if running or period <= 0 {
-			show_debug_message("te")
 			if destructor != -1 and instance_exists(parent) {
 				var proc = destructor
 				with parent
@@ -103,7 +102,6 @@ function countdown(proc, dest) constructor {
 			if time <= 0
 				closing = true
 		} else if closing {
-			show_debug_message("ce")
 			finish()
 		}
 

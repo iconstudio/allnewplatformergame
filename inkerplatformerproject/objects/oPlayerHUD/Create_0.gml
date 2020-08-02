@@ -4,7 +4,6 @@ if !instance_exists(oPlayer) {
 }
 
 parent = oPlayer.id
-property = parent.property
 y = global.client.game_height
 border = global.client.border
 y_border = y + border

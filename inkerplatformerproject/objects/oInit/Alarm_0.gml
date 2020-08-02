@@ -9,4 +9,4 @@ if global.flag_is_mobile {
 
 instance_create(oGlobal)
 
-alarm[1] = 1
+alarm[1] = 10

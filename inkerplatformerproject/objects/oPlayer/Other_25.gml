@@ -1,6 +1,4 @@
 /// @description 속성 초기화
-set_serial_number("player-default")
-
 event_inherited()
 
 attack_slash = noone

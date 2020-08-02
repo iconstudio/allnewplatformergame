@@ -1,5 +1,5 @@
 /// @description 개체 상태 열거자 선언
-enum entity_states {
+enum mob_status {
 	normal = 0,
 	stunned = 90,
 	dead
@@ -16,6 +16,7 @@ enum mob_category {
 	none				= 0,
 	human				= 1,		//0x00000000001
 	insect			= 2,		//0x00000000010
+	tested			= 8,		//0x00000001000
 	animal			= 16,		//0x00000010000, 동물 대분류
 	reptile			= 20,		//0x00000010100, 동물
 	beastary		= 17,		//0x00000010001, human & animal
@@ -39,27 +40,43 @@ enum mob_intelligences {
 	omniscent = 100 // 전지, 일부 몹만 해당
 }
 
-enum mob_ai_movings { // 몹 평상시 이동 유형
-	nothing = -1,
-	trap = 0,
-	statue = 1,
-	roaming, // 배회
-	roaming_natural, // 비선공, 추적 및 배회
-	roaming_tracking, // 선공, 추적 및 배회
-	guard_static, // 선공, 정지
-	guard_roaming, // 선공, 배회
-	guard_tracking, // 선공, 추적
-	guard_patrol, // 선공, 왕복
-	tracking_always, // 항상 정확하게 플레이어 추적
-	tracking_natural, // 항상 플레이어를 추적하지만 발견 전까진 무작위로 이동함
+enum mob_ai_states {
+	none = -1,
+	stop = 0,
+	idle,
+	normal,
+	tracking,
+	attacking,
+	retreat
 }
 
-enum mob_ai_attack_patterns {
+enum mob_ai_move_types { // 몹의 평상시 이동 방식
+	none = -1,
+	stand = 0, // 항상 정지함
+	roaming, // 배회
+	guard, // 지역 방어, 정지, 추적하다 돌아감
+	guard_roam, // 지역 배회
+	guard_track, // 한번 추적하면 계속 함
+	guard_roam_track, // 지역 배회, 한번 추적하면 계속 함
+	guard_patrol, // 지역 왕복
+	tracking_always // 항상 정확하게 플레이어 추적
+}
+
+enum mob_ai_track_types { // 몹이 적 발견시 이동 방식
+	none = -1, // 추적 안함
+	stop, // 공격 시엔 정지
+	to_range, // 사정거리까지만 이동
+	close, // 무조건 타일 한칸 거리까지 이동
+	suicidal, // 무조건 돌격 (겹침)
+	roaming, // 배회
+	stay_away, // 거리 유지를 시도함
+	retreat, // 반대편으로 도망감
+	tracking_always // 항상 정확하게 플레이어 추적, 공격 상태가 풀리지 않음.
+}
+
+enum mob_ai_attack_types { // 몹의 공격 방식
 	none = 0, // 공격 안함
 	normal, // 보통
-	hover, // 공격하면서 이동하기
-	charger, // 항상 몸통 박치기
-	suicidal, // 자살 공격
-	stay_away, // 거리 유지를 시도함
-	stay_away_always, // 항상 도망가서 거리 유지
+	close, // 항상 가까이 접근
+	suicidal // 자살 공격 (겹침)
 }

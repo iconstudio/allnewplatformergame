@@ -1,11 +1,4 @@
-function entity_register(serial, item) {
-	ds_list_add(global.__entity_list, item)
-	ds_map_add(global.__entity_db, serial, item)
-
-	show_debug_message(string(item))
-}
-
-function entity_find(serial) {
+function entity_find_data(serial) {
 	var result = ds_map_find_value(global.__entity_db, serial)
 	if is_undefined(result)
 		return global.__entity_db[? ""]
@@ -13,29 +6,32 @@ function entity_find(serial) {
 		return result
 }
 
-function entity_read(map_parsed) {
-	
+function entity_find_serial(object) {
+	var result = ds_map_find_value(global.__entity_db, object)
+	if is_undefined(result)
+		return ""
+	else
+		return result
 }
 
-// ** 데이터베이스 용 속성 **
-///@function Entity(name, [title])
-function Entity(nname, ntitle) constructor {
+function attributes_init() {
 	version = GM_version
 
 	sprite = -1 // 실제 스프라이트가 아님
 	sprite_icon = -1 // 편집기 혹은 지도에 표시해 줄 아이콘
-	name = nname
-	title = argument_select(ntitle, "")
+	name = ""
+	title = ""
+
+	category = mob_category.none // 엔티티의 종류
+	intelligence = mob_intelligences.normal // 엔티티의 지능
+	ai_move_type = mob_ai_move_types.nothing
+	ai_track_type = mob_ai_track_types.stop
+	ai_attack_type = mob_ai_attack_types.normal
 
 	can_fly = false // 지금 날고있지 않더라도 날 수 있음
 	can_move_through = false // 블록을 통과 가능 (날지 못하면 좌우로만 가능)
 	can_swim_level = mob_swimming.water // -1: 물에 못 들어감, 0: 물에선 가라앉음, 1: 물에서 수영 가능, 2: 용암에서 수영 가능
 	flying = false // 날고있는 상태
-
-	category = mob_category.none // 엔티티의 종류
-	intelligence = mob_intelligences.normal // 엔티티의 지능
-	ai_move = mob_ai_movings.nothing
-	ai_attack_pattern = mob_ai_attack_patterns.normal
 
 	hd = 0 // 레벨
 	maxhp = 1 // 체력
@@ -46,13 +42,11 @@ function Entity(nname, ntitle) constructor {
 	ev = 0 // 회피
 	sh = 0 // 패링
 
-	skills_original = -1
-
-#region 메서드
 	function toString() {
 		return name
 	}
 
+#region 메서드
 	function set_image(value) {
 		sprite = value
 		return self
@@ -108,13 +102,18 @@ function Entity(nname, ntitle) constructor {
 		return self
 	}
 
-	function set_ai_moving(value) {
-		ai_move = value
+	function set_ai_move_type(value) {
+		ai_move_type = value
 		return self
 	}
 
-	function set_ai_attack_pattern(value) {
-		ai_attack_pattern = value
+	function set_ai_track_type(value) {
+		ai_track_type = value
+		return self
+	}
+
+	function set_ai_attack_type(value) {
+		ai_attack_type = value
 		return self
 	}
 
@@ -167,11 +166,11 @@ function Entity(nname, ntitle) constructor {
 		return sprite_icon
 	}
 
-	function get_name(caption) {
+	function get_name() {
 		return name
 	}
 
-	function get_title(caption) {
+	function get_title() {
 		return title
 	}
 
@@ -199,12 +198,16 @@ function Entity(nname, ntitle) constructor {
 		return intelligence
 	}
 
-	function get_ai_move() {
-		return ai_move
+	function get_ai_move_type() {
+		return ai_move_type
 	}
 
-	function get_ai_attack_pattern() {
-		return ai_attack_pattern 
+	function get_ai_track_type() {
+		return ai_track_type
+	}
+
+	function get_ai_attack_type() {
+		return ai_attack_type 
 	}
 
 	function get_level() {
@@ -241,286 +244,85 @@ function Entity(nname, ntitle) constructor {
 	function get_shield() {
 		return sh
 	}
+	#endregion
+}
+
+function property_load(serial) {
+	if loaded
+		exit
+	else
+		loaded = true
+
+	var source = entity_find_data(serial)
+
+	set_image(source.get_image())
+	set_icon(source.get_icon())
+	set_name(source.get_name())
+	set_title(source.get_title())
+
+	set_flyable(source.get_flyable())
+	set_movable_through_blocks(source.get_movable_through_blocks())
+	set_swimming_level(source.get_swimming_level())
+	set_flying(source.get_flying())
+	if get_flying()
+		make_flyer()
+
+	set_category(source.get_category())
+	set_intelligence(source.get_intelligence())
+	set_ai_move_type(source.get_ai_move_type())
+	set_ai_track_type(source.get_ai_track_type())
+	set_ai_attack_type(source.get_ai_attack_type())
+
+	set_level(source.get_level())
+	if is_array(source.er) {
+		if !is_array(er) {
+			er = array_create(element_number, 0)
+		}
+		array_copy(er, 0, source.er, 0, element_number)
+	} else {
+		er = 0
+	}
+	set_magic_resistance(source.get_magic_resistance())
+	set_armour(source.get_armour())
+	set_shield(source.get_shield())
+	set_evasion(source.get_evasion())
+
+	init_health(source.get_health_max())
+	init_mana(source.get_mana_max())
+	// ** 스킬 모음 복사 **
+	var sks_org = source.get_skills_original()
+	if sks_org != -1 {
+		set_skills(sks_org.copy())
+	}
+}
+
+function property_init() {
+	if !loaded {
+		var myself = entity_find_serial(object_index)
+		property_load(myself)
+	}
+}
+
+///@description 엔티티 데이터베이스
+///@function RawEntity(serial)
+function RawEntity(serial) constructor {
+	attributes_init()
+	sid = serial
+	skills_original = -1
+
+	function read(map_parsed) {
+		
+	}
+
+	function register(object) {
+		ds_list_add(global.__entity_list, self)
+		ds_map_add(global.__entity_db, sid, self)
+		ds_map_add(global.__entity_db, object, sid)
+
+		show_debug_message(string(self))
+	}
 
 	function get_skills_original() {
 		return skills_original
-	}
-#endregion
-}
-
-///@function Attribute(name, [title])
-function Attribute(nname, ntitle): Entity(nname, ntitle) constructor {
-	status = entity_states.normal
-	status_previous = status
-
-	hp = 1
-	mp = 0
-
-#region 메서드
-	function init_status(value) {
-		status = value
-		status_previous = value
-		return self
-	}
-
-	function init_health(value) {
-		set_health_max(value)
-		set_health(value)
-		return self
-	}
-
-	function init_mana(value) {
-		set_mana_max(value)
-		set_mana(value)
-		return self
-	}
-
-	function set_status(value) {
-		status_previous = status
-		status = value
-		//show_debug_message(status)
-		return self
-	}
-
-	function set_health(value) {
-		hp = value
-		return self
-	}
-
-	function set_mana(value) {
-		mp = value
-		return self
-	}
-
-	function get_status() {
-		return status
-	}
-
-	function get_status_previous() {
-		return status_previous
-	}
-
-	function get_health() {
-		return hp
-	}
-
-	function get_mana() {
-		return mp
-	}
-
-	function get_health_ratio() {
-		return hp / maxhp
-	}
-
-	function get_mana_ratio() {
-		return mp / maxmp
-	}
-
-	function add_health(value) {
-		hp += value
-		if maxhp < hp
-			hp = maxhp
-		return hp
-	}
-
-	function add_mana(value) {
-		mp += value
-		if maxmp < mp
-			mp = maxmp
-		return mp
-	}
-
-	function reprise_status() {
-		set_status(get_status_previous())
-	}
-#endregion
-}
-
-///@function skill_set([skill_0], [skill_1], ...)
-function skill_set() constructor {
-	skills = []
-	number = 0
-
-	function toString() {
-		if 0 < number {
-			var result = ""
-			for (var i = 0; i < number; ++i) {
-				result += string(skills[i])
-				if i < number - 1
-					result += ", "
-			}
-
-			return result
-		} else {
-			return "A empty set of skill"
-		}
-	}
-
-	copy = function() {
-		if 0 < number {
-			var result = new skill_set()
-			for (var i = 0; i < number; ++i) {
-				result.add(skills[i].copy())
-			}
-			return result
-		} else {
-			return new skill_set() // 빈 스킬 모음 반환
-		}
-	}
-
-	update = function() {
-		if 0 < number {
-			for (var i = 0; i < number; ++i) {
-				skills[i].update() // 재귀 형태가 될 수 있다.
-			}
-		}
-	}
-
-	set = function(index, sk) {
-		skills[index] = sk
-		return self
-	}
-
-	add = function(sk) {
-		set(number, sk)
-		return number++
-	}
-
-	get = function(index) {
-		if number <= index
-			throw "능력의 정보 번호가 잘못됐습니다."
-		return skills[index]
-	}
-
-	get_number = function() {
-		return number
-	}
-
-	destroy = function() {
-		skills = 0
-	}
-
-	if 0 < argument_count {
-		for (var i = 0; i < argument_count; ++i)
-			add(argument[i])
-	}
-}
-
-function skill(info, abt) constructor {
-	original = -1
-	level = 0
-	data = 0
-	information = info
-	procedure = abt
-
-	toString = function() {
-		return "Skill name: " + get_name() + select(get_description() != "", ", " + get_description(), "")
-	}
-
-	copy = function() {
-		var copied = new skill(information, procedure.copy())
-		copied.original = self
-		return copied 
-	}
-
-	update = function() {
-		procedure.update()
-	}
-
-	set_data = function(value) {
-		data = value
-		return self
-	}
-
-	get_data = function() {
-		return data
-	}
-
-	get_name = function() {
-		return information.name
-	}
-
-	get_description = function () {
-		return information.description
-	}
-
-	get_tooltip = function() {
-		return information.tooltip
-	}
-}
-
-///@function skill_strings([name], [description], [tooltip])
-function skill_strings(nname, ndescription, ntooltip) constructor { // 복사 불가
-	name = argument_select(nname, "")
-	description = argument_select(ndescription, "")
-	tooltip = argument_select(ntooltip, "")
-
-	toString = function() {
-		return name
-	}
-}
-
-///@function ability(cooltime, period, condition, [execute_once], [execute], [execute_end])
-function ability(cooltime, period, condition, execute_once, execute, execute_end) constructor { // 복사 가능
-	parent = other
-	running = false
-	if cooltime <= 0
-		throw "재사용 대기시간은 0 이하일 수 없습니다."
-	cooldown = new timer(cooltime).finish()
-	duration = new timer(period).finish()
-	shortcut = condition
-	initializer = argument_select(execute_once, -1)
-	predicate = argument_select(execute, -1) 
-	destructor = argument_select(execute_end, -1)
-
-	copy = function() {
-		return new ability(cooldown.period, duration.period, shortcut, initializer, predicate, destructor)
-	}
-
-	get_cooldown = function() {
-		return cooldown.get()
-	}
-
-	get_duration = function() {
-		return duration.get()
-	}
-
-	cast = function() {
-		if !running and get_cooldown() == 1 {
-			cooldown.reset()
-			duration.reset()
-			running = true
-
-			if initializer != -1 {
-				with parent
-					other.initializer()
-			}
-		}
-	}
-
-	update = function() {
-		cooldown.update()
-
-		if shortcut != -1 and shortcut() {
-			cast()
-		}
-
-		if running {
-			duration.update()
-			if predicate != -1 {
-				with parent
-					other.predicate()
-			}
-
-			if get_duration() == 1 {
-				running = false
-
-				if destructor != -1 {
-					var proc = destructor
-					with parent
-						proc()
-				}
-			}
-		}
 	}
 }

@@ -13,7 +13,7 @@ for (var i = 0; i < 3; ++i) {
 draw_set_font(fontUI)
 draw_set_halign(0)
 draw_set_valign(0)
-var health_string = make_percent_caption("Lives", property.get_health(), property.get_health_max())
+var health_string = make_percent_caption("Lives", parent.get_health(), parent.get_health_max())
 draw_text(10, y_draw_begin, health_string)
 
 var target = parent.skills

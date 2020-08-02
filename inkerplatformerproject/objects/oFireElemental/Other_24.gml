@@ -11,6 +11,7 @@ if dist < 8 {
 	var dir = point_direction(x, y, global.playerpos[0], global.playerpos[1])
 	xvel = lx(dir) * 0.3
 	yvel = ly(dir) * 0.3
+	//move_towards_point(oPlayer.x, oPlayer.y, 0.2)
 	/*//move_towards_point(oPlayer.x, oPlayer.y, 0.2)
 	xvel = sign(global.playerpos[0] - x) * 0.3
 	yvel = sign(global.playerpos[1] - y) * 0.3

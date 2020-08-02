@@ -31,8 +31,5 @@ function make_thorny(flag, dmg) {
 		}
 		return thorns
 	} else {
-		if struct_exists(thorns) {
-			delete thorns
-		}
 	}
 }
