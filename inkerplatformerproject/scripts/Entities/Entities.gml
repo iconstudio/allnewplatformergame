@@ -24,7 +24,7 @@ function attributes_init() {
 
 	category = mob_category.none // 엔티티의 종류
 	intelligence = mob_intelligences.normal // 엔티티의 지능
-	ai_move_type = mob_ai_move_types.nothing
+	ai_move_type = mob_ai_move_types.stand
 	ai_track_type = mob_ai_track_types.stop
 	ai_attack_type = mob_ai_attack_types.normal
 

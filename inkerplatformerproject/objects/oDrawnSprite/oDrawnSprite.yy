@@ -21,8 +21,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "inkerplatformerproject",
-    "path": "inkerplatformerproject.yyp",
+    "name": "Game System",
+    "path": "folders/Game System.yy",
   },
   "resourceVersion": "1.0",
   "name": "oDrawnSprite",

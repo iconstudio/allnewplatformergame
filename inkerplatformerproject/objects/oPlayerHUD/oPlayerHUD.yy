@@ -26,8 +26,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Interface",
-    "path": "folders/Interface.yy",
+    "name": "Game System",
+    "path": "folders/Game System.yy",
   },
   "resourceVersion": "1.0",
   "name": "oPlayerHUD",

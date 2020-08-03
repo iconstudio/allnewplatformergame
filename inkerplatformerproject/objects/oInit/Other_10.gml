@@ -52,7 +52,7 @@ enum mob_ai_states {
 
 enum mob_ai_move_types { // 몹의 평상시 이동 방식
 	none = -1,
-	stand = 0, // 항상 정지함
+	stand = 0, // 가만히 있음
 	roaming, // 배회
 	guard, // 지역 방어, 정지, 추적하다 돌아감
 	guard_roam, // 지역 배회
@@ -75,7 +75,7 @@ enum mob_ai_track_types { // 몹이 적 발견시 이동 방식
 }
 
 enum mob_ai_attack_types { // 몹의 공격 방식
-	none = 0, // 공격 안함
+	none = -1, // 공격 안함
 	normal, // 보통
 	close, // 항상 가까이 접근
 	suicidal // 자살 공격 (겹침)

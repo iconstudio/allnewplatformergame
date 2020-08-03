@@ -69,7 +69,7 @@
   ],
   "parent": {
     "name": "Interface",
-    "path": "folders/Interface.yy",
+    "path": "folders/Game System/Interface.yy",
   },
   "resourceVersion": "1.0",
   "name": "sSkillIcon",
