@@ -1,87 +1,62 @@
 /// @description 메뉴 속성 선언
-function MenuGroup() constructor {
-	parent = -1
-	last = -1
-	entries = []
-	size = 0
-	focus_before = -1
-	focus = -1
+group_main = new MenuGroup()
+menu_before = group_main
+menu_current = group_main
+push = 0
+push_previous = 0
 
-	function focus_item(entry) {
-		if entry.focusable {
-			focus_before = focus
-			focus = entry
-			return true
-		} else {
-			return false
-		}
-	}
-
-	function select_item(entry) {
-		return entry.choice()
-	}
-
-	function set_parent(group) {
-		parent = group
-		return self
-	}
-
-	function add(entry) {
-		if last != -1 {
-			last.set_next(entry)
-			entry.set_before(last)
-		}
-		entry.set_parent(self)
-		entries[size++] = entry
-		last = entry
-
-		return self
-	}
-
-	draw = FUNC_NULL
+function select_group(group) {
+	menu_before = menu_current
+	menu_current = group
 }
 
-function MenuEntry() constructor {
-	parent = -1
-	enabled = true
-	visible = true
+entry_campaign = new MenuCaption("Campaign", "Play the story mode.")
+entry_log = new MenuCaption("Log", "View the played log.")
+entry_setting = new MenuCaption("Setting", "Options for game.")
+entry_exit = new MenuCaption("Exit", "End the game.")
+group_main.add(entry_campaign).add(entry_log).add(entry_setting).add(entry_exit)
+group_main.focus_item(entry_campaign)
 
-	focusable = true
-	can_select = true
-	pole = false
-
-	proceed_select = -1
-	predicate = -1
-	next = -1
-	before = -1
-
-	function choice() {
-		if can_select {
-			if predicate != -1
-				predicate()
-			return true
-		} else {
-			return false
-		}
-	}
-
-	function set_parent(value) {
-		parent = value
-		return self
-	}
-
-	function set_next(entry) {
-		next = entry
-		return self
-	}
-
-	function set_before(entry) {
-		before = entry
-		return self
-	}
+group_campaign = new MenuGroup(group_main)
+with group_campaign {
+	add_caption("Start", "Start the game.")
+	add_caption("Back", "")
+	focus_item(first)
 }
 
-function MenuCaption(title, description): MenuEntry() constructor {
-	caption = title
-	tip = description
+group_log = new MenuGroup(group_main)
+with group_log {
+	add_caption("LOG", "")
+	add_caption("Back", "")
+	focus_item(last)
 }
+
+group_setting = new MenuGroup(group_main)
+with group_setting {
+	add_caption("Start", "Start the single game.")
+	add_caption("Back", "")
+	focus_item(first)
+}
+
+group_exit = new MenuGroup(group_main)
+with group_exit {
+	add_caption("Yes", "Start the single game.")
+	add_caption("No", "")
+	focus_item(last)
+}
+
+function select_item(entry) {
+	
+}
+
+function select_next_item() {
+	
+}
+
+function select_before_item() {
+	
+}
+
+key_peek = RIGHT
+key_dir = 0
+key_tick = new countdown()
