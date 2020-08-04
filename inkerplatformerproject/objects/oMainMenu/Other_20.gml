@@ -57,6 +57,4 @@ function select_before_item() {
 	
 }
 
-key_peek = RIGHT
-key_dir = 0
-key_tick = new countdown()
+
