@@ -1,4 +1,5 @@
 /// @description 메뉴 속성 선언
+global.main_menu = id
 group_main = new MenuGroup()
 menu_before = group_main
 menu_current = group_main
@@ -10,7 +11,13 @@ function select_group(group) {
 	menu_current = group
 }
 
-entry_campaign = new MenuCaption("Campaign", "Play the story mode.")
+function menu_back() {
+	
+}
+
+entry_campaign = new MenuCaption("Campaign", "Play the story mode.", function() {
+	global.main_menu.menu_back()
+})
 entry_log = new MenuCaption("Log", "View the played log.")
 entry_setting = new MenuCaption("Setting", "Options for game.")
 entry_exit = new MenuCaption("Exit", "End the game.")

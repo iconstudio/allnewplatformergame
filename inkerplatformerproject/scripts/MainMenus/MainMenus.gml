@@ -45,12 +45,19 @@ function MenuEntry() constructor {
 		before = entry
 		return self
 	}
+
+	function set_predicate(func) {
+		predicate = func
+		return self
+	}
 }
 
-function MenuCaption(title, description): MenuEntry() constructor {
+///@function MenuCaption(title, description, predicate)
+function MenuCaption(title, description, pred): MenuEntry() constructor {
 	type = menu_types.text
 	caption = title
 	tip = description
+	predicate = pred
 	width = string_width(title)
 	height = string_height(title)
 
@@ -110,8 +117,8 @@ function MenuGroup(up) constructor {
 		return self
 	}
 
-	function add_caption(title, description) {
-		return add(new MenuCaption(title, description))
+	function add_caption(title, description, pred) {
+		return add(new MenuCaption(title, description, pred))
 	}
 
 	draw = FUNC_NULL
