@@ -92,6 +92,8 @@ global.__entity_list = ds_list_create()
 global.__entity_db = ds_map_create()
 event_user(2)
 
+event_user(3)
+
 audio_loaded = true
 if global.flag_is_mobile {
 	audio_channel_num(16)

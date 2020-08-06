@@ -1,8 +1,12 @@
 function MenuEntry() constructor {
-	x = -1
-	y = -1
+	type = menu_types.none
 	parent = other.id
 	enabled = true
+
+	x = -1
+	y = -1
+	width = 0
+	height = 0
 
 	focusable = true
 	can_select = true
@@ -44,8 +48,16 @@ function MenuEntry() constructor {
 }
 
 function MenuCaption(title, description): MenuEntry() constructor {
+	type = menu_types.text
 	caption = title
 	tip = description
+	width = string_width(title)
+	height = string_height(title)
+
+	function draw() {
+		draw_text(x, y, caption)
+		return height
+	}
 }
 
 ///@function MenuGroup([parent])
@@ -82,11 +94,15 @@ function MenuGroup(up) constructor {
 			throw "No struct exists!"
 
 		if last != -1 {
+			last.pole = false
 			last.set_next(entry)
 			entry.set_before(last)
+			entry.pole = true
 		}
-		if first == -1
+		if first == -1 {
 			first = entry
+			first.pole = true
+		}
 		entry.set_parent(self)
 		entries[size++] = entry
 		last = entry
