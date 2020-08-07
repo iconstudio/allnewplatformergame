@@ -6,8 +6,8 @@ function argument_select(arg, def) {
 	return select(is_undefined(arg), def, arg)
 }
 
-///@function timer(duration, [predicate], [destructor])
-function timer(duration, proc, dest) constructor {
+///@function Timer(duration, [predicate], [destructor])
+function Timer(duration, proc, dest) constructor {
 	parent = other
 	running = false
 	time = 0
@@ -67,11 +67,11 @@ function timer(duration, proc, dest) constructor {
 	}
 }
 
-///@function countdown([predicate], [destructor])
-function countdown(proc, dest) constructor {
+///@function Countdown([predicate], [destructor])
+function Countdown(proc, dest) constructor {
 	parent = other
-	time = -1
-	time_max = -1
+	time = 0
+	time_max = 1
 	closing = false
 	predicate = argument_select(proc, -1)
 	destructor = argument_select(dest, -1)
@@ -120,7 +120,7 @@ function countdown(proc, dest) constructor {
 				proc()
 		}
 
-		set(-1)
+		set(0)
 		closing = false
 		return self
 	}

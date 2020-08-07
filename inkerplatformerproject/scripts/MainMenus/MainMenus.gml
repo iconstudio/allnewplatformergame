@@ -1,6 +1,6 @@
 function MenuEntry() constructor {
 	type = menu_types.none
-	parent = other.id
+	parent = other
 	enabled = true
 
 	x = -1
@@ -59,11 +59,12 @@ function MenuCaption(title, description, pred): MenuEntry() constructor {
 	tip = description
 	predicate = pred
 	width = string_width(title)
-	height = string_height(title)
+	//height = string_height(title)
 
 	function draw() {
+		draw_set_font(fontMainMenuEntry)
 		draw_text(x, y, caption)
-		return height
+		return global.menu_caption_height
 	}
 }
 

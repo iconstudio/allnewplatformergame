@@ -128,8 +128,8 @@ function ability(cooltime, period, condition, execute_once, execute, execute_end
 	running = false
 	if cooltime <= 0
 		throw "재사용 대기시간은 0 이하일 수 없습니다."
-	cooldown = new timer(cooltime).finish()
-	duration = new timer(period).finish()
+	cooldown = new Timer(cooltime).finish()
+	duration = new Timer(period).finish()
 	shortcut = condition
 	initializer = argument_select(execute_once, -1)
 	predicate = argument_select(execute, -1) 
