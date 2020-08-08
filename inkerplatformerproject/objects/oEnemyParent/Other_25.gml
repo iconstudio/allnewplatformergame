@@ -15,11 +15,11 @@ function get_thorny() {
 
 ///@function make_thorny([flag], [damage])
 function make_thorny(flag, dmg) {
-	var value = argument_select(flag, true)
+	var value = select_argument(flag, true)
 	thorny = value
 
 	if value {
-		var value_dmg = argument_select(dmg, 1)
+		var value_dmg = select_argument(dmg, 1)
 		if struct_exists(thorns) {
 			thorns.damage = value_dmg
 		} else {

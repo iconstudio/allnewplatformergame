@@ -76,7 +76,7 @@ function skill(info, abt) constructor {
 	procedure = abt
 
 	toString = function() {
-		return "Skill name: " + get_name() + select(get_description() != "", ", " + get_description(), "")
+		return "Skill name: " + get_name() + integral(get_description() != "", ", " + get_description(), "")
 	}
 
 	function copy() {
@@ -113,9 +113,9 @@ function skill(info, abt) constructor {
 
 ///@function skill_strings([name], [description], [tooltip])
 function skill_strings(nname, ndescription, ntooltip) constructor { // 복사 불가
-	name = argument_select(nname, "")
-	description = argument_select(ndescription, "")
-	tooltip = argument_select(ntooltip, "")
+	name = select_argument(nname, "")
+	description = select_argument(ndescription, "")
+	tooltip = select_argument(ntooltip, "")
 
 	toString = function() {
 		return name
@@ -131,9 +131,9 @@ function ability(cooltime, period, condition, execute_once, execute, execute_end
 	cooldown = new Timer(cooltime).finish()
 	duration = new Timer(period).finish()
 	shortcut = condition
-	initializer = argument_select(execute_once, -1)
-	predicate = argument_select(execute, -1) 
-	destructor = argument_select(execute_end, -1)
+	initializer = select_argument(execute_once, -1)
+	predicate = select_argument(execute, -1) 
+	destructor = select_argument(execute_end, -1)
 
 	function copy() {
 		return new ability(cooldown.period, duration.period, shortcut, initializer, predicate, destructor)

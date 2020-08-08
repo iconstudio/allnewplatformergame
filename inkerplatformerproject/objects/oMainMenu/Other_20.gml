@@ -1,10 +1,79 @@
 /// @description 메뉴 속성 선언
-global.main_menu = id
+push = new Countdown()
+children = []
+child_focused = -1
+number = 0
 
-group_main = new MenuGroup()
+function update() {
+	push.update()
+	if 0 < number {
+		for (var i = 0; i < number; ++i)
+			get(i).update()
+	}
+}
+
+function draw_menu() {
+	if 0 < number {
+		var dx = x, dy = y, temp = []
+		for (var i = 0; i < number; ++i) {
+			temp = get(i).draw(dx, dy)
+			dx += temp[0]
+			dy += temp[1]
+		}
+	}
+}
+
+function add_general(item) {
+	children[number++] = item
+	return item
+}
+
+function add(title, description, predicate) {
+	var result = new MenuItem()
+	result.text = title
+	result.tip = description
+	result.predicate = predicate
+	return add_general(result)
+}
+
+function focus(item) {
+	child_focused = item
+}
+
+function get(index) {
+	return children[index]
+}
+
+function get_number() {
+	return number
+}
+
+function select(item) {
+	
+}
+
+/*
+function MainMenuDepth(): MenuGroup() constructor {
+	x = 0
+	y = 0
+
+	function draw() {
+		if 0 < size {
+			var dx = x, dy = y
+			for (var i = 0; i < size; ++i) {
+				entries[i].x = dx
+				entries[i].y = dy
+				temp = entries[i].draw()
+				dy += temp
+			}
+		}
+	}
+}
+
+group_main = new MainMenuDepth()
 menu_before = group_main
 menu_current = group_main
-push = (new Countdown()).set(1)
+push = new Countdown()
 push_predicate = global.ease.linear
 
 function select_group(group) {
@@ -16,9 +85,13 @@ function menu_back() {
 	select_group(menu_before)
 }
 
-title = new MenuEntry()
-title.draw = function() {
-	return global.menu_title_height
+title = new MenuItem()
+with title {
+	focusable = false
+
+	function draw() {
+		return [0, global.menu_title_height]
+	}
 }
 
 entry_campaign = new MenuCaption("Campaign", "Play the story mode.", function() {
@@ -75,5 +148,4 @@ function select_next_item() {
 function select_before_item() {
 	
 }
-
-
+*/

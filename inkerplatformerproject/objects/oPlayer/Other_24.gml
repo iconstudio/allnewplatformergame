@@ -33,7 +33,7 @@ else {
 	move_key_peek = NONE
 }
 
-var mover = select(move_key_peek == RIGHT, 1, select(move_key_peek == LEFT, -1, 0))
+var mover = integral(move_key_peek == RIGHT, 1, integral(move_key_peek == LEFT, -1, 0))
 if mover != 0 {
 	move_dir = mover
 	if move_dir == -1 { // 왼쪽

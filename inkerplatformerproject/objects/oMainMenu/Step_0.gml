@@ -22,11 +22,11 @@ else {
 	key_peek = NONE
 }
 
-var mover = select(key_peek == RIGHT, 1, select(key_peek == LEFT, -1, 0))
+var mover = integral(key_peek == RIGHT, 1, integral(key_peek == LEFT, -1, 0))
 if mover != 0 {
 	key_dir = mover
 }
 
-push.update()
+update()
 
 

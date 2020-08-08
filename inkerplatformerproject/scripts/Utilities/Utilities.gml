@@ -1,9 +1,9 @@
-function select(condition, value_true, value_false) {
+function integral(condition, value_true, value_false) {
 	return condition ? value_true : value_false
 }
 
-function argument_select(arg, def) {
-	return select(is_undefined(arg), def, arg)
+function select_argument(arg, def) {
+	return integral(is_undefined(arg), def, arg)
 }
 
 ///@function Timer(duration, [predicate], [destructor])
@@ -12,8 +12,8 @@ function Timer(duration, proc, dest) constructor {
 	running = false
 	time = 0
 	period = duration
-	predicate = argument_select(proc, -1)
-	destructor = argument_select(dest, -1)
+	predicate = select_argument(proc, -1)
+	destructor = select_argument(dest, -1)
 
 	set =	function(count) {
 		running = false
@@ -73,8 +73,8 @@ function Countdown(proc, dest) constructor {
 	time = 0
 	time_max = 1
 	closing = false
-	predicate = argument_select(proc, -1)
-	destructor = argument_select(dest, -1)
+	predicate = select_argument(proc, -1)
+	destructor = select_argument(dest, -1)
 
 	set =	function(count) {
 		time = count
@@ -153,7 +153,7 @@ function io_check_ok() {
 
 ///@function dice(side, [number])
 function dice(side, number) {
-	var count = argument_select(number, 1)
+	var count = select_argument(number, 1)
 	return irandom_range(count, side * count)
 }
 
@@ -163,7 +163,7 @@ function lx(angle, length) {
 		angle += 360
 	if 360 <= angle
 		angle = angle mod 360
-	return global.__lengthdir_cashed[angle][0] * argument_select(length, 1)
+	return global.__lengthdir_cashed[angle][0] * select_argument(length, 1)
 }
 
 ///@function ly(angle, [length])
@@ -172,12 +172,12 @@ function ly(angle, length) {
 		angle += 360
 	if 360 <= angle
 		angle = angle mod 360
-	return global.__lengthdir_cashed[angle][1] * argument_select(length, 1)
+	return global.__lengthdir_cashed[angle][1] * select_argument(length, 1)
 }
 
 ///@function instance_create(obj, [x], [y], [layer])
 function instance_create(obj, nx, ny, nlayer) {
-	return instance_create_layer(argument_select(nx, 0), argument_select(ny, 0), argument_select(nlayer, layer), obj)
+	return instance_create_layer(select_argument(nx, 0), select_argument(ny, 0), select_argument(nlayer, layer), obj)
 }
 
 function make_percent_caption(title, value, value_max) {
