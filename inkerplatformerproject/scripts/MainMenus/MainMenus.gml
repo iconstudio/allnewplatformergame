@@ -1,16 +1,23 @@
 ///@function MenuItem()
 function MenuItem() constructor {
 	parent = other
+	
+	sprite = -1
 	font = fontMainMenuEntry
-	aligns = [1, 1]
 	text = ""
 	tip = ""
+	width = global.menu_caption_width
+	height = global.menu_caption_height
+	aligns = [1, 1]
+	ax = 0
+	ay = 0
 
 	predicate = -1
 	opened = false
 	focusable = true
+	openable = true
 	pole = false
-	push = new Timer(seconds(0.4))
+	push = new Timer(seconds(0.7))
 	children = []
 	child_focused = -1
 	number = 0
@@ -36,11 +43,18 @@ function MenuItem() constructor {
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
 		if text != "" {
+			dx += ax
+			dy += ay
+			var ocolor = draw_get_color()
+			if focusable and parent.child_focused == self
+				draw_set_color(c_orange)
+
 			draw_set_font(font)
 			draw_set_halign(aligns[0])
 			draw_set_valign(aligns[1])
 			draw_text(dx, dy, text)
-			return [0, global.menu_caption_height]
+			draw_set_color(ocolor)
+			return [0, height]
 		} else {
 			return [0, 0]
 		}
@@ -48,11 +62,19 @@ function MenuItem() constructor {
 
 	///@function draw(x, y)
 	function draw(dx, dy) {
+		var result = [0, 0]
+		var oalpha = draw_get_alpha()
+		var dalpha = oalpha * push.get()
 		if opened {
-			return draw_children(dx, dy)
+			draw_set_alpha(1 - dalpha)
+			result = draw_children(dx, dy)
 		} else {
-			return draw_me(dx, dy)
+			draw_set_alpha(dalpha)
+			result = draw_me(dx, dy)
 		}
+		// 이 주석을 해제하면 한번에 페이드 인아웃함.
+		//draw_set_alpha(oalpha)
+		return result
 	}
 
 	function update() {
@@ -102,9 +124,40 @@ function MenuItem() constructor {
 	}
 
 	function select(item) {
-		if item.focusable and item.predicate != -1 {
-			item.predicate()
+		if item.focusable {
+			if item.openable and 0 < item.get_number() {
+				with item {
+					open()
+					push.reset()
+					global.menu_focused = self
+				}
+			}
+			if item.predicate != -1 {
+				item.predicate()
+			}
 		}
+	}
+}
+
+function MenuSprite(spr): MenuItem() constructor {
+	sprite = spr
+	width = sprite_get_width(sprite)
+	height = sprite_get_height(sprite)
+	ax = 0
+	ay = height * 0.5
+	docked_center = true
+	focusable = false
+
+	///@function draw_me(x, y)
+	function draw_me(dx, dy) {
+		dx += ax
+		dy += ay
+		draw_sprite_ext(sprite, 0, dx, dy, 1, 1, 0, draw_get_color(), draw_get_alpha())
+
+		if docked_center
+			return [0, height]
+		else
+			return [width, height]
 	}
 }
 
