@@ -6,5 +6,5 @@ var alpha = ratio
 draw_set_alpha(alpha)
 
 draw_set_alpha(1 - alpha)
-draw_menu()
+draw(x, y)
 draw_set_font(fontMainMenu)

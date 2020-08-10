@@ -1,32 +1,44 @@
 /// @description 메뉴 선택 및 실행
-var was_left = key_peek == LEFT, was_right = key_peek == RIGHT
-var KEY_L = global.io_left or global.io_up
-var KEY_R = global.io_right or global.io_down
-var KEY_PL = global.io_pressed_left or global.io_pressed_up
-var KEY_PR = global.io_pressed_right or global.io_pressed_down
-
-if !KEY_L and !KEY_R {
-	key_peek = NONE
-}
-else if (KEY_PL and KEY_R and was_right)
-or (KEY_L and !KEY_R)
-or (!KEY_PR and KEY_L and was_left) {
-	key_peek = LEFT
-}
-else if (KEY_PR and KEY_L and was_left)
-or (KEY_R and !KEY_L)
-or (!KEY_PL and KEY_R and was_right) {
-	key_peek = RIGHT
-}
-else {
-	key_peek = NONE
-}
-
-var mover = integral(key_peek == RIGHT, 1, integral(key_peek == LEFT, -1, 0))
-if mover != 0 {
-	key_dir = mover
-}
-
 update()
+key_tick.update()
 
+var KEY_PU = global.io_pressed_up
+var KEY_PD = global.io_pressed_down
+var KEY_U = global.io_up
+var KEY_D = global.io_down
+var KEY_CONFIRM = global.io_pressed_yes
 
+if KEY_CONFIRM {
+	with global.menu_opened {
+		if child_focused != -1
+			select(child_focused)
+	}
+} else if KEY_PU {
+	if key_pick != UP {
+		menu_focus_up()
+		key_tick.set(key_duration_pick)
+		key_pick = UP
+	} else {
+		key_pick = NONE
+	}
+} else if KEY_PD {
+	if key_pick != DOWN {
+		menu_focus_down()
+		key_tick.set(key_duration_pick)
+		key_pick = DOWN
+	} else {
+		key_pick = NONE
+	}
+} else if !KEY_U and !KEY_D {
+	key_pick = NONE
+}
+
+if key_pick != NONE and key_tick.get() == 0 {
+	if key_pick == UP {
+		menu_focus_up()
+		key_tick.set(key_duration_continue)
+	} else if key_pick == DOWN {
+		menu_focus_down()
+		key_tick.set(key_duration_continue)
+	}
+}
