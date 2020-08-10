@@ -36,6 +36,8 @@ surface_resize(application_surface, global.client.game_width, global.client.game
 #macro RIGHT 2
 #macro UP 1
 #macro DOWN 3
+#macro HORIZONTAL 0
+#macro VERTICAL 2
 
 global.timescale = 1.00
 
