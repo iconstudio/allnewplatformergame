@@ -1,4 +1,6 @@
 /// @description 초기화
+
+// GRIEF
 global.flag_debug = false
 global.flag_is_mobile = (os_type == os_android or os_type == os_ios) // 하지만 안드로이드만 지원
 global.flag_is_browser = (os_browser != browser_not_a_browser)
@@ -11,6 +13,23 @@ display_reset(0, false)
 display_set_timing_method(tm_countvsyncs)
 gpu_set_ztestenable(true)
 gpu_set_zwriteenable(true)
+
+global.settings = {
+	control_modified_keyboard: false,
+	control_modified_gamepad: false,
+	volume_sfx: 10,
+	volume_bgm: 7,
+	fullscreen: false,
+	screenshake: true
+}
+
+global.setting_control_keyboard = {
+	
+}
+
+global.setting_control_gamepad = {
+	
+}
 
 global.client = {
 	width: 960,

@@ -35,14 +35,15 @@ with entry_log {
 
 with entry_setting {
 	add_header("Controls")
+	add_text("Does not supported now")
 	add_entry("Keyboard", "")
 	add_entry("Gamepad", "")
 	add_header("Sounds")
-	add_entry("SFX Volume", "")
-	add_entry("BGM Volume", "")
+	add_setting_option("SFX Volume", "volume_sfx", callback_indicator_off)
+	add_setting_option("BGM Volume", "volume_bgm", callback_indicator_off)
 	add_header("Graphics")
-	add_entry("Fullscreen", "")
-	add_entry("Screenshake", "")
+	add_setting_option("Fullscreen", "fullscreen", callback_indicator_flags)
+	add_setting_option("Screenshake", "screenshake", callback_indicator_flags)
 	add_entry("Back", "", menu_goto_back)
 	focus(child_first)
 }

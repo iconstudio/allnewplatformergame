@@ -3,20 +3,22 @@ function menu_init_basic() {
 	opened = false
 	focusable = true
 	openable = true
-	mdepth = 0
+
 	children = []
 	child_focused = -1
 	child_first = -1
 	child_last = -1
+	pole = false // 선택할 수 있는 양 끝점 항목인가
+	pole_first = -1 // 처음으로 선택할 수 있는 항목
+	pole_last = -1 // 마지막으로 선택할 수 있는 항목
 	children_arrays = VERTICAL
 	number = 0
 	next = -1
 	before = -1
-	pole = false
-	poled_first = false
-	poled_last = false
 
-	function update() {
+	sidekey_predicate = -1 // 좌우 메뉴 선택키 입력받기.
+
+	function update_general() {
 		push.update()
 		if 0 < number {
 			for (var i = 0; i < number; ++i)
@@ -24,9 +26,12 @@ function menu_init_basic() {
 		}
 	}
 
+	function update() {
+		update_general()
+	}
+
 	function add_general(item) {
 		child_last = item
-		item.mdepth = self.mdepth + 1
 		if 0 < number {
 			var cbefore = children[number - 1]
 			item.before = cbefore
@@ -34,7 +39,7 @@ function menu_init_basic() {
 		} else {
 			child_first = item
 		}
-		
+
 		children[number++] = item
 		return item
 	}
@@ -63,6 +68,18 @@ function menu_init_basic() {
 		return add_general(result)
 	}
 
+	///@function add_option(caption, variable_name, variable_predicate, predicate)
+	function add_option(caption, var_name, var_pred, pred) {
+		var result = new MenuOption(caption, var_name, var_pred, pred)
+		return add_general(result)
+	}
+
+	///@function add_setting_option(caption, variable_name, variable_predicate, predicate)
+	function add_setting_option(caption, var_name, var_pred, pred) {
+		var result = new MenuSettingOption(caption, var_name, var_pred, pred)
+		return add_general(result)
+	}
+
 	///@function add_space(width, height)
 	function add_space(w, h) {
 		var result = new MenuSpace(w, h)
@@ -70,11 +87,18 @@ function menu_init_basic() {
 	}
 
 	function focus(item) {
-		if item.focusable {
-			child_focused = item
+		if item != -1 {
+			if item.focusable {
+				child_focused = item
+				return true
+			} else if 1 < number {
+				if item.next != -1
+					focus(item.next)
+			} else {
+				return false
+			}
 		} else {
-			if item.next != -1
-				focus(item.next)
+			return false
 		}
 	}
 
@@ -85,8 +109,6 @@ function menu_init_basic() {
 			global.menu_opened = self
 		else
 			global.menu_opened = parent
-		global.menu_depth = global.menu_opened.mdepth
-		show_debug_message(global.menu_depth)
 	}
 
 	function select(item) {
@@ -144,12 +166,12 @@ function MenuItem() constructor {
 	function draw(dx, dy) {
 		var oalpha = draw_get_alpha()
 		var result = [0, 0]
-		if mdepth == global.menu_depth {
-			if parent != -1 and parent.opened and !opened and parent.child_focused = self
+		if global.menu_opened == self {
+			if parent != -1 and parent.opened and !opened
 				result = draw_me(dx, dy)
 			else
 				draw_children(global.main_menu.x, global.main_menu.y)
-		} else if mdepth == global.menu_depth + 1 {
+		} else if global.menu_opened == parent {
 			if parent != -1 and parent.opened
 				result = draw_me(dx, dy)
 		}
@@ -200,6 +222,7 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 	font = fontMainMenuEntry
 	text = caption
 	focusable = false
+	openable = false
 	color = $cccccc
 	
 	///@function draw_me(x, y)
@@ -226,8 +249,54 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 function MenuHeader(caption): MenuText(caption) constructor {
 	font = fontMainMenuHeader
 	text = caption
-	focusable = false
 	color = $ffade5
+}
+
+///@function MenuOption(text, variable_name, variable_predicate, predicate)
+function MenuOption(caption, var_name, var_pred, pred): MenuEntry(caption, "", pred) constructor {
+	variable_name = var_name
+	variable_predicate = select_argument(var_pred, -1)
+	aligns = [0, 1]
+
+	function make_vars_string() {
+		if variable_global_exists(variable_name) and variable_predicate != -1
+			return ": " + variable_predicate(variable_global_get(variable_name))
+		else
+			return ": ERROR"
+	}
+
+	///@function draw_me(x, y)
+	function draw_me(dx, dy) {
+		dx += ax
+		dy += ay
+		var ocolor = draw_get_color(), ofont = draw_get_font()
+		if focusable and parent.child_focused == self
+			draw_set_color(c_orange)
+		draw_set_font(font)
+		draw_set_halign(aligns[0])
+		draw_set_valign(aligns[1])
+		var value_string = make_vars_string()
+
+		var sw = string_width(text)
+		var sx = floor(dx - sw)
+		draw_text(sx, dy, text)
+		draw_set_color($ffffff)
+		draw_text(sx + sw, dy, value_string)
+
+		draw_set_color(ocolor)
+		draw_set_font(ofont)
+		return [0, height]
+	}
+}
+
+///@function MenuSettingOption(text, variable_name, variable_predicate, predicate)
+function MenuSettingOption(caption, var_name, var_pred, pred): MenuOption(caption, var_name, var_pred, pred) constructor {
+	function make_vars_string() {
+		if variable_struct_exists(global.settings, variable_name) and variable_predicate != -1
+			return ": " + variable_predicate(variable_struct_get(global.settings, variable_name))
+		else
+			return ": ERROR"
+	}
 }
 
 function MenuSprite(spr): MenuItem() constructor {
@@ -238,6 +307,7 @@ function MenuSprite(spr): MenuItem() constructor {
 	ay = height * 0.5
 	docked_center = true
 	focusable = false
+	openable = false
 
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
@@ -256,11 +326,14 @@ function MenuSpace(w, h): MenuItem() constructor {
 	width = w
 	height = h
 	focusable = false
+	openable = false
 }
 
 function menu_goto_back() {
-	open(false)
-	
+	if parent != -1 {
+		with parent
+			open(false)
+	}
 }
 
 function menu_find_up(item) {
@@ -311,4 +384,22 @@ function menu_focus_down() {
 		if target != -1
 			focus(target)
 	}
+}
+
+function callback_indicator(value) {
+	return string(value)
+}
+
+function callback_indicator_off(value) {
+	if value == 0
+		return "Off"
+	else
+		return string(value)
+}
+
+function callback_indicator_flags(value) {
+	if value
+		return "On"
+	else
+		return "Off"
 }

@@ -2,7 +2,9 @@
 update()
 key_tick.update()
 
+var KEY_PL = global.io_pressed_left
 var KEY_PU = global.io_pressed_up
+var KEY_PR = global.io_pressed_right
 var KEY_PD = global.io_pressed_down
 var KEY_U = global.io_up
 var KEY_D = global.io_down
@@ -31,6 +33,16 @@ if KEY_CONFIRM {
 	}
 } else if !KEY_U and !KEY_D {
 	key_pick = NONE
+}
+
+// ** 좌우 입력은 따로 받는다. **
+var SIDEKEY_INPUT = KEY_PR - KEY_PL
+if SIDEKEY_INPUT != 0 {
+	with global.menu_opened {
+		if child_focused != -1 and child_focused.sidekey_predicate != -1 {
+			child_focused.sidekey_predicate(SIDEKEY_INPUT)
+		}
+	}
 }
 
 if key_pick != NONE and key_tick.get() == 0 {
