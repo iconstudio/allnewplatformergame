@@ -1,2 +1,2 @@
 /// @description 정리
-delete push
+delete menu_push

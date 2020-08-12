@@ -51,7 +51,7 @@
     {"id":{"name":"sPlankWood","path":"sprites/sPlankWood/sPlankWood.yy",},"order":4,},
     {"id":{"name":"oEnemyParent","path":"objects/oEnemyParent/oEnemyParent.yy",},"order":0,},
     {"id":{"name":"oPlankWood","path":"objects/oPlankWood/oPlankWood.yy",},"order":6,},
-    {"id":{"name":"oMainMenu","path":"objects/oMainMenu/oMainMenu.yy",},"order":5,},
+    {"id":{"name":"oMainScene","path":"objects/oMainScene/oMainScene.yy",},"order":5,},
     {"id":{"name":"oPlatform","path":"objects/oPlatform/oPlatform.yy",},"order":5,},
     {"id":{"name":"oPhysicalObject","path":"objects/oPhysicalObject/oPhysicalObject.yy",},"order":8,},
     {"id":{"name":"objHackDetect","path":"objects/objHackDetect/objHackDetect.yy",},"order":3,},

@@ -82,12 +82,16 @@ function Countdown(proc, dest) constructor {
 		return self
 	}
 
-	get =	function() {
+	get_time = function() {
 		return time
 	}
 
 	get_max =	function() {
 		return time_max
+	}
+
+	get =	function() {
+		return time / time_max
 	}
 
 	update = function() {
@@ -120,9 +124,13 @@ function Countdown(proc, dest) constructor {
 				proc()
 		}
 
-		set(0)
+		time = 0
 		closing = false
 		return self
+	}
+
+	function toString() {
+		return "Countdown"
 	}
 }
 
@@ -184,6 +192,59 @@ function make_percent_caption(title, value, value_max) {
 	return title + ": " + string(value) + " / " + string(value_max)
 }
 
+function bresenham() {
+	// arguments : 0x1, 1y1, 2x2, 3y2, 4execute<func(x, y, [arg])>, [5argument]
+	var dx = abs(argument2 - argument0);
+	var dy = abs(argument3 - argument1);
+	var sx = select(argument0 < argument2, -1, 1);
+	var sy = select(argument1 < argument3, -1, 1);
+	var err = dx - dy;
+	var e2;
+
+	while (1) {
+	 script_execute(argument4, argument0, argument1, argument5);
+
+	 if (argument0 = argument2 && argument1 = argument3)
+	  break;
+
+	 e2 = err * 2;
+ 
+	 if (e2 > -dy) {
+	  err -= dy;
+	  argument0 += sx;
+	 }
+ 
+	 if (e2 < dx) {
+	  err += dx;
+	  argument1 += sy;
+	 }
+	}
+}
+
+function string_cap(str, ratio) {
+	var length = string_length(str)
+	var length_output = ceil(length * ratio)
+	return string_copy(str, 1, length_output)
+}
+
+function string_mutation(str, ratio) {
+	var length = string_length(str)
+	var dlen = ceil(length * 1.5 * ratio)
+	var olen = ceil(dlen - (length / 2))
+
+	if dlen > length
+		dlen = length
+	if olen > length
+		olen = length
+	if olen < 0
+		olen = 0
+
+	var result = string_copy(str, 1, olen)
+	for (var i = olen; i < dlen; i += 1)
+		result += chr(irandom_range(32, 127))
+
+	return result
+}
 
 globalvar ease;
 ease = new (function() constructor {

@@ -1,5 +1,5 @@
 function menu_init_basic() {
-	push = new Timer(seconds(0.7))
+	push = -1
 	opened = false
 	focusable = true
 	openable = true
@@ -18,16 +18,15 @@ function menu_init_basic() {
 
 	sidekey_predicate = -1 // 좌우 메뉴 선택키 입력받기.
 
-	function update_general() {
-		push.update()
+	function update_children() {
 		if 0 < number {
 			for (var i = 0; i < number; ++i)
-				get(i).update()
+				get_child(i).update()
 		}
 	}
 
 	function update() {
-		update_general()
+		update_children()
 	}
 
 	function add_general(item) {
@@ -86,8 +85,13 @@ function menu_init_basic() {
 		return add_general(result)
 	}
 
+	///@function add_separator()
+	function add_separator() {
+		return add_space(0, global.menu_header_height - global.menu_caption_height)
+	}
+
 	function focus(item) {
-		if item != -1 {
+		if item != -1 and child_focused != item {
 			if item.focusable {
 				child_focused = item
 				return true
@@ -123,7 +127,7 @@ function menu_init_basic() {
 		}
 	}
 
-	function get(index) {
+	function get_child(index) {
 		return children[index]
 	}
 
@@ -135,6 +139,7 @@ function menu_init_basic() {
 ///@function MenuItem()
 function MenuItem() constructor {
 	menu_init_basic()
+	push = new Timer(seconds(0.7))
 	parent = other
 	predicate = -1
 
@@ -145,12 +150,17 @@ function MenuItem() constructor {
 	ax = 0
 	ay = 0
 
+	function update() {
+		push.update()
+		update_children()
+	}
+
 	///@function draw_children(x, y)
 	function draw_children(dx, dy) {
 		if 0 < number {
 			var temp
 			for (var i = 0; i < number; ++i) {
-				temp = get(i).draw(dx, dy)
+				temp = get_child(i).draw(dx, dy)
 				dx += temp[0]
 				dy += temp[1]
 			}
@@ -250,6 +260,7 @@ function MenuHeader(caption): MenuText(caption) constructor {
 	font = fontMainMenuHeader
 	text = caption
 	color = $ffade5
+	height = global.menu_header_height
 }
 
 ///@function MenuOption(text, variable_name, variable_predicate, predicate)
@@ -339,40 +350,38 @@ function menu_goto_back() {
 function menu_find_up(item) {
 	if item == -1 {
 		return -1
-	} else if item.focusable { // 인자는 이미 이전 항목을 받아옴.
-		return item
 	} else {
-		var result = item.before
-		while result != -1 {
-			if result.focusable
-				return result
-
-			result = result.before
+		var found_prev = item
+		var found = item.before
+		while true {
+			if found == -1
+				return found_prev
+			if found.focusable
+				return found
+			found = found.before
 		}
-		return -1
 	}
 }
 
 function menu_find_down(item) {
 	if item == -1 {
 		return -1
-	} else if item.focusable { // 인자는 이미 이전 항목을 받아옴.
-		return item
 	} else {
-		var result = item.next
-		while result != -1 {
-			if result.focusable
-				return result
-
-			result = result.next
+		var found_prev = item
+		var found = item.next
+		while true {
+			if found == -1
+				return found_prev
+			if found.focusable
+				return found
+			found = found.next
 		}
-		return -1
 	}
 }
 
 function menu_focus_up() {
 	with global.menu_opened {
-		var target = menu_find_up(child_focused.before)
+		var target = menu_find_up(child_focused)
 		if target != -1
 			focus(target)
 	}
@@ -380,7 +389,7 @@ function menu_focus_up() {
 
 function menu_focus_down() {
 	with global.menu_opened {
-		var target = menu_find_down(child_focused.next)
+		var target = menu_find_down(child_focused)
 		if target != -1
 			focus(target)
 	}
