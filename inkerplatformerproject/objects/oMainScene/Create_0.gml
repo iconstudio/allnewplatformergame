@@ -4,8 +4,8 @@ event_user(11)
 event_user(12)
 
 menu_push = new Countdown();
-//mode_change(mode_logo_fadein)
-mode_change(mode_menu)
+mode_change(mode_logo_fadein)
+//mode_change(mode_menu)
 
 key_pick = RIGHT
 key_duration_pick = seconds(0.4)

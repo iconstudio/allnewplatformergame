@@ -1,6 +1,6 @@
 /// @description 메뉴 상태 선언
 mode_logo_fadein = new menu_mode(1, function() {
-	menu_push.set(seconds(0.7))
+	menu_push.set(seconds(0.4))
 }, function() {
 	if menu_push.update() <= 0
 		mode_change(mode_logo)
@@ -11,7 +11,7 @@ mode_logo_fadein = new menu_mode(1, function() {
 })
 
 mode_logo = new menu_mode(1, function() {
-	menu_push.set(seconds(2.6))
+	menu_push.set(seconds(4.6))
 	logo_time = seconds(2)
 }, function() {
 	if menu_push.update() <= 0
