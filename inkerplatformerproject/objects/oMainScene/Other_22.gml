@@ -1,5 +1,5 @@
 /// @description 메뉴 항목 생성
-entry_title = add_sprite(sTitle)
+entry_title = add_sprite(sTitleGlyph)
 entry_start = add_entry("Campaign", "aa")
 entry_log = add_entry("Log", "aa")
 entry_setting = add_entry("Setting", "aa")

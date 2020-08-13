@@ -12,11 +12,13 @@ mode_logo_fadein = new menu_mode(1, function() {
 
 mode_logo = new menu_mode(1, function() {
 	menu_push.set(seconds(4.6))
-	logo_time = seconds(2)
+	//logo_time = seconds(2)
 }, function() {
 	if menu_push.update() <= 0
-		mode_change(mode_menu)
+		mode_change(mode_title)
 }, function() {
+	draw_sprite_ext(sLogo, 0, center_x, center_y, 1, 1, 0, $ffffff, 1)
+	/*
 	var lim = menu_push.get_max()
 	var time = menu_push.get_time()
 	if time <= logo_time {
@@ -25,11 +27,43 @@ mode_logo = new menu_mode(1, function() {
 			draw_sprite_ext(sLogo, 0, center_x, center_y, 1, 1, 0, $ffffff, alpha)
 	} else {
 		draw_sprite_ext(sLogo, 0, center_x, center_y, 1, 1, 0, $ffffff, 1)
-	}
+	}*/
 })
 
 mode_title = new menu_mode(10, function() {
 	menu_push.set(seconds(0.3))
+	update_children()
+}, function() {
+	if menu_push.update() <= 0 {
+		if global.io_pressed_yes
+		or (!global.flag_is_mobile and mouse_check_button_pressed(mb_left))
+		or (global.flag_is_mobile and mouse_check_button_released(mb_left)) {
+			mode_change(mode_menu)
+		} else if global.io_pressed_no {
+		mode_change(mode_title_exit)
+		} else {
+			
+		}
+	}
+}, function() {
+	draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, 1)
+})
+
+mode_title_exit = new menu_mode(10, function() {
+	menu_push.set(seconds(0.5))
+	update_children()
+}, function() {
+	if menu_push.update() <= 0
+		game_end()
+}, function() {
+	var alpha = lerp(1, 0, 1 - menu_push.get())
+	if 0 < alpha
+		draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, alpha)
+})
+
+mode_menu_enter = new menu_mode(10, function() {
+	menu_push.set(seconds(0.3))
+	update_children()
 }, function() {
 	menu_push.update()
 
@@ -39,7 +73,7 @@ mode_title = new menu_mode(10, function() {
 		mode_change(mode_menu)
 	}
 }, function() {
-	
+	draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, 1)
 })
 
 mode_menu = new menu_mode(20, function() {

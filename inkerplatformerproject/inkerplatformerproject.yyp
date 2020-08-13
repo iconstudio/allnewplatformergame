@@ -39,6 +39,7 @@
     {"id":{"name":"oDummy","path":"objects/oDummy/oDummy.yy",},"order":4,},
     {"id":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},"order":2,},
     {"id":{"name":"Entities","path":"scripts/Entities/Entities.yy",},"order":6,},
+    {"id":{"name":"sTitleGlyph","path":"sprites/sTitleGlyph/sTitleGlyph.yy",},"order":2,},
     {"id":{"name":"sTitle","path":"sprites/sTitle/sTitle.yy",},"order":1,},
     {"id":{"name":"oSlash","path":"objects/oSlash/oSlash.yy",},"order":6,},
     {"id":{"name":"System","path":"scripts/System/System.yy",},"order":4,},
