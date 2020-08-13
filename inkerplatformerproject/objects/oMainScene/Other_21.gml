@@ -40,7 +40,7 @@ mode_title = new menu_mode(10, function() {
 		or (global.flag_is_mobile and mouse_check_button_released(mb_left)) {
 			mode_change(mode_menu)
 		} else if global.io_pressed_no {
-		mode_change(mode_title_exit)
+			mode_change(mode_title_exit)
 		} else {
 			
 		}
