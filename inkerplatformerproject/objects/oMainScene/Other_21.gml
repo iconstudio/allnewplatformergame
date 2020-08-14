@@ -56,7 +56,7 @@ mode_title_exit = new menu_mode(10, function() {
 	if menu_push.update() <= 0
 		game_end()
 }, function() {
-	var alpha = lerp(1, 0, 1 - menu_push.get())
+	var alpha = ease.in_circ(lerp(1, 0, 1 - menu_push.get()))
 	if 0 < alpha
 		draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, alpha)
 })
