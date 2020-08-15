@@ -1,5 +1,5 @@
 /// @description 메뉴 항목 생성
-entry_title = add_sprite(sTitleGlyph)
+entry_title = add_sprite(sTitle)
 entry_start = add_entry("Campaign", "aa")
 entry_log = add_entry("Log", "aa")
 entry_setting = add_entry("Setting", "aa")
@@ -7,7 +7,10 @@ entry_exit = add_entry("Exit", "aa")
 focus(entry_start)
 init()
 
-entry_title.height = global.menu_title_height
+with entry_title {
+	height = global.menu_title_height
+	scale = 0.55
+}
 
 with entry_start {
 	with add_space(0, global.menu_title_height) {

@@ -1,4 +1,6 @@
 function menu_init_basic() {
+	enable = true
+	visible = true
 	push = -1
 	opened = false
 	focusable = true
@@ -26,7 +28,8 @@ function menu_init_basic() {
 	}
 
 	function update() {
-		update_children()
+		if enable
+			update_children()
 	}
 
 	function add_general(item) {
@@ -108,22 +111,26 @@ function menu_init_basic() {
 
 	///@function open([flag])
 	function open(flag) {
-		opened = select_argument(flag, true)
-		if opened
-			global.menu_opened = self
-		else
-			global.menu_opened = parent
+		if enable {
+			opened = select_argument(flag, true)
+			if opened
+				global.menu_opened = self
+			else
+				global.menu_opened = parent
+		}
 	}
 
 	function select(item) {
-		if item.openable and 0 < item.get_number() {
-			with item {
-				open()
-				push.reset()
+		if item.enable {
+			if item.openable and 0 < item.get_number() {
+				with item {
+					open()
+					push.reset()
+				}
 			}
-		}
-		if item.predicate != -1 {
-			item.predicate()
+			if item.predicate != -1 {
+				item.predicate()
+			}
 		}
 	}
 
@@ -151,13 +158,15 @@ function MenuItem() constructor {
 	ay = 0
 
 	function update() {
-		push.update()
-		update_children()
+		if enable {
+			push.update()
+			update_children()
+		}
 	}
 
 	///@function draw_children(x, y)
 	function draw_children(dx, dy) {
-		if 0 < number {
+		if enable and 0 < number {
 			var temp
 			for (var i = 0; i < number; ++i) {
 				temp = get_child(i).draw(dx, dy)
@@ -174,6 +183,10 @@ function MenuItem() constructor {
 
 	///@function draw(x, y)
 	function draw(dx, dy) {
+		if !enable {
+			return [0, 0]
+			exit
+		}
 		var oalpha = draw_get_alpha()
 		var result = [0, 0]
 		if global.menu_opened == self {
@@ -208,18 +221,20 @@ function MenuEntry(title, description, predicate): MenuItem() constructor {
 
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
-		if text != "" {
-			dx += ax
-			dy += ay
-			var ocolor = draw_get_color()
-			if focusable and parent.child_focused == self
-				draw_set_color(c_orange)
+		if enable and text != "" {
+			if visible {
+				dx += ax
+				dy += ay
+				var ocolor = draw_get_color()
+				if focusable and parent.child_focused == self
+					draw_set_color(c_orange)
 
-			draw_set_font(font)
-			draw_set_halign(aligns[0])
-			draw_set_valign(aligns[1])
-			draw_text(dx, dy, text)
-			draw_set_color(ocolor)
+				draw_set_font(font)
+				draw_set_halign(aligns[0])
+				draw_set_valign(aligns[1])
+				draw_text(dx, dy, text)
+				draw_set_color(ocolor)
+			}
 			return [0, height]
 		} else {
 			return [0, 0]
@@ -237,17 +252,19 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 	
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
-		if text != "" {
-			dx += ax
-			dy += ay
-			var ocolor = draw_get_color(), ofont = draw_get_font()
-			draw_set_color(color)
-			draw_set_font(font)
-			draw_set_halign(aligns[0])
-			draw_set_valign(aligns[1])
-			draw_text(dx, dy, text)
-			draw_set_color(ocolor)
-			draw_set_font(ofont)
+		if enable and text != "" {
+			if visible {
+				dx += ax
+				dy += ay
+				var ocolor = draw_get_color(), ofont = draw_get_font()
+				draw_set_color(color)
+				draw_set_font(font)
+				draw_set_halign(aligns[0])
+				draw_set_valign(aligns[1])
+				draw_text(dx, dy, text)
+				draw_set_color(ocolor)
+				draw_set_font(ofont)
+			}
 			return [0, height]
 		} else {
 			return [0, 0]
@@ -278,25 +295,31 @@ function MenuOption(caption, var_name, var_pred, pred): MenuEntry(caption, "", p
 
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
-		dx += ax
-		dy += ay
-		var ocolor = draw_get_color(), ofont = draw_get_font()
-		if focusable and parent.child_focused == self
-			draw_set_color(c_orange)
-		draw_set_font(font)
-		draw_set_halign(aligns[0])
-		draw_set_valign(aligns[1])
-		var value_string = make_vars_string()
+		if enable {
+			if visible {
+				dx += ax
+				dy += ay
+				var ocolor = draw_get_color(), ofont = draw_get_font()
+				if focusable and parent.child_focused == self
+					draw_set_color(c_orange)
+				draw_set_font(font)
+				draw_set_halign(aligns[0])
+				draw_set_valign(aligns[1])
+				var value_string = make_vars_string()
 
-		var sw = string_width(text)
-		var sx = floor(dx - sw)
-		draw_text(sx, dy, text)
-		draw_set_color($ffffff)
-		draw_text(sx + sw, dy, value_string)
+				var sw = string_width(text)
+				var sx = floor(dx - sw)
+				draw_text(sx, dy, text)
+				draw_set_color($ffffff)
+				draw_text(sx + sw, dy, value_string)
 
-		draw_set_color(ocolor)
-		draw_set_font(ofont)
-		return [0, height]
+				draw_set_color(ocolor)
+				draw_set_font(ofont)
+			}
+			return [0, height]
+		} else {
+			return [0, 0]
+		}
 	}
 }
 
@@ -312,6 +335,7 @@ function MenuSettingOption(caption, var_name, var_pred, pred): MenuOption(captio
 
 function MenuSprite(spr): MenuItem() constructor {
 	sprite = spr
+	scale = 1
 	width = sprite_get_width(sprite)
 	height = sprite_get_height(sprite)
 	ax = 0
@@ -322,14 +346,20 @@ function MenuSprite(spr): MenuItem() constructor {
 
 	///@function draw_me(x, y)
 	function draw_me(dx, dy) {
-		dx += ax
-		dy += ay
-		draw_sprite_ext(sprite, 0, dx, dy, 1, 1, 0, draw_get_color(), draw_get_alpha())
+		if enable {
+			if visible and scale != 0 {
+				dx += ax
+				dy += ay
+				draw_sprite_ext(sprite, 0, dx, dy, scale, scale, 0, draw_get_color(), draw_get_alpha())
+			}
 
-		if docked_center
-			return [0, height]
-		else
-			return [width, height]
+			if docked_center
+				return [0, height]
+			else
+				return [width, height]
+		} else {
+			return [0, 0]
+		}
 	}
 }
 

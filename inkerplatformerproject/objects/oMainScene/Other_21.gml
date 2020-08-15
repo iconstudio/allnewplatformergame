@@ -1,6 +1,6 @@
 /// @description 메뉴 상태 선언
 mode_logo_fadein = new menu_mode(1, function() {
-	menu_push.set(seconds(0.4))
+	menu_push.set(seconds(0.2))
 }, function() {
 	if menu_push.update() <= 0
 		mode_change(mode_logo)
@@ -11,7 +11,7 @@ mode_logo_fadein = new menu_mode(1, function() {
 })
 
 mode_logo = new menu_mode(1, function() {
-	menu_push.set(seconds(4.6))
+	menu_push.set(seconds(2.8))
 	//logo_time = seconds(2)
 }, function() {
 	if menu_push.update() <= 0
@@ -30,6 +30,7 @@ mode_logo = new menu_mode(1, function() {
 	}*/
 })
 
+//
 mode_title = new menu_mode(10, function() {
 	menu_push.set(seconds(0.3))
 	update_children()
@@ -38,20 +39,18 @@ mode_title = new menu_mode(10, function() {
 		if global.io_pressed_yes
 		or (!global.flag_is_mobile and mouse_check_button_pressed(mb_left))
 		or (global.flag_is_mobile and mouse_check_button_released(mb_left)) {
-			mode_change(mode_menu)
+			mode_change(mode_menu_enter)
 		} else if global.io_pressed_no {
 			mode_change(mode_title_exit)
-		} else {
-			
 		}
 	}
 }, function() {
 	draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, 1)
 })
 
+//
 mode_title_exit = new menu_mode(10, function() {
 	menu_push.set(seconds(0.5))
-	update_children()
 }, function() {
 	if menu_push.update() <= 0
 		game_end()
@@ -61,26 +60,37 @@ mode_title_exit = new menu_mode(10, function() {
 		draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, alpha)
 })
 
+//
 mode_menu_enter = new menu_mode(10, function() {
-	menu_push.set(seconds(0.3))
+	menu_push.set(seconds(0.8))
+	entry_title.visible = false
+}, function() {
+	if menu_push.update() <= 0 {
+		mode_change(mode_menu)
+		menu_push.finish()
+		entry_title.visible = true
+	}
 	update_children()
 }, function() {
-	menu_push.update()
+	var alpha = 1 - menu_push.get()
+	var dist = global.menu_title_y - center_y
 
-	if global.io_pressed_yes
-	or (!global.flag_is_mobile and mouse_check_button_pressed(mb_left))
-	or (global.flag_is_mobile and mouse_check_button_released(mb_left)) {
-		mode_change(mode_menu)
-	}
-}, function() {
-	draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, 1)
+	var ty = lerp(50, 0, ease.out_quart(alpha))
+	draw_set_alpha(alpha)
+	if 0 < alpha
+		draw(x, y + ty)
+
+	var ratio = ease.in_quad(alpha)
+	ty = lerp(center_y, global.menu_title_y, ratio)
+	var ts = lerp(0.7, 0.55, ease.in_quad(alpha))
+	draw_sprite_ext(sTitle, 0, center_x, ty, ts, ts, 0, $ffffff, 1)
 })
 
+//
 mode_menu = new menu_mode(20, function() {
 	menu_push.set(seconds(0.3))
 }, function() {
 	menu_push.update()
-	key_tick.update()
 	update_children()
 
 	if global.io_pressed_yes {
