@@ -6,6 +6,46 @@ function select_argument(arg, def) {
 	return integral(is_undefined(arg), def, arg)
 }
 
+/*
+/// scptAimTo(param_1relative, param_, param_3, param_4)
+/// @description Aim to certain point with minimum speed
+/// @x relative x coordinate
+/// @y relative y coordinate
+/// @g gravity acceleration
+/// @w gravity angle
+//Argument 0: relative x coordinate
+//Argument 1: relative y coordinate
+//Argument 2: gravity acceleration
+//Argument 3: gravity angle
+argument1 *= -1;
+var xx = argument0;
+var yy = argument1;
+if(argument3 != -90){
+    xx = dcos(-argument3 - 90) * argument0 - dsin(-argument3 - 90) * argument1;
+    yy = dsin(-argument3 - 90) * argument0 + dcos(-argument3 - 90) * argument1;
+}
+var dist = point_distance(0,0,xx,yy);
+var spd = sqrt(argument2 / (2*dist) * (xx * xx + (yy + dist) * (yy + dist)));
+var dir = darctan2((yy + dist) , xx) + argument3 + 90;
+var A = global.commander;
+A.data[0] = spd * dcos(dir);    // X speed
+A.data[1] = - spd * dsin(dir);    // Y speed
+//A.data[2] = abs(spd * dsin(dir) * 2 / argument2);
+A.data[2] = xx / (spd * dcos(dir - argument3 - 90));
+//A.data[2] = spd * (dsin(dir) + sqrt(sqr(A.data[1])+4*argument2*yy))/(-argument2);
+A.data[3] = spd;    // Speed
+A.data[4] = dir;    // Direction
+
+// A
+var gy;
+yMove += gy;
+y += yMove + gy/ 2;
+y += yMove;
+x += xMove;
+
+
+*/
+
 ///@function Timer(duration, [predicate], [destructor])
 function Timer(duration, proc, dest) constructor {
 	parent = other

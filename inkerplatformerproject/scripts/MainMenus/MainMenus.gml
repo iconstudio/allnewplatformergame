@@ -10,6 +10,7 @@ function menu_init_basic() {
 	child_focused = -1
 	child_first = -1
 	child_last = -1
+	index = -1
 	pole = false // 선택할 수 있는 양 끝점 항목인가
 	pole_first = -1 // 처음으로 선택할 수 있는 항목
 	pole_last = -1 // 마지막으로 선택할 수 있는 항목
@@ -33,15 +34,33 @@ function menu_init_basic() {
 	}
 
 	function add_general(item) {
-		child_last = item
+		if item.focusable {
+			if pole_first == -1 {
+				pole_first = item
+				item.pole = true
+			} else if 0 < number {
+				if pole_last != -1 {
+					pole_last.pole = false
+					pole_last = item
+					item.pole = true
+				} else {
+					pole_last = item
+					item.pole = true
+				}
+			} 
+		}
+
 		if 0 < number {
-			var cbefore = children[number - 1]
-			item.before = cbefore
-			cbefore.next = item
+			item.before = child_last
+			item.next = child_first
+			child_first.before = item
+			child_last.next = item
 		} else {
 			child_first = item
 		}
 
+		item.index = number
+		child_last = item
 		children[number++] = item
 		return item
 	}
@@ -113,6 +132,7 @@ function menu_init_basic() {
 	function open(flag) {
 		if enable {
 			opened = select_argument(flag, true)
+			global.menu_opened_prev = global.menu_opened
 			if opened
 				global.menu_opened = self
 			else
@@ -125,7 +145,7 @@ function menu_init_basic() {
 			if item.openable and 0 < item.get_number() {
 				with item {
 					open()
-					push.reset()
+					global.main_menu.entry_push.reset()
 				}
 			}
 			if item.predicate != -1 {
@@ -146,7 +166,6 @@ function menu_init_basic() {
 ///@function MenuItem()
 function MenuItem() constructor {
 	menu_init_basic()
-	push = new Timer(seconds(0.7))
 	parent = other
 	predicate = -1
 
@@ -159,14 +178,13 @@ function MenuItem() constructor {
 
 	function update() {
 		if enable {
-			push.update()
 			update_children()
 		}
 	}
 
 	///@function draw_children(x, y)
 	function draw_children(dx, dy) {
-		if enable and 0 < number {
+		if 0 < number {
 			var temp
 			for (var i = 0; i < number; ++i) {
 				temp = get_child(i).draw(dx, dy)
@@ -190,13 +208,16 @@ function MenuItem() constructor {
 		var oalpha = draw_get_alpha()
 		var result = [0, 0]
 		if global.menu_opened == self {
-			if parent != -1 and parent.opened and !opened
+			var push = global.main_menu.entry_push.get()
+			if !opened {
+				draw_set_alpha(oalpha * (1 - push))
 				result = draw_me(dx, dy)
-			else
+			} else if opened and 0 < number {
+				draw_set_alpha(oalpha * push)
 				draw_children(global.main_menu.x, global.main_menu.y)
+			}
 		} else if global.menu_opened == parent {
-			if parent != -1 and parent.opened
-				result = draw_me(dx, dy)
+			result = draw_me(dx, dy)
 		}
 		draw_set_alpha(oalpha)
 		return result
@@ -388,6 +409,7 @@ function menu_find_up(item) {
 				return found_prev
 			if found.focusable
 				return found
+			found_prev = found
 			found = found.before
 		}
 	}
@@ -404,6 +426,7 @@ function menu_find_down(item) {
 				return found_prev
 			if found.focusable
 				return found
+			found_prev = found
 			found = found.next
 		}
 	}
@@ -414,6 +437,7 @@ function menu_focus_up() {
 		var target = menu_find_up(child_focused)
 		if target != -1
 			focus(target)
+		return target
 	}
 }
 
@@ -422,6 +446,7 @@ function menu_focus_down() {
 		var target = menu_find_down(child_focused)
 		if target != -1
 			focus(target)
+		return target
 	}
 }
 

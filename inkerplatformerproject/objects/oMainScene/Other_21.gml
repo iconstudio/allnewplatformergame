@@ -5,7 +5,7 @@ mode_logo_fadein = new menu_mode(1, function() {
 	if menu_push.update() <= 0
 		mode_change(mode_logo)
 }, function() {
-	var alpha = ease.out_quad(1 - menu_push.get())
+	var alpha = ease.in_quad(1 - menu_push.get())
 	if 0 < alpha
 		draw_sprite_ext(sLogo, 0, center_x, center_y, 1, 1, 0, $ffffff, alpha)
 })
@@ -45,7 +45,7 @@ mode_title = new menu_mode(10, function() {
 		}
 	}
 }, function() {
-	draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, 1)
+	draw_sprite_ext(sTitle, 0, center_x, center_y, global.menu_title_scale, global.menu_title_scale, 0, $ffffff, 1)
 })
 
 //
@@ -57,7 +57,7 @@ mode_title_exit = new menu_mode(10, function() {
 }, function() {
 	var alpha = ease.in_circ(lerp(1, 0, 1 - menu_push.get()))
 	if 0 < alpha
-		draw_sprite_ext(sTitle, 0, center_x, center_y, 0.7, 0.7, 0, $ffffff, alpha)
+		draw_sprite_ext(sTitle, 0, center_x, center_y, global.menu_title_scale, global.menu_title_scale, 0, $ffffff, alpha)
 })
 
 //
@@ -82,7 +82,7 @@ mode_menu_enter = new menu_mode(10, function() {
 
 	var ratio = ease.in_quad(alpha)
 	ty = lerp(center_y, global.menu_title_y, ratio)
-	var ts = lerp(0.7, 0.55, ease.in_quad(alpha))
+	var ts = lerp(global.menu_title_scale, global.menu_title_scale_main, ease.in_quad(alpha))
 	draw_sprite_ext(sTitle, 0, center_x, ty, ts, ts, 0, $ffffff, 1)
 })
 
@@ -91,6 +91,8 @@ mode_menu = new menu_mode(20, function() {
 	menu_push.set(seconds(0.3))
 }, function() {
 	menu_push.update()
+	entry_push.update()
+	key_tick.update()
 	update_children()
 
 	if global.io_pressed_yes {
@@ -114,7 +116,7 @@ mode_menu = new menu_mode(20, function() {
 		} else {
 			key_pick = NONE
 		}
-	} else if !global.io_left and !global.io_right {
+	} else if !global.io_up and !global.io_down {
 		key_pick = NONE
 		key_tick.finish()
 	}
@@ -130,12 +132,23 @@ mode_menu = new menu_mode(20, function() {
 	}
 
 	if key_pick != NONE and key_tick.get() <= 0 {
+		var entry = -1
 		if key_pick == UP {
-			menu_focus_up()
-			key_tick.set(key_duration_continue)
+			entry = menu_focus_up()
 		} else if key_pick == DOWN {
-			menu_focus_down()
-			key_tick.set(key_duration_continue)
+			entry = menu_focus_down()
+		}
+
+		if entry != -1 {
+			if entry.pole {
+				key_pick = NONE
+				key_tick.finish()
+			} else {
+				key_tick.set(key_duration_continue)
+			}
+		} else {
+			key_pick = NONE
+			key_tick.finish()
 		}
 	}
 }, function() {
@@ -171,15 +184,23 @@ mode_restart = new menu_mode(90, function() {
 })
 
 mode_exit = new menu_mode(99, function() {
-	menu_push.set(seconds(1.4))
+	exit_fadeout_period = seconds(0.6)
+	exit_period = seconds(1.4)
+	exit_await_period = exit_period - exit_fadeout_period
+	menu_push.set(exit_period)
 }, function() {
 	if menu_push.update() <= 0 {
 		game_end()
 		exit
 	}
 }, function() {
-	var alpha = menu_push.get() * 0.5
-	draw_set_alpha(alpha)
-	if 0 < alpha
-		draw(x, y)
+	var lim = menu_push.get_max()
+	var time = lim - menu_push.get_time()
+
+	if time < exit_fadeout_period {
+		var alpha = (exit_fadeout_period - time) / (lim - exit_await_period)
+		draw_set_alpha(ease.in_expo(alpha))
+		if 0 < alpha
+			draw(x, y)
+	}
 })
