@@ -1,3 +1,7 @@
+function chapter_get_info(sn) {
+	
+}
+
 ///@function element_get_resistance_ratios(type, level)
 function element_get_resistance_ratios(type, level) {
 	if level < -3

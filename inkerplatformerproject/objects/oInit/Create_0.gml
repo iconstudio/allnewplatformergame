@@ -106,15 +106,6 @@ for (var i = 0; i <= 360; ++i) {
 	global.__lengthdir_cashed[i][1] = lengthdir_y(1, i)
 }
 
-event_user(0)
-event_user(1)
-
-global.__entity_list = ds_list_create()
-global.__entity_db = ds_map_create()
-event_user(2)
-
-event_user(3)
-
 audio_loaded = true
 if global.flag_is_mobile {
 	audio_channel_num(16)
@@ -132,5 +123,15 @@ global.shader_supported = shaders_are_supported()
 if !global.shader_supported {
 	throw "Shaders are not supported on this device."
 }
+
+event_user(0)
+event_user(1)
+
+global.__entity_list = ds_list_create()
+global.__entity_db = ds_map_create()
+event_user(2)
+event_user(3)
+
+event_user(4)
 
 alarm[0] = 1

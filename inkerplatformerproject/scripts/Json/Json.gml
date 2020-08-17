@@ -98,13 +98,13 @@ function json_parse(json_string){
 	try {
 		var _res = json_parse_child(_list,json_string,
 									json_next_char(json_string,1,global.JSON_MAP.get("space"),true));
-		ds_list_destroy(_list.ds);
+		ds_list_destroy(_list.data_raw);
 		delete(_list);
 		return _res[0];
 		
 	} catch(e) {
 		// delete each DS from _list - cleanup
-		for (var i=0;i<_list.size();i++) {
+		for (var i=0;i<_list.get_size();i++) {
 			if (is_struct(_list.get(i))) {
 				_list.get(i).destroy(true);	
 			}

@@ -1,90 +1,102 @@
-function Stack() constructor {
-	type = ds_type_stack;
-	ds = ds_stack_create();
-	destroy = function() {
-		if (ds==undefined) {
-			show_error("Stack does not exist: \n" + debug_get_callstack(),false);
-		} else {
-			ds_stack_destroy(ds);
+///@function DataStructure([items])
+function DataStructure(items) constructor {
+	type = undefined
+	data_raw = undefined
+
+	virtual_add = -1
+	virtual_get_size = -1
+	virtual_destroy = -1
+
+	///@function get_size()
+	function get_size() {
+		return virtual_get_size(data_raw)
+	}
+
+	///@function destroy()
+	function destroy() {
+		try {
+			if check_reliability()
+				virtual_destroy(data_raw)
+		} finally {
+			data_raw = undefined
 		}
-		ds = undefined;
-	};
-    top = function() { return ds_stack_top(ds); };
-    pop = function() { return ds_stack_pop(ds); };
-    push = function(val) { ds_stack_push(ds,val); };
-    size = function() { return ds_stack_size(ds); };
-	if (argument_count > 0) {
-		for (var i=0;i<argument_count;i++) {
-			push(argument[i]);
+	}
+
+	///@function check_reliability()
+	function check_reliability() {
+		if is_undefined(data_raw) or !ds_exists(data_raw, type) {
+			throw "DS does not exist: \n" + string(debug_get_callstack())
+			return false
+		} else {
+			return true
+		}
+	}
+
+	if virtual_add != -1 {
+		if 0 < argument_count {
+			for (var i = 0; i < argument_count; ++i) {
+				virtual_add(argument[i])
+			}
 		}
 	}
 }
 
-function Queue() constructor {
-    type = ds_type_queue;
-    ds = ds_queue_create();
-    destroy = function() {
-		if (ds == undefined) {
-			show_error("Queue does not exist: " + debug_get_callstack(),false);
-		} else {
-			ds_queue_destroy(ds);
-		}
-		ds = undefined;
-	};
-    top = function() { return ds_queue_head(ds); };
-    pop = function() { return ds_queue_dequeue(ds); };
-    push = function(val) { ds_queue_enqueue(ds,val); };
-    size = function() { return ds_queue_size(ds); };
-	if (argument_count > 0) {
-		for (var i=0;i<argument_count;i++) {
-			push(argument[i]);
-		}
-	}
+///@function Stack([items])
+function Stack(items): DataStructure(items) constructor {
+	type = ds_type_stack
+	data_raw = ds_stack_create()
+
+	top = function() { return ds_stack_top(data_raw) }
+  pop = function() { return ds_stack_pop(data_raw) }
+  push = function(val) { ds_stack_push(data_raw, val) }
+	virtual_add = push
+	virtual_get_size = ds_stack_size
+	virtual_destroy = ds_stack_destroy
 }
 
+///@function Queue([items])
+function Queue(items): DataStructure(items) constructor {
+  type = ds_type_queue
+  data_raw = ds_queue_create()
 
-function PriorityQueue() constructor {
-    type = ds_type_priority;
-    ds = ds_priority_create();
-    destroy = function() {
-		if (ds == undefined) {
-			show_error("Priority Queue does not exist: " + debug_get_callstack(),false);
-		} else {
-			ds_priority_destroy(ds);
-		}
-		ds = undefined;
-	};
-    clear = function() { ds_priority_clear(ds); };
-    size = function() { return ds_priority_size(ds); };
-    add = function(val,priority) { ds_priority_add(ds,val,priority); }; 
-    get_min = function() { return ds_priority_find_min(ds); };
-    get_max = function() { return ds_priority_find_max(ds); };
-    delete_min = function() { return ds_priority_delete_min(ds); };
-    delete_max = function() { return ds_priority_delete_max(ds); };
+  top = function() { return ds_queue_head(data_raw) }
+  pop = function() { return ds_queue_dequeue(data_raw) }
+  push = function(val) { ds_queue_enqueue(data_raw,val) }
+	virtual_add = push
+	virtual_get_size = ds_queue_size
+	virtual_destroy = ds_queue_destroy
 }
 
-function Grid(_width, _height) constructor {
+///@function PriorityQueue()
+function PriorityQueue(): DataStructure() constructor {
+  type = ds_type_priority
+  data_raw = ds_priority_create()
+
+  clear = function() { ds_priority_clear(data_raw) }
+  add = function(val,priority) { ds_priority_add(data_raw,val,priority) } 
+  get_min = function() { return ds_priority_find_min(data_raw) }
+  get_max = function() { return ds_priority_find_max(data_raw) }
+  delete_min = function() { return ds_priority_delete_min(data_raw) }
+  delete_max = function() { return ds_priority_delete_max(data_raw) }
+	virtual_add = -1
+	virtual_get_size = ds_priority_size
+	virtual_destroy = ds_priority_destroy
+}
+
+///@function Grid(width, height)
+function Grid(_width, _height): DataStructure() constructor {
 	type = ds_type_grid;
-	ds = ds_grid_create(_width, _height);
+	data_raw = ds_grid_create(_width, _height)
 	__width = _width;
 	__height = _height;
 
-	destroy = function() {
-		if (ds == undefined) {
-			show_error("Grid does not exist: " + debug_get_callstack(),false);
-		} else {
-			ds_grid_destroy(ds);
-		}
-		ds = undefined;
-	}
-
 	set_width = function(value) {
-		resize(value, __height);
+		resize(value, __height)
 		return self;
 	}
 
 	set_height = function(value) {
-		resize(__width, value);
+		resize(__width, value)
 		return self;
 	}
 
@@ -99,56 +111,59 @@ function Grid(_width, _height) constructor {
 	resize = function(_w,_h) {
 		__width = _w;
 		__height = _h;
-		ds_grid_resize(ds,_w,_h);
+		ds_grid_resize(data_raw,_w,_h)
 	}
 
 	clear = function() {
 		var _v = argument_count == 1 ? argument[0] : 0;
-		ds_grid_clear(ds,_v);
-	};
+		ds_grid_clear(data_raw,_v)
+	}
 
-    shuffle = function() { ds_grid_shuffle(ds); };
-    sort = function(column,ascending) { ds_grid_sort(ds,column,ascending); };
-    set = function(x,y,v) { ds[# x,y] = v; };
-    get = function(x,y) { return ds[# x,y]; };
-    get_max = function(x1,y1,x2,y2) { return ds_grid_get_max(ds,x1,y1,x2,y2); };
-    get_min = function(x1,y1,x2,y2) { return ds_grid_get_min(ds,x1,y1,x2,y2); };
-    get_mean = function(x1,y1,x2,y2) { return ds_grid_get_mean(ds,x1,y1,x2,y2); };
-    get_sum = function(x1,y1,x2,y2) { return ds_grid_get_sum(ds,x1,y1,x2,y2); };
-    get_max_disk = function(x,y,r) { return ds_grid_get_disk_max(ds,x,y,r); };
-    get_min_disk = function(x,y,r) { return ds_grid_get_disk_min(ds,x,y,r); };
-    get_mean_disk = function(x,y,r) { return ds_grid_get_disk_mean(ds,x,y,r); };
-    get_sum_disk = function(x,y,r) { return ds_grid_get_disk_sum(ds,x,y,r); };
-	
+  shuffle = function() { ds_grid_shuffle(data_raw) }
+  sort = function(column,ascending) { ds_grid_sort(data_raw,column,ascending) }
+  set = function(x,y,v) { data_raw[# x,y] = v; }
+  get = function(x,y) { return data_raw[# x,y]; }
+  get_max = function(x1,y1,x2,y2) { return ds_grid_get_max(data_raw,x1,y1,x2,y2) }
+  get_min = function(x1,y1,x2,y2) { return ds_grid_get_min(data_raw,x1,y1,x2,y2) }
+  get_mean = function(x1,y1,x2,y2) { return ds_grid_get_mean(data_raw,x1,y1,x2,y2) }
+  get_sum = function(x1,y1,x2,y2) { return ds_grid_get_sum(data_raw,x1,y1,x2,y2) }
+  get_max_disk = function(x,y,r) { return ds_grid_get_disk_max(data_raw,x,y,r) }
+  get_min_disk = function(x,y,r) { return ds_grid_get_disk_min(data_raw,x,y,r) }
+  get_mean_disk = function(x,y,r) { return ds_grid_get_disk_mean(data_raw,x,y,r) }
+  get_sum_disk = function(x,y,r) { return ds_grid_get_disk_sum(data_raw,x,y,r) }
+
+	///@function filter(predicate)
 	filter = function (cb) {
-		var _nds = new Grid(__width,__height);
+		var _nds = new Grid(__width,__height)
 		for (var _x=0;_x<__width;_x++) {
 			for (var _y=0;_y<__width;_y++) {
-				if (cb(ds[# _x,_y],_x,_y,self)) {
-					_nds.set(_x,_y,ds[# _x,_y]);
+				if (cb(data_raw[# _x,_y],_x,_y,self)) {
+					_nds.set(_x,_y,data_raw[# _x,_y])
 				} else {
-					_nds.set(_x,_y,undefined);
+					_nds.set(_x,_y,undefined)
 				}
 			}
 		}
 		return _nds;
-	};
-	
+	}
+
+	///@function map(predicate)
 	map = function(cb){
-		var _nds = new Grid(__width,__height);
+		var _nds = new Grid(__width,__height)
 		for (var _x=0;_x<__width;_x++) {
 			for (var _y=0;_y<__width;_y++) {
-				_nds.set(_x,_y,cb(ds[# x,y],_x,_y,self));
+				_nds.set(_x,_y,cb(data_raw[# x,y],_x,_y,self))
 			}
 		}
 		return _nds;
-	};
-	
+	}
+
+	///@function foreach(predicate)
 	foreach = function(cb) {
 		var _br = false;
 		for (var _x=0;_x<__width;_x++) {
 			for (var _y=0;_y<__width;_y++) {
-				if (cb(ds[# _x,_y],_x,_y,self) == false) {
+				if (cb(data_raw[# _x,_y],_x,_y,self) == false) {
 					_br = true;
 					break;
 				}
@@ -157,25 +172,30 @@ function Grid(_width, _height) constructor {
 				break;	
 			}
 		}
-	};
-	
+	}
+
+	virtual_add = -1
+	virtual_get_size = -1
+	virtual_destroy = ds_grid_destroy
 }
 
-function List() constructor {
-	type = ds_type_list;
-	ds = ds_list_create();
+///@function List([items])
+function List(items): DataStructure(items) constructor {
+	type = ds_type_list
+	data_raw = ds_list_create()
 
-	destroy = function(shallow) {
-		if (shallow == undefined) {
-			shallow = false;	
+	///@function destroy(do_remove_children)
+	destroy = function(cleanup) {
+		if (cleanup == undefined) {
+			cleanup = false;	
 		}
-		if (ds == undefined) {
-			show_error("List does not exist: " + debug_get_callstack(),false);
+		if is_undefined(data_raw) {
+			show_error("List does not exist: " + debug_get_callstack(), false)
 		} else {
-			if (shallow != false) {
-				var _iter = new Iterator(self);
+			if cleanup {
+				var _iter = new Iterator(self)
 				while (_iter.next() != undefined) {
-					var _item = _iter.value();
+					var _item = _iter.value()
 					if (is_struct(_item)) {
 						switch (instanceof(_item)) {
 							case "List":
@@ -184,86 +204,106 @@ function List() constructor {
 							case "Queue":
 							case "Priority":
 							case "Stack":
-								_item.destroy();
+								_item.destroy()
 							break;
 						}
 					}
 				}
 			}
-			ds_list_destroy(ds);
+			ds_list_destroy(data_raw)
 		}
-		ds = undefined;
+		data_raw = undefined
 	}
 
-    get = function(i) { return ds[| i]};
-    set = function(i,v) { ds[| i] = v; };
-    add = function(v) { ds_list_add(ds,v); };
-    insert = function(i, v) { ds_list_insert(ds, i, v); };
-    shuffle = function() { ds_list_shuffle(ds); };
-    sort = function(ascending) { ds_list_sort(ds,ascending); };
-    size = function() { return ds_list_size(ds); };
-    mark_list = function(i) { ds_list_mark_as_list(ds, i); };
-    mark_map = function(i) { ds_list_mark_as_map(ds,i); };
-	remove = function(i) { ds_list_delete(ds,i) };
-	
+	///@function get(index)
+  get = function(i) { return data_raw[| i]}
+
+	///@function set(index, value)
+  set = function(i, v) { data_raw[| i] = v; }
+
+	///@function add(value)
+  add = function(v) { ds_list_add(data_raw,v) }
+
+	///@function insert(index, value)
+  insert = function(i, v) { ds_list_insert(data_raw, i, v) }
+
+	///@function shuffle()
+  shuffle = function() { ds_list_shuffle(data_raw) }
+
+	///@function sort(ascending)
+  sort = function(ascending) { ds_list_sort(data_raw,ascending) }
+
+	///@function get_size()
+  get_size = function() { return ds_list_size(data_raw) }
+
+	///@function mark_list(index)
+  mark_list = function(i) { ds_list_mark_as_list(data_raw, i) }
+
+	///@function mark_map(index)
+  mark_map = function(i) { ds_list_mark_as_map(data_raw,i) }
+
+	///@function remove(index)
+	remove = function(i) { ds_list_delete(data_raw,i) }
+
+	///@function foreach(predicate)
 	foreach = function(cb) {
-		for (var i=0,s=size();i<s;i++) {
-			if (cb(ds[| i],i,self) == true) {
+		for (var i=0,s=get_size();i<s;i++) {
+			if (cb(data_raw[| i],i,self) == true) {
 				break;	
 			}
 		}
 	}
-	
+
+	///@function map(predicate, do_destroy_self)
 	map = function(cb,remove) {
 		if (remove == undefined) {
 			remove = false;	
 		}
-		var _nds = new List();
-		for (var i=0,s=size();i<s;i++) {
-			_nds.add(cb(ds[| i], i, self));
+		var _nds = new List()
+		for (var i=0,s=get_size();i<s;i++) {
+			_nds.add(cb(data_raw[| i], i, self))
 		}
-		if (remove) {
-			self.destroy(true);
+		if remove {
+			self.destroy(true)
 		}
 		return _nds;
 	}
-	
+
+	///@function filter(predicate, do_destroy_self)
 	filter = function(cb,remove) {
 		if (remove == undefined) {
 			remove = false;	
 		}
-		var _nds = List();
-		for (var i=0,s=size();i<s;i++) {
-			if (cb(ds[| i],i,self) == true) {
-				_nds.add(ds[| i]);	
+		var _nds = List()
+		for (var i=0,s=get_size();i<s;i++) {
+			if (cb(data_raw[| i],i,self) == true) {
+				_nds.add(data_raw[| i])	
 			}
 		}
-		if (remove) {
-			self.destroy(true);	
+		if remove {
+			self.destroy(true)	
 		}
 	}
-	
-	if (argument_count > 0) {
-		for (var i=0;i<argument_count;i++) {
-			add(argument[i]);	
-		}
-	}
+
+	virtual_add = add
+	virtual_get_size = ds_list_size
+	virtual_destroy = ds_list_destroy
 }
 
 function Map() constructor {
 	type = ds_type_map;
-	ds = ds_map_create();
-	destroy = function(shallow) {
-		if (shallow = undefined) {
-			shallow = false;	
+	data_raw = ds_map_create()
+	destroy = function(cleanup) {
+		if (cleanup = undefined) {
+			cleanup = false;	
 		}
-		if (ds == undefined) {
-			show_error("Map does not exist: " + debug_get_callstack(),false);
+		if is_undefined(data_raw) {
+			show_error("Map does not exist: " + debug_get_callstack(), false)
 		} else {
-			if (shallow != false) {
-				var _iter = new Iterator(self);
+			if cleanup {
+				var _iter = new Iterator(self)
 				while (_iter.next() != undefined) {
-					var _item = _iter.value();
+					var _item = _iter.value()
 					if (is_struct(_item)) {
 						switch (instanceof(_item)) {
 							case "List":
@@ -272,70 +312,74 @@ function Map() constructor {
 							case "Queue":
 							case "Priority":
 							case "Stack":
-								_item.destroy();
+								_item.destroy()
 							break;
 						}
 					}
 				}
 			}
-			ds_map_destroy(ds);
+			ds_map_destroy(data_raw)
 		}
-		ds = undefined;
+		data_raw = undefined
 	}
-	get = function(key) { return ds[? key]; };
-	set = function(key,val) { ds[? key] = val; };
-	clear = function() { ds_map_clear(ds); };
-	remove = function(key) { ds_map_delete(ds,key); };
-	size = function() { return ds_map_size(ds); };
+	get = function(key) { return data_raw[? key]; }
+	set = function(key,val) { data_raw[? key] = val; }
+	clear = function() { ds_map_clear(data_raw) }
+	remove = function(key) { ds_map_delete(data_raw,key) }
+	get_size = function() { return ds_map_size(data_raw) }
 	
 	foreach = function() {
-		var _k = ds_map_find_first(ds);
+		var _k = ds_map_find_first(data_raw)
 		while (_k != undefined) {
-			if (cb(ds[? _k], _k, ds) == true) {
+			if (cb(data_raw[? _k], _k, data_raw) == true) {
 				break;
 			}
-			k = ds_map_find_next(ds,_k);
+			k = ds_map_find_next(data_raw,_k)
 		}
-	};
+	}
 	map = function(cb,remove) {
 		if (remove == undefined) {
 			remove = false;	
 		}
-		var _k = ds_map_find_first(ds);
-		var _nds = Map();
+		var _k = ds_map_find_first(data_raw)
+		var _nds = Map()
 		while (_k != undefined) {
-			_nds.set(_k,cb(ds[? _k], _k, self));
-			k = ds_map_find_next(ds,_k);
+			_nds.set(_k,cb(data_raw[? _k], _k, self))
+			k = ds_map_find_next(data_raw,_k)
 		}
-		if (remove) {
-			self.destroy();	
+		if remove {
+			self.destroy()	
 		}
 		return _nds;
 	}
 	filter = function(cb) {
-		var _k = ds_map_find_first(ds);
-		var _nds = new Map();
+		var _k = ds_map_find_first(data_raw)
+		var _nds = new Map()
 		while (_k != undefined) {
-			if (cb(ds[? _k],_k,self)) {
-				_nds[? _k] = ds[? _k];
+			if (cb(data_raw[? _k],_k,self)) {
+				_nds[? _k] = data_raw[? _k];
 			}
 		}
 		return _nds;
 	}
+
+	virtual_add = -1
+	virtual_get_size = ds_map_size
+	virtual_destroy = ds_map_destroy
 }
 
 
 function Iterator(bds) constructor {
-	ds = bds;
-	type = ds.type;
-	key = undefined;
-	next = undefined;
-	value = undefined;
+	data = bds;
+	type = data.type;
+	key = undefined
+	next = undefined
+	value = undefined
 	last = function() {
 		if (type == ds_type_list) {
-			return ds.size()-1;
+			return data.get_size()-1;
 		} else if (type == ds_type_map) {
-			return ds_map_find_last(ds.ds);
+			return ds_map_find_last(data.data_raw)
 		}
 	}
 	_next_list = function() {
@@ -343,93 +387,96 @@ function Iterator(bds) constructor {
 			key = 0;
 			return key;
 		}
-		if (key+1 < ds_list_size(ds.ds)) {
+		if (key+1 < ds_list_size(data_raw.data_raw)) {
 			return ++key;
 		} else {
-			return undefined;	
+			return undefined	
 		}
 	}
 	_next_map = function() {
         if (key == undefined) {
-            key = ds_map_find_first(ds.ds);
+            key = ds_map_find_first(data_raw.data_raw)
         } else {
-            key = ds_map_find_next(ds.ds,key);
+            key = ds_map_find_next(data_raw.data_raw,key)
         }
         return key;
 	}
     _value_list = function() {
-        return ds.ds[| key];
-    };
+        return data_raw.data_raw[| key];
+    }
     _value_map = function() {
-        return ds.ds[? key];
-    };
+        return data_raw.data_raw[? key];
+    }
 	if (type == ds_type_list) {
-		key = undefined;
+		key = undefined
 		next = _next_list;
 		value = _value_list;
 	} else if (type == ds_type_map) {
-		key = undefined;
+		key = undefined
 		next = _next_map;
 		value = _value_map;
 	}
 }
 
 function Buffer(_size,_type,_alignment) constructor {
-	buffer = buffer_create(_size,_type,_alignment);
-	type = _type;
-	size = function() {
-		return buffer_get_size(buffer);	
-	};
-	read = function(_type) {
-		return buffer_read(buffer,_type);	
+	buffer = buffer_create(_size,_type,_alignment)
+	type = _type
+
+	get_size = function() {
+		return buffer_get_size(buffer)	
 	}
+
+	read = function(_type) {
+		return buffer_read(buffer,_type)	
+	}
+
 	write = function(_type,_value) {
-		buffer_write(buffer,_type,_value);
+		buffer_write(buffer,_type,_value)
 	}
 	fill = function(_offset,_type,_value,_size){
-		buffer_fill(buffer,_offset,_type,_value,_size);
+		buffer_fill(buffer,_offset,_type,_value,_size)
 	}
 	seek = function(_base,_offset) {
-		buffer_seek(buffer,_base,_offset);
+		buffer_seek(buffer,_base,_offset)
 	}
 	tell = function() {
 		return buffer_tell(buffer)
 	}
 	peek = function(_offset,_type) {
-		return buffer_peek(buffer,_offset,_type);
+		return buffer_peek(buffer,_offset,_type)
 	}
 	poke = function(_offset,_type,_value) {
-		buffer_poke(buffer,_offset,_type,_value);	
+		buffer_poke(buffer,_offset,_type,_value)	
 	}
 	compress = function(_offset,_size) {
-		return buffer_from(buffer_compress(buffer,_offset,_size));
+		return buffer_from(buffer_compress(buffer,_offset,_size))
 		
 	}
 	decompress = function(_offset,_size) {
-		return buffer_from(buffer_decompress(buffer));
+		return buffer_from(buffer_decompress(buffer))
 	}
 	copy = function(_src_buffer,_src_offset,_size,_dest_offset) {
-		buffer_copy(_src_buffer,_src_offset,_size,buffer,_dest_offset);
+		buffer_copy(_src_buffer,_src_offset,_size,buffer,_dest_offset)
 	}
 	resize = function(_size) {
-		buffer_resize(buffer,_size);
+		buffer_resize(buffer,_size)
 	}
 	address = function() {
-		return buffer_get_address(buffer);
+		return buffer_get_address(buffer)
 	}
 	
 }
 
 function make_buffer_from(buff) {
-	var _buff = new Buffer(buffer_get_size(buff),buffer_get_type(buff),buffer_get_alignment(buff));
-	_buff.copy(buff,0,buffer_get_size(buff),0);
+	var _buff = new Buffer(buffer_get_size(buff),buffer_get_type(buff),buffer_get_alignment(buff))
+	_buff.copy(buff,0,buffer_get_size(buff),0)
 }
 /*
 function Surface(_width,_height) constructor {
 	width = width;
 	height = height;
 	buffer_size = width*height*4;
-	surface = surface_create(width,height);
-	buffer = new Buffer(buffer_size,buffer_fixed,1);	
+	surface = surface_create(width,height)
+	buffer = new Buffer(buffer_size,buffer_fixed,1)	
 }
 */

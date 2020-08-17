@@ -18,37 +18,53 @@ scrolling = false
 menu_push = new Countdown()
 entry_push = new Timer(seconds(0.2))
 entry_push.finish()
-global.menu_opened_prev = id
+global.menu_opened_prev = -1
 global.menu_opened = id
 
 menu_init_basic()
 opened = true
 
+///@function draw_children(x, y)
+function draw_children(dx, dy) {
+	var temp
+	for (var i = 0; i < get_items_count(); ++i) {
+		temp = get_child(i).draw(dx, dy)
+		dx += temp[0]
+		dy += temp[1]
+	}
+}
+
 ///@function draw(x, y)
 function draw(dx, dy) {
-	with global.menu_opened {
-		if 0 < get_number() {
-			draw_children(dx, dy)
+	var oalpha = draw_get_alpha()
+	var push = entry_push.get()
+	var alpha = oalpha * (1 - push)
+	
+	if 0 < alpha and global.menu_opened_prev != -1 {
+		with global.menu_opened_prev {
+			if 0 < get_items_count() {
+				draw_set_alpha(alpha)
+				draw_children(dx, dy)
+			}
 		}
 	}
-	/*
-	if 0 < number {
-		var dx = x, dy = y, temp = []
-		for (var i = 0; i < number; ++i) {
-			temp = get_child(i).draw(dx, dy)
-			dx += temp[0]
-			dy += temp[1]
+
+	alpha = oalpha * push
+	if 0 < alpha {
+		with global.menu_opened {
+			if 0 < get_items_count() {
+				draw_set_alpha(alpha)
+				draw_children(dx, dy)
+			}
 		}
 	}
-	*/
+	draw_set_alpha(1)
 }
 
 function init() {
-	if 0 < number {
-		for (var i = 0; i < number; ++i) {
-			with get_child(i) {
-				parent = other.id
-			}
+	for (var i = 0; i < get_items_count(); ++i) {
+		with get_child(i) {
+			parent = other.id
 		}
 	}
 }

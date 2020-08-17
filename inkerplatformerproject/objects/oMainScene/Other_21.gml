@@ -95,6 +95,11 @@ mode_menu = new menu_mode(20, function() {
 	key_tick.update()
 	update_children()
 
+	if entry_push.get() < 0.8 {
+		key_pick = NONE
+		exit
+	}
+
 	if global.io_pressed_yes {
 		with global.menu_opened {
 			if child_focused != -1

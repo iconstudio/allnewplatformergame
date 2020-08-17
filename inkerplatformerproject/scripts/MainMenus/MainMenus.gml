@@ -15,15 +15,15 @@ function menu_init_basic() {
 	pole_first = -1 // 처음으로 선택할 수 있는 항목
 	pole_last = -1 // 마지막으로 선택할 수 있는 항목
 	children_arrays = VERTICAL
-	number = 0
+	child_count = 0
 	next = -1
 	before = -1
 
 	sidekey_predicate = -1 // 좌우 메뉴 선택키 입력받기.
 
 	function update_children() {
-		if 0 < number {
-			for (var i = 0; i < number; ++i)
+		if 0 < child_count {
+			for (var i = 0; i < child_count; ++i)
 				get_child(i).update()
 		}
 	}
@@ -38,7 +38,7 @@ function menu_init_basic() {
 			if pole_first == -1 {
 				pole_first = item
 				item.pole = true
-			} else if 0 < number {
+			} else if 0 < child_count {
 				if pole_last != -1 {
 					pole_last.pole = false
 					pole_last = item
@@ -50,7 +50,7 @@ function menu_init_basic() {
 			} 
 		}
 
-		if 0 < number {
+		if 0 < child_count {
 			item.before = child_last
 			item.next = child_first
 			child_first.before = item
@@ -59,9 +59,9 @@ function menu_init_basic() {
 			child_first = item
 		}
 
-		item.index = number
+		item.index = child_count
 		child_last = item
-		children[number++] = item
+		children[child_count++] = item
 		return item
 	}
 
@@ -89,15 +89,15 @@ function menu_init_basic() {
 		return add_general(result)
 	}
 
-	///@function add_option(caption, variable_name, variable_predicate, predicate)
-	function add_option(caption, var_name, var_pred, pred) {
-		var result = new MenuOption(caption, var_name, var_pred, pred)
+	///@function add_indicator(caption, variable_name, variable_predicate, predicate)
+	function add_indicator(caption, var_name, var_pred, pred) {
+		var result = new MenuIndicator(caption, var_name, var_pred, pred)
 		return add_general(result)
 	}
 
-	///@function add_setting_option(caption, variable_name, variable_predicate, predicate)
-	function add_setting_option(caption, var_name, var_pred, pred) {
-		var result = new MenuSettingOption(caption, var_name, var_pred, pred)
+	///@function add_option(caption, variable_name, variable_predicate, predicate)
+	function add_option(caption, var_name, var_pred, pred) {
+		var result = new MenuOption(caption, var_name, var_pred, pred)
 		return add_general(result)
 	}
 
@@ -117,7 +117,7 @@ function menu_init_basic() {
 			if item.focusable {
 				child_focused = item
 				return true
-			} else if 1 < number {
+			} else if 1 < child_count {
 				if item.next != -1
 					focus(item.next)
 			} else {
@@ -137,15 +137,15 @@ function menu_init_basic() {
 				global.menu_opened = self
 			else
 				global.menu_opened = parent
+			global.main_menu.entry_push.reset()
 		}
 	}
 
 	function select(item) {
 		if item.enable {
-			if item.openable and 0 < item.get_number() {
+			if item.openable and 0 < item.get_items_count() {
 				with item {
 					open()
-					global.main_menu.entry_push.reset()
 				}
 			}
 			if item.predicate != -1 {
@@ -158,8 +158,8 @@ function menu_init_basic() {
 		return children[index]
 	}
 
-	function get_number() {
-		return number
+	function get_items_count() {
+		return child_count
 	}
 }
 
@@ -184,19 +184,12 @@ function MenuItem() constructor {
 
 	///@function draw_children(x, y)
 	function draw_children(dx, dy) {
-		if 0 < number {
-			var temp
-			for (var i = 0; i < number; ++i) {
-				temp = get_child(i).draw(dx, dy)
-				dx += temp[0]
-				dy += temp[1]
-			}
+		var temp
+		for (var i = 0; i < get_items_count(); ++i) {
+			temp = get_child(i).draw(dx, dy)
+			dx += temp[0]
+			dy += temp[1]
 		}
-	}
-
-	///@function draw_me(x, y)
-	function draw_me(dx, dy) {
-		return [width, height]
 	}
 
 	///@function draw(x, y)
@@ -205,22 +198,8 @@ function MenuItem() constructor {
 			return [0, 0]
 			exit
 		}
-		var oalpha = draw_get_alpha()
-		var result = [0, 0]
-		if global.menu_opened == self {
-			var push = global.main_menu.entry_push.get()
-			if !opened {
-				draw_set_alpha(oalpha * (1 - push))
-				result = draw_me(dx, dy)
-			} else if opened and 0 < number {
-				draw_set_alpha(oalpha * push)
-				draw_children(global.main_menu.x, global.main_menu.y)
-			}
-		} else if global.menu_opened == parent {
-			result = draw_me(dx, dy)
-		}
-		draw_set_alpha(oalpha)
-		return result
+
+		return get_size()
 	}
 
 	function get_width() {
@@ -230,18 +209,62 @@ function MenuItem() constructor {
 	function get_height() {
 		return height
 	}
+
+	///@function get_size()
+	function get_size() {
+		return [get_width(), get_height()]
+	}
+}
+
+///@function MainEntryChapter(serial)
+function MainEntryChapter(sn): MenuItem() constructor {
+	index = 0
+	
+}
+
+///@function MainEntryCampaign()
+function MainEntryCampaign(): MenuItem() constructor {
+	width = global.menu_width
+	width_real = width
+	height = global.menu_title_height + global.menu_caption_height
+	height_real = global.menu_title_height
+	focusable = true
+	openable = true
+
+	///@function draw(x, y)
+	function draw(dx, dy) {
+		var oalpha = draw_get_alpha()
+		draw_set_alpha(oalpha * 0.2)
+		//draw_set_color(0)
+		draw_set_color($ffffff)
+		draw_rectangle(0, dy, width_real, dy + height_real, false)
+		draw_set_alpha(oalpha)
+		if 0 < get_items_count() {
+			var temp = []
+			for (var i = 0; i < get_items_count(); ++i) {
+				temp = get_child(i).draw(dx, dy)
+				dx += temp[0]
+				dy += temp[1]
+			}
+		}
+
+		draw_set_alpha(oalpha)
+		draw_set_color($ffffff)
+		return get_size()
+	}
 }
 
 ///@function MenuEntry(text, tooltip, predicate)
-function MenuEntry(title, description, predicate): MenuItem() constructor {
+function MenuEntry(title, description, pred): MenuItem() constructor {
 	font = fontMainMenuEntry
 	text = title
 	tip = description
-	self.predicate = select_argument(predicate, -1)
+	width = 0
+	predicate = select_argument(pred, -1)
 	aligns = [1, 1]
 
-	///@function draw_me(x, y)
-	function draw_me(dx, dy) {
+	///@function draw(x, y)
+	function draw(dx, dy) {
 		if enable and text != "" {
 			if visible {
 				dx += ax
@@ -256,7 +279,7 @@ function MenuEntry(title, description, predicate): MenuItem() constructor {
 				draw_text(dx, dy, text)
 				draw_set_color(ocolor)
 			}
-			return [0, height]
+			return get_size()
 		} else {
 			return [0, 0]
 		}
@@ -271,8 +294,8 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 	openable = false
 	color = $cccccc
 	
-	///@function draw_me(x, y)
-	function draw_me(dx, dy) {
+	///@function draw(x, y)
+	function draw(dx, dy) {
 		if enable and text != "" {
 			if visible {
 				dx += ax
@@ -286,7 +309,7 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 				draw_set_color(ocolor)
 				draw_set_font(ofont)
 			}
-			return [0, height]
+			return get_size()
 		} else {
 			return [0, 0]
 		}
@@ -301,8 +324,8 @@ function MenuHeader(caption): MenuText(caption) constructor {
 	height = global.menu_header_height
 }
 
-///@function MenuOption(text, variable_name, variable_predicate, predicate)
-function MenuOption(caption, var_name, var_pred, pred): MenuEntry(caption, "", pred) constructor {
+///@function MenuIndicator(text, variable_name, variable_predicate, predicate)
+function MenuIndicator(caption, var_name, var_pred, pred): MenuEntry(caption, "", pred) constructor {
 	variable_name = var_name
 	variable_predicate = select_argument(var_pred, -1)
 	aligns = [0, 1]
@@ -314,8 +337,8 @@ function MenuOption(caption, var_name, var_pred, pred): MenuEntry(caption, "", p
 			return ": ERROR"
 	}
 
-	///@function draw_me(x, y)
-	function draw_me(dx, dy) {
+	///@function draw(x, y)
+	function draw(dx, dy) {
 		if enable {
 			if visible {
 				dx += ax
@@ -337,15 +360,15 @@ function MenuOption(caption, var_name, var_pred, pred): MenuEntry(caption, "", p
 				draw_set_color(ocolor)
 				draw_set_font(ofont)
 			}
-			return [0, height]
+			return get_size()
 		} else {
 			return [0, 0]
 		}
 	}
 }
 
-///@function MenuSettingOption(text, variable_name, variable_predicate, predicate)
-function MenuSettingOption(caption, var_name, var_pred, pred): MenuOption(caption, var_name, var_pred, pred) constructor {
+///@function MenuOption(text, variable_name, variable_predicate, predicate)
+function MenuOption(caption, var_name, var_pred, pred): MenuIndicator(caption, var_name, var_pred, pred) constructor {
 	function make_vars_string() {
 		if variable_struct_exists(global.settings, variable_name) and variable_predicate != -1
 			return ": " + variable_predicate(variable_struct_get(global.settings, variable_name))
@@ -357,16 +380,26 @@ function MenuSettingOption(caption, var_name, var_pred, pred): MenuOption(captio
 function MenuSprite(spr): MenuItem() constructor {
 	sprite = spr
 	scale = 1
-	width = sprite_get_width(sprite)
-	height = sprite_get_height(sprite)
+	width_real = sprite_get_width(sprite)
+	width = 0
+	height_real = sprite_get_height(sprite)
+	height = height_real
 	ax = 0
 	ay = height * 0.5
 	docked_center = true
 	focusable = false
 	openable = false
 
-	///@function draw_me(x, y)
-	function draw_me(dx, dy) {
+	function make_docked(flag) {
+		docked_center = flag
+		if docked_center
+			width = 0
+		else
+			width = width_real
+	}
+
+	///@function draw(x, y)
+	function draw(dx, dy) {
 		if enable {
 			if visible and scale != 0 {
 				dx += ax
@@ -374,10 +407,7 @@ function MenuSprite(spr): MenuItem() constructor {
 				draw_sprite_ext(sprite, 0, dx, dy, scale, scale, 0, draw_get_color(), draw_get_alpha())
 			}
 
-			if docked_center
-				return [0, height]
-			else
-				return [width, height]
+			return get_size()
 		} else {
 			return [0, 0]
 		}

@@ -14,40 +14,15 @@ with entry_title {
 
 with entry_start {
 	add_header("Campaign")
-	var gamemenu = new MenuItem()
+	var gamemenu = new MainEntryCampaign()
 	with gamemenu {
-		width = global.menu_width
-		height = global.menu_title_height
-		focusable = true
-		openable = false
 		add_entry("Chapter 1", "")
 		add_entry("Chapter 2", "")
 		add_entry("Chapter 3", "")
 		add_entry("Chapter 4", "")
 		focus(child_first)
-
-		///@function draw_me(x, y)
-		function draw_me(dx, dy) {
-			var oalpha = draw_get_alpha()
-			draw_set_alpha(oalpha * 0.3)
-			//draw_set_color(0)
-			draw_set_color($ffffff)
-			draw_rectangle(0, dy, width, dy + height, false)
-			if 0 < number {
-				var temp = []
-				for (var i = 0; i < number; ++i) {
-					temp = get_child(i).draw(dx, dy)
-					dx += 100
-				}
-			}
-
-			draw_set_alpha(oalpha)
-			draw_set_color($ffffff)
-			return [0, height + global.menu_caption_height]
-		}
 	}
 	add_general(gamemenu)
-	add_separator()
 	add_entry("Back", "", menu_goto_back)
 
 	sidekey_predicate = function(input) {
@@ -65,7 +40,6 @@ with entry_log {
 	with add_space(0, global.menu_title_height) {
 		
 	}
-	add_separator()
 	add_entry("Back", "", menu_goto_back)
 
 	focus(child_last)
@@ -81,12 +55,12 @@ with entry_setting {
 	add_entry("Gamepad", "")
 	add_separator()
 	add_header("Sounds")
-	add_setting_option("SFX Volume", "volume_sfx", callback_indicator_off)
-	add_setting_option("BGM Volume", "volume_bgm", callback_indicator_off)
+	add_option("SFX Volume", "volume_sfx", callback_indicator_off)
+	add_option("BGM Volume", "volume_bgm", callback_indicator_off)
 	add_separator()
 	add_header("Graphics")
-	add_setting_option("Fullscreen", "fullscreen", callback_indicator_flags)
-	add_setting_option("Screenshake", "screenshake", callback_indicator_flags)
+	add_option("Fullscreen", "fullscreen", callback_indicator_flags)
+	add_option("Screenshake", "screenshake", callback_indicator_flags)
 	add_separator()
 	add_entry("Back", "", menu_goto_back)
 
@@ -100,7 +74,6 @@ with entry_exit {
 	with add_space(0, global.menu_title_height) {
 		
 	}
-	add_separator()
 	add_text("Are you sure to exit?")
 	add_entry("Yes", "", function() {
 		with global.main_menu
