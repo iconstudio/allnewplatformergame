@@ -20,7 +20,23 @@ global.settings = {
 	volume_sfx: 10,
 	volume_bgm: 7,
 	fullscreen: false,
-	screenshake: true
+	screenshake: true,
+	
+	set_bgm: function(value) {
+		global.settings.volume_bgm = value
+	},
+
+	set_sfx: function(value) {
+		global.settings.volume_sfx = value
+	},
+
+	get_bgm: function() {
+		return global.settings.volume_bgm
+	},
+
+	get_sfx: function() {
+		return global.settings.volume_sfx
+	},
 }
 
 global.setting_control_keyboard = {

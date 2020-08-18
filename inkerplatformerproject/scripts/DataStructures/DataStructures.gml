@@ -1,7 +1,15 @@
-///@function DataStructure([items])
+///@function DataStructure([items...])
 function DataStructure(items) constructor {
 	type = undefined
 	data_raw = undefined
+	param_values_count = argument_count
+	if 0 < param_values_count {
+		param_values = array_create(param_values_count, 0)
+		for (var i = 0; i < param_values_count; ++i)
+			param_values[i] = argument[i]
+	} else {
+		param_values = undefined
+	}
 
 	virtual_add = -1
 	virtual_get_size = -1
@@ -15,8 +23,9 @@ function DataStructure(items) constructor {
 	///@function destroy()
 	function destroy() {
 		try {
-			if check_reliability()
+			if check_reliability() {
 				virtual_destroy(data_raw)
+			}
 		} finally {
 			data_raw = undefined
 		}
@@ -32,16 +41,16 @@ function DataStructure(items) constructor {
 		}
 	}
 
-	if virtual_add != -1 {
-		if 0 < argument_count {
-			for (var i = 0; i < argument_count; ++i) {
-				virtual_add(argument[i])
+	function init() {
+		if 0 < param_values_count and virtual_add != -1 {
+			for (var i = 0; i < param_values_count; ++i) {
+				virtual_add(param_values[i])
 			}
 		}
 	}
 }
 
-///@function Stack([items])
+///@function Stack([items...])
 function Stack(items): DataStructure(items) constructor {
 	type = ds_type_stack
 	data_raw = ds_stack_create()
@@ -52,9 +61,10 @@ function Stack(items): DataStructure(items) constructor {
 	virtual_add = push
 	virtual_get_size = ds_stack_size
 	virtual_destroy = ds_stack_destroy
+	init()
 }
 
-///@function Queue([items])
+///@function Queue([items...])
 function Queue(items): DataStructure(items) constructor {
   type = ds_type_queue
   data_raw = ds_queue_create()
@@ -65,6 +75,7 @@ function Queue(items): DataStructure(items) constructor {
 	virtual_add = push
 	virtual_get_size = ds_queue_size
 	virtual_destroy = ds_queue_destroy
+	init()
 }
 
 ///@function PriorityQueue()
@@ -85,38 +96,40 @@ function PriorityQueue(): DataStructure() constructor {
 
 ///@function Grid(width, height)
 function Grid(_width, _height): DataStructure() constructor {
-	type = ds_type_grid;
+	type = ds_type_grid
 	data_raw = ds_grid_create(_width, _height)
-	__width = _width;
-	__height = _height;
+	__width = _width
+	__height = _height
 
-	set_width = function(value) {
+	function set_width(value) {
 		resize(value, __height)
-		return self;
+		return self
 	}
 
-	set_height = function(value) {
+	function set_height(value) {
 		resize(__width, value)
-		return self;
+		return self
 	}
 
-	get_width = function() {
-		return __width;
+	function get_width() {
+		return __width
 	}
 
-	get_height = function() {
-		return __height;
+	function get_height() {
+		return __height
 	}
 
-	resize = function(_w,_h) {
-		__width = _w;
-		__height = _h;
+	///@function resize(width, height)
+	function resize(_w,_h) {
+		__width = _w
+		__height = _h
 		ds_grid_resize(data_raw,_w,_h)
 	}
 
-	clear = function() {
-		var _v = argument_count == 1 ? argument[0] : 0;
-		ds_grid_clear(data_raw,_v)
+	///@function clear([value])
+	function clear(value) {
+		var value_clear = select_argument(value, 0)
+		ds_grid_clear(data_raw, value_clear)
 	}
 
   shuffle = function() { ds_grid_shuffle(data_raw) }
@@ -179,7 +192,7 @@ function Grid(_width, _height): DataStructure() constructor {
 	virtual_destroy = ds_grid_destroy
 }
 
-///@function List([items])
+///@function List([items...])
 function List(items): DataStructure(items) constructor {
 	type = ds_type_list
 	data_raw = ds_list_create()
@@ -233,9 +246,6 @@ function List(items): DataStructure(items) constructor {
 	///@function sort(ascending)
   sort = function(ascending) { ds_list_sort(data_raw,ascending) }
 
-	///@function get_size()
-  get_size = function() { return ds_list_size(data_raw) }
-
 	///@function mark_list(index)
   mark_list = function(i) { ds_list_mark_as_list(data_raw, i) }
 
@@ -274,8 +284,8 @@ function List(items): DataStructure(items) constructor {
 		if (remove == undefined) {
 			remove = false;	
 		}
-		var _nds = List()
-		for (var i=0,s=get_size();i<s;i++) {
+		var _nds = new List()
+		for (var i=0, s=get_size(); i<s; i++) {
 			if (cb(data_raw[| i],i,self) == true) {
 				_nds.add(data_raw[| i])	
 			}
@@ -288,9 +298,10 @@ function List(items): DataStructure(items) constructor {
 	virtual_add = add
 	virtual_get_size = ds_list_size
 	virtual_destroy = ds_list_destroy
+	init()
 }
 
-function Map() constructor {
+function Map(): DataStructure() constructor {
 	type = ds_type_map;
 	data_raw = ds_map_create()
 	destroy = function(cleanup) {
@@ -326,8 +337,7 @@ function Map() constructor {
 	set = function(key,val) { data_raw[? key] = val; }
 	clear = function() { ds_map_clear(data_raw) }
 	remove = function(key) { ds_map_delete(data_raw,key) }
-	get_size = function() { return ds_map_size(data_raw) }
-	
+
 	foreach = function() {
 		var _k = ds_map_find_first(data_raw)
 		while (_k != undefined) {

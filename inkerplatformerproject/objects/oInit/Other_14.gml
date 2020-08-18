@@ -11,17 +11,12 @@ enum chapter_identity {
 	underworld_hell
 }
 
-global.__ch_infos = new List()
+global.__ch_infos = ds_list_create()
 
 function chapter_info(sn, caption, desc) constructor {
 	serial = sn
 	title = caption
 	description = desc
-}
-
-function chapter_info_add(sn, caption, desc) {
-	var result = new chapter_info(sn, caption, desc)
-	global.__ch_infos.add(result)
 }
 
 chapter_info_add(chapter_identity.intro, "The Introduction", "")

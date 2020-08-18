@@ -100,24 +100,44 @@ mode_menu = new menu_mode(20, function() {
 		exit
 	}
 
-	if global.io_pressed_yes {
+	if global.io_pressed_back {
+		with global.menu_opened {
+			menu_goto_back()
+		}
+	} else if global.io_pressed_yes {
 		with global.menu_opened {
 			if child_focused != -1
 				select(child_focused)
 		}
 	} else if global.io_pressed_up {
 		if key_pick != UP {
-			menu_focus_up()
-			key_tick.set(key_duration_pick)
-			key_pick = UP
+			var entry = - 1
+			with global.menu_opened {
+				entry = menu_find_up(child_focused)
+				if entry != -1
+					focus(entry)
+			}
+			if entry != -1
+			and (global.menu_opened.pole_last == entry or !entry.pole) and entry.before != -1 {
+				key_tick.set(key_duration_pick)
+				key_pick = UP
+			}
 		} else {
 			key_pick = NONE
 		}
 	} else if global.io_pressed_down {
 		if key_pick != DOWN {
-			menu_focus_down()
-			key_tick.set(key_duration_pick)
-			key_pick = DOWN
+			var entry = - 1
+			with global.menu_opened {
+				entry = menu_find_down(child_focused)
+				if entry != -1
+					focus(entry)
+			}
+			if entry != -1
+			and (global.menu_opened.pole_first == entry or !entry.pole) and entry.next != -1 {
+				key_tick.set(key_duration_pick)
+				key_pick = DOWN
+			}
 		} else {
 			key_pick = NONE
 		}
@@ -127,21 +147,30 @@ mode_menu = new menu_mode(20, function() {
 	}
 
 	// ** 좌우 입력은 따로 받는다. **
-	var SIDEKEY_INPUT = global.io_pressed_right - global.io_pressed_left
-	if SIDEKEY_INPUT != 0 {
-		with global.menu_opened {
-			if child_focused != -1 and child_focused.sidekey_predicate != -1 {
-				child_focused.sidekey_predicate(SIDEKEY_INPUT)
+	if key_pick == NONE {
+		var SIDEKEY_INPUT = global.io_pressed_right - global.io_pressed_left
+		if SIDEKEY_INPUT != 0 {
+			with global.menu_opened {
+				if child_focused != -1 and child_focused.child_can_choice_unopened {
+					with child_focused {
+						if SIDEKEY_INPUT == -1
+							menu_focus_up()
+						else if SIDEKEY_INPUT == 1
+							menu_focus_down()
+					}
+				}
 			}
 		}
-	}
-
-	if key_pick != NONE and key_tick.get() <= 0 {
+	} else if key_tick.get() == 0 {
 		var entry = -1
 		if key_pick == UP {
-			entry = menu_focus_up()
+			with global.menu_opened {
+				entry = menu_find_up(child_focused)
+				menu_focus_up()
+			}
 		} else if key_pick == DOWN {
-			entry = menu_focus_down()
+			with global.menu_opened
+				entry = menu_focus_down()
 		}
 
 		if entry != -1 {

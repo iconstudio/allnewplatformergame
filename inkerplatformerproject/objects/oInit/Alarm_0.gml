@@ -8,5 +8,6 @@ if global.flag_is_mobile {
 }
 
 instance_create(oGlobal)
+instance_create(oGamepad)
 
 alarm[1] = 10

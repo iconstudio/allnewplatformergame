@@ -143,8 +143,10 @@ function Countdown(proc, dest) constructor {
 			}
 
 			time--
-			if time <= 0
+			if time <= 0 {
+				time = 0
 				closing = true
+			}
 		} else if closing {
 			finish()
 		}
@@ -164,7 +166,7 @@ function Countdown(proc, dest) constructor {
 				proc()
 		}
 
-		time = 0
+		time = -1
 		closing = false
 		return self
 	}

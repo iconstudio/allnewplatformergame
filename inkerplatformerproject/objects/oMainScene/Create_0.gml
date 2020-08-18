@@ -3,7 +3,7 @@ event_user(10)
 event_user(11)
 event_user(12)
 
-mode_change(mode_menu)
+mode_change(mode_logo_fadein)
 //mode_change(mode_menu)
 
 key_pick = RIGHT

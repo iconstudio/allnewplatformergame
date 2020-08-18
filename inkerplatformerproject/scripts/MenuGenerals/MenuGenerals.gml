@@ -1,4 +1,5 @@
 function menu_init_basic() {
+	parent = -1
 	enable = true
 	visible = true
 	push = -1
@@ -18,8 +19,7 @@ function menu_init_basic() {
 	child_count = 0
 	next = -1
 	before = -1
-
-	sidekey_predicate = -1 // 좌우 메뉴 선택키 입력받기.
+	child_can_choice_unopened = false // 열리지 않아도 자식 선택하기.
 
 	function update_children() {
 		if 0 < child_count {
@@ -89,15 +89,21 @@ function menu_init_basic() {
 		return add_general(result)
 	}
 
-	///@function add_indicator(caption, variable_name, variable_predicate, predicate)
-	function add_indicator(caption, var_name, var_pred, pred) {
-		var result = new MenuIndicator(caption, var_name, var_pred, pred)
+	///@function add_indicator(caption, *variable_method, [indicate_predicate], [predicate])
+	function add_indicator(caption, var_method, idic_pred, pred) {
+		var result = new MenuIndicator(caption, var_method, idic_pred, pred)
 		return add_general(result)
 	}
 
-	///@function add_option(caption, variable_name, variable_predicate, predicate)
-	function add_option(caption, var_name, var_pred, pred) {
-		var result = new MenuOption(caption, var_name, var_pred, pred)
+	///@function add_setting_indicator(caption, variable_name, [indicate_predicate], [predicate])
+	function add_setting_indicator(caption, var_name, idic_pred, pred) {
+		var result = new MainEntryIndicator(caption, var_name, idic_pred, pred)
+		return add_general(result)
+	}
+
+	///@function add_option(text, [predicate])
+	function add_option(text, predicate) {
+		var result = new MainEntryOption(text, predicate)
 		return add_general(result)
 	}
 
@@ -109,7 +115,7 @@ function menu_init_basic() {
 
 	///@function add_separator()
 	function add_separator() {
-		return add_space(0, global.menu_header_height - global.menu_caption_height)
+		return add_space(0, global.menu_sep_height)
 	}
 
 	function focus(item) {
@@ -144,9 +150,7 @@ function menu_init_basic() {
 	function select(item) {
 		if item.enable {
 			if item.openable and 0 < item.get_items_count() {
-				with item {
-					open()
-				}
+				item.open()
 			}
 			if item.predicate != -1 {
 				item.predicate()
@@ -216,45 +220,7 @@ function MenuItem() constructor {
 	}
 }
 
-///@function MainEntryChapter(serial)
-function MainEntryChapter(sn): MenuItem() constructor {
-	index = 0
-	
-}
-
-///@function MainEntryCampaign()
-function MainEntryCampaign(): MenuItem() constructor {
-	width = global.menu_width
-	width_real = width
-	height = global.menu_title_height + global.menu_caption_height
-	height_real = global.menu_title_height
-	focusable = true
-	openable = true
-
-	///@function draw(x, y)
-	function draw(dx, dy) {
-		var oalpha = draw_get_alpha()
-		draw_set_alpha(oalpha * 0.2)
-		//draw_set_color(0)
-		draw_set_color($ffffff)
-		draw_rectangle(0, dy, width_real, dy + height_real, false)
-		draw_set_alpha(oalpha)
-		if 0 < get_items_count() {
-			var temp = []
-			for (var i = 0; i < get_items_count(); ++i) {
-				temp = get_child(i).draw(dx, dy)
-				dx += temp[0]
-				dy += temp[1]
-			}
-		}
-
-		draw_set_alpha(oalpha)
-		draw_set_color($ffffff)
-		return get_size()
-	}
-}
-
-///@function MenuEntry(text, tooltip, predicate)
+///@function MenuEntry(text, tooltip, [predicate])
 function MenuEntry(title, description, pred): MenuItem() constructor {
 	font = fontMainMenuEntry
 	text = title
@@ -324,17 +290,36 @@ function MenuHeader(caption): MenuText(caption) constructor {
 	height = global.menu_header_height
 }
 
-///@function MenuIndicator(text, variable_name, variable_predicate, predicate)
-function MenuIndicator(caption, var_name, var_pred, pred): MenuEntry(caption, "", pred) constructor {
-	variable_name = var_name
-	variable_predicate = select_argument(var_pred, -1)
+///@function MenuIndicator(text, *variable_method, [indicate_predicate], [predicate])
+function MenuIndicator(caption, var_method, indic_pred, pred): MenuEntry(caption, "") constructor {
+	variable_method = var_method
+	indicate_predicate = select_argument(indic_pred, -1)
+	variable_predicate = select_argument(pred, -1)
 	aligns = [0, 1]
 
-	function make_vars_string() {
-		if variable_global_exists(variable_name) and variable_predicate != -1
-			return ": " + variable_predicate(variable_global_get(variable_name))
+	function find_variable(str) {
+		if variable_global_exists(str)
+			return variable_global_get(str)
 		else
-			return ": ERROR"
+			return undefined
+	}
+
+	function parse_variable() {
+		var value_parsed = undefined
+		var value_string = ": ERROR"
+		if is_string(variable_method) and variable_method != "" {
+			value_parsed = find_variable(variable_method)
+		} else is_method(variable_method) {
+			//value_parsed = variable_method()
+		}
+
+		if !is_undefined(value_parsed) {
+			if indicate_predicate != -1 
+				value_string = ": " + indicate_predicate(value_parsed)
+			else
+				value_string = ": " + string(value_parsed)
+		}
+		return value_string
 	}
 
 	///@function draw(x, y)
@@ -349,14 +334,10 @@ function MenuIndicator(caption, var_name, var_pred, pred): MenuEntry(caption, ""
 				draw_set_font(font)
 				draw_set_halign(aligns[0])
 				draw_set_valign(aligns[1])
-				var value_string = make_vars_string()
-
 				var sw = string_width(text)
 				var sx = floor(dx - sw)
 				draw_text(sx, dy, text)
-				draw_set_color($ffffff)
-				draw_text(sx + sw, dy, value_string)
-
+				draw_text(sx + sw, dy, parse_variable())
 				draw_set_color(ocolor)
 				draw_set_font(ofont)
 			}
@@ -365,15 +346,10 @@ function MenuIndicator(caption, var_name, var_pred, pred): MenuEntry(caption, ""
 			return [0, 0]
 		}
 	}
-}
 
-///@function MenuOption(text, variable_name, variable_predicate, predicate)
-function MenuOption(caption, var_name, var_pred, pred): MenuIndicator(caption, var_name, var_pred, pred) constructor {
-	function make_vars_string() {
-		if variable_struct_exists(global.settings, variable_name) and variable_predicate != -1
-			return ": " + variable_predicate(variable_struct_get(global.settings, variable_name))
-		else
-			return ": ERROR"
+	predicate = function() {
+		if variable_predicate != -1
+			variable_predicate(self.index)
 	}
 }
 
@@ -422,8 +398,8 @@ function MenuSpace(w, h): MenuItem() constructor {
 }
 
 function menu_goto_back() {
-	if parent != -1 {
-		with parent
+	if global.menu_opened != global.main_menu and global.menu_opened != -1 {
+		with global.menu_opened
 			open(false)
 	}
 }
@@ -436,7 +412,7 @@ function menu_find_up(item) {
 		var found = item.before
 		while true {
 			if found == -1
-				return found_prev
+				return -1
 			if found.focusable
 				return found
 			found_prev = found
@@ -453,7 +429,7 @@ function menu_find_down(item) {
 		var found = item.next
 		while true {
 			if found == -1
-				return found_prev
+				return -1
 			if found.focusable
 				return found
 			found_prev = found
@@ -463,21 +439,17 @@ function menu_find_down(item) {
 }
 
 function menu_focus_up() {
-	with global.menu_opened {
-		var target = menu_find_up(child_focused)
-		if target != -1
-			focus(target)
-		return target
-	}
+	var target = menu_find_up(child_focused)
+	if target != -1
+		focus(target)
+	return target
 }
 
 function menu_focus_down() {
-	with global.menu_opened {
-		var target = menu_find_down(child_focused)
-		if target != -1
-			focus(target)
-		return target
-	}
+	var target = menu_find_down(child_focused)
+	if target != -1
+		focus(target)
+	return target
 }
 
 function callback_indicator(value) {

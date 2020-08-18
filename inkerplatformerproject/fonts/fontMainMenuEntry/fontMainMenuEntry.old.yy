@@ -5,7 +5,7 @@
   "pointRounding": 0,
   "fontName": "04b_20",
   "styleName": "Regular",
-  "size": 20.0,
+  "size": 19.0,
   "bold": false,
   "italic": false,
   "charset": 0,
