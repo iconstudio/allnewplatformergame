@@ -1,5 +1,7 @@
+
 function chapter_info_add(sn, caption, desc) {
 	var result = new chapter_info(sn, caption, desc)
+	ds_map_add(global.__ch_db, sn, result)
 	ds_list_add(global.__ch_infos, result)
 }
 
@@ -12,15 +14,8 @@ function chapter_get_number() {
 }
 
 function chapter_seek_serial(sn) {
-	for (var i = 0; i < chapter_get_number(); ++i) {
-		var item = chapter_get(i)
-		if item.serial == sn
-			return item
-	}
-	return -1
+	return ds_map_find_value(global.__ch_db, sn)
 }
-
-
 
 ///@function element_get_resistance_ratios(type, level)
 function element_get_resistance_ratios(type, level) {

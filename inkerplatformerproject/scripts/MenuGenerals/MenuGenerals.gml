@@ -220,11 +220,11 @@ function MenuItem() constructor {
 	}
 }
 
-///@function MenuEntry(text, tooltip, [predicate])
+///@function MenuEntry(text, [tooltip], [predicate])
 function MenuEntry(title, description, pred): MenuItem() constructor {
 	font = fontMainMenuEntry
 	text = title
-	tip = description
+	tip = select_argument(description, "")
 	width = 0
 	predicate = select_argument(pred, -1)
 	aligns = [1, 1]
@@ -279,6 +279,16 @@ function MenuText(caption): MenuEntry(caption, "", -1) constructor {
 		} else {
 			return [0, 0]
 		}
+	}
+}
+
+///@function MenuDynamicText(text_predicate)
+function MenuDynamicText(pred): MenuText("") constructor {
+	text_predicate = pred
+	drawer_orig = draw
+	function draw(dx, dy) {
+		text = text_predicate()
+		drawer_orig(dx, dy)
 	}
 }
 

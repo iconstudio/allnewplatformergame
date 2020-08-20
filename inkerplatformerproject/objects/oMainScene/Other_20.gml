@@ -9,6 +9,7 @@ global.menu_title_scale = 1
 global.menu_title_scale_main = 0.7
 global.menu_header_height = 40
 global.menu_caption_height = 40
+global.menu_chapter_width = global.client.width * 0.3
 global.menu_sep_height = 6
 center_x = global.client.width * 0.5
 center_y = global.client.height * 0.5

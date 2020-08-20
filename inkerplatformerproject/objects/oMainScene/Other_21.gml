@@ -73,8 +73,6 @@ mode_menu_enter = new menu_mode(10, function() {
 	update_children()
 }, function() {
 	var alpha = 1 - menu_push.get()
-	var dist = global.menu_title_y - center_y
-
 	var ty = lerp(50, 0, ease.out_quart(alpha))
 	draw_set_alpha(alpha)
 	if 0 < alpha
@@ -109,7 +107,11 @@ mode_menu = new menu_mode(20, function() {
 			if child_focused != -1
 				select(child_focused)
 		}
-	} else if global.io_pressed_up {
+	} else {
+		var entry = global.menu_opened.child_focused
+	}
+
+	if global.io_pressed_up {
 		if key_pick != UP {
 			var entry = - 1
 			with global.menu_opened {

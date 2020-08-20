@@ -1,6 +1,8 @@
 /// @description 초기화
 
 // GRIEF
+// Doou'hl
+
 global.flag_debug = false
 global.flag_is_mobile = (os_type == os_android or os_type == os_ios) // 하지만 안드로이드만 지원
 global.flag_is_browser = (os_browser != browser_not_a_browser)

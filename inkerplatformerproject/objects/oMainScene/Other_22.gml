@@ -1,9 +1,9 @@
 /// @description 메뉴 항목 생성
 entry_title = add_sprite(sTitle)
-entry_start = add_entry("Campaign", "aa")
-entry_log = add_entry("Logs", "aa")
-entry_setting = add_entry("Setting", "aa")
-entry_exit = add_entry("Exit", "aa")
+entry_start = add_entry("Campaign")
+entry_log = add_entry("Logs")
+entry_setting = add_entry("Setting")
+entry_exit = add_entry("Exit")
 focus(entry_start)
 init()
 
@@ -13,27 +13,15 @@ with entry_title {
 }
 
 with entry_start {
-	add_header("Campaign")
-	var gamemenu = new MainEntryCampaign()
-	with gamemenu {
-		var number = chapter_get_number()
-		for (var i = 0; i < number; ++i) {
-			var ch = chapter_get(i)
-			add_entry(string(i + 1))
-			
-			//if !is_undefined(ch) and ch != -1 {
-			//	add_entry("Chapter " + string(i + 1), ch.title)
-			//}
+	add_header("- Select your profile -")
+	for (var i = 0; i < 3; ++i) {
+		var profile = new MainEntryCampaign("Profile " + string(i + 1))
+		with profile {
+			add_text("Stage Level")
 		}
-		child_first.before = -1
-		child_last.next = -1
-		focus(child_first)
+		add_general(profile)
 	}
-	add_general(gamemenu)
-	add_text("Stage Level")
 	add_entry("Back", "", menu_goto_back)
-	child_first.before = -1
-	child_last.next = -1
 
 	predicate = function() {
 		focus(child_first)
@@ -69,6 +57,10 @@ with entry_setting {
 				focus(child_last)
 		}
 		add_entry("Back", "", menu_goto_back)
+		if child_focused == -1 or
+		(child_focused != -1 and !child_focused.focusable) {
+			focus(child_last)
+		}
 	}
 	with add_setting_indicator("SFX Volume", "volume_sfx", callback_indicator_off) {
 		add_header("SFX Volume")
@@ -79,8 +71,11 @@ with entry_setting {
 			if child_last.index == global.settings.get_sfx()
 				focus(child_last)
 		}
-		add_space(0, global.menu_title_height)
 		add_entry("Back", "", menu_goto_back)
+		if child_focused == -1 or
+		(child_focused != -1 and !child_focused.focusable) {
+			focus(child_last)
+		}
 	}
 	add_separator()
 	add_header("Graphics")
