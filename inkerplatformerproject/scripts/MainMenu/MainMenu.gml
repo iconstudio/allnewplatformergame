@@ -44,8 +44,10 @@ function MainEntryCampaign(title): MenuEntry(title) constructor {
 	width_real = global.menu_width
 	width = 0
 	height_real = global.menu_title_height + global.menu_caption_height
-	height = height_real + global.menu_caption_height * 2
-	focusable = true
+	//height = height_real + global.menu_caption_height * 2
+	height = global.menu_caption_height * 2
+	ay = height * 0.5
+
 	children_arrays = HORIZONTAL
 
 	ch_number = chapter_get_number()

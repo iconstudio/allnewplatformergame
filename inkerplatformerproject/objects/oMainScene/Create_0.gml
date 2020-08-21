@@ -16,11 +16,19 @@ function key_lockon(dir) {
 	key_pick = dir
 }
 
-function key_goon(dir) {
+function key_goon() {
 	key_tick.set(key_duration_continue)
 }
 
 function key_lockoff() {
 	key_pick = NONE
 	key_tick.finish()
+}
+
+function key_on_tick() {
+	return (key_tick.get() == 0)
+}
+
+function key_is_free() {
+	return (key_pick = NONE)
 }

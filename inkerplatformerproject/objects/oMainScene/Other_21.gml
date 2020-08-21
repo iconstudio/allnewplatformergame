@@ -94,76 +94,61 @@ mode_menu = new menu_mode(20, function() {
 	update_children()
 
 	if entry_push.get() < 0.8 {
-		key_pick = NONE
 		exit
 	}
 
+	var menu_is_horizontal = (global.menu_opened.children_arrays == HORIZONTAL)
+	var menu_is_vertical = (global.menu_opened.children_arrays == VERTICAL)
+	var key_pressed_go_before = (menu_is_horizontal and global.io_pressed_left) or (menu_is_vertical and global.io_pressed_up)
+	var key_pressed_go_next = (menu_is_horizontal and global.io_pressed_right) or (menu_is_vertical and global.io_pressed_down)
+	var key_go_before = (menu_is_horizontal and global.io_left) or (menu_is_vertical and global.io_up)
+	var key_go_next = (menu_is_horizontal and global.io_right) or (menu_is_vertical and global.io_down)
+
 	if global.io_pressed_back {
-		with global.menu_opened {
-			menu_goto_back()
+		if global.menu_opened != id {
+			key_lockoff()
+			with global.menu_opened {
+				menu_goto_back()
+			}
 		}
 	} else if global.io_pressed_yes {
 		with global.menu_opened {
 			if child_focused != -1
 				select(child_focused)
 		}
-	} else {
-		var entry = global.menu_opened.child_focused
-	}
-
-	if global.io_pressed_up {
-		if key_pick != UP {
-			var entry = - 1
-			with global.menu_opened {
-				entry = menu_find_up(child_focused)
-				if entry != -1
-					focus(entry)
-			}
-			if entry != -1
-			and (global.menu_opened.pole_last == entry or !entry.pole) and entry.before != -1 {
-				key_tick.set(key_duration_pick)
-				key_pick = UP
-			}
-		} else {
-			key_pick = NONE
-		}
-	} else if global.io_pressed_down {
-		if key_pick != DOWN {
-			var entry = - 1
-			with global.menu_opened {
-				entry = menu_find_down(child_focused)
-				if entry != -1
-					focus(entry)
-			}
-			if entry != -1
-			and (global.menu_opened.pole_first == entry or !entry.pole) and entry.next != -1 {
-				key_tick.set(key_duration_pick)
-				key_pick = DOWN
-			}
-		} else {
-			key_pick = NONE
-		}
-	} else if !global.io_up and !global.io_down {
-		key_pick = NONE
-		key_tick.finish()
-	}
-
-	// ** 좌우 입력은 따로 받는다. **
-	if key_pick == NONE {
-		var SIDEKEY_INPUT = global.io_pressed_right - global.io_pressed_left
-		if SIDEKEY_INPUT != 0 {
-			with global.menu_opened {
-				if child_focused != -1 and child_focused.child_can_choice_unopened {
-					with child_focused {
-						if SIDEKEY_INPUT == -1
-							menu_focus_up()
-						else if SIDEKEY_INPUT == 1
-							menu_focus_down()
-					}
+	} else if key_is_free() {
+		if key_pressed_go_before {
+			if key_pick != UP {
+				var entry = - 1
+				with global.menu_opened {
+					entry = menu_find_up(child_focused)
+					if entry != -1
+						focus(entry)
 				}
+				if entry != -1
+				and (global.menu_opened.pole_last == entry or !entry.pole) and entry.before != -1 {
+					key_lockon(UP)
+				}
+			} else {
+				key_lockoff()
+			}
+		} else if key_pressed_go_next {
+			if key_pick != DOWN {
+				var entry = - 1
+				with global.menu_opened {
+					entry = menu_find_down(child_focused)
+					if entry != -1
+						focus(entry)
+				}
+				if entry != -1
+				and (global.menu_opened.pole_first == entry or !entry.pole) and entry.next != -1 {
+					key_lockon(DOWN)
+				}
+			} else {
+				key_lockoff()
 			}
 		}
-	} else if key_tick.get() == 0 {
+	} else if key_on_tick() {
 		var entry = -1
 		if key_pick == UP {
 			with global.menu_opened {
@@ -177,15 +162,15 @@ mode_menu = new menu_mode(20, function() {
 
 		if entry != -1 {
 			if entry.pole {
-				key_pick = NONE
-				key_tick.finish()
+				key_lockoff()
 			} else {
-				key_tick.set(key_duration_continue)
+				key_goon()
 			}
 		} else {
-			key_pick = NONE
-			key_tick.finish()
+			key_lockoff()
 		}
+	} else if !key_go_before and !key_go_next {
+		key_lockoff()
 	}
 }, function() {
 	var alpha = 1 - menu_push.get()
