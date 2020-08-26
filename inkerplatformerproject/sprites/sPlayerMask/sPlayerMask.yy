@@ -69,7 +69,7 @@
   ],
   "parent": {
     "name": "Sprites",
-    "path": "folders/Entity/Sprites.yy",
+    "path": "folders/Player/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "sPlayerMask",

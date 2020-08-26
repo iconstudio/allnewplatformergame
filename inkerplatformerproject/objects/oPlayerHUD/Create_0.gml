@@ -4,13 +4,13 @@ if !instance_exists(oPlayer) {
 }
 
 parent = oPlayer.id
-y = global.client.game_height
-border = global.client.border
+y = global.resolution.game_height
+border = global.resolution.border
 y_border = y + border
 y_draw_begin = y_border + border
 
 panel_bezel_pos_begin = [border, y_border]
-panel_bezel_pos_end = [global.client.panel_width - border, y + global.client.panel_height]
+panel_bezel_pos_end = [global.resolution.panel_width - border, y + global.resolution.panel_height]
 
 // ** 스킬 아이콘 초기화 **
 sk_icon_org_width = 64
@@ -19,7 +19,7 @@ sk_icon_padding = 40
 sk_icon_width = sk_icon_org_width + sk_icon_padding
 
 sk_icons_width = sk_icon_width * 4 - sk_icon_padding
-sk_x_begin = (global.client.panel_width - sk_icons_width) * 0.5
+sk_x_begin = (global.resolution.panel_width - sk_icons_width) * 0.5
 
 skill_indicators = new List()
 

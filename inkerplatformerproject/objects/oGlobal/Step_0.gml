@@ -71,3 +71,4 @@ global.io_pressed_menu = keyboard_check_pressed(vk_escape) or keyboard_check_pre
 global.io_pressed_yes = keyboard_check_pressed(vk_enter) or keyboard_check_pressed(vk_space) or check_comma or global.io_pressed_x
 global.io_pressed_no = keyboard_check_pressed(vk_escape) or keyboard_check_pressed(vk_backspace) or check_dot or global.io_pressed_c
 global.io_pressed_back = global.io_pressed_no
+global.resolution.update()

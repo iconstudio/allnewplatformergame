@@ -6,7 +6,7 @@
 global.flag_debug = false
 global.flag_is_mobile = (os_type == os_android or os_type == os_ios) // 하지만 안드로이드만 지원
 global.flag_is_browser = (os_browser != browser_not_a_browser)
-global.flag_is_desktop = (os_type == os_windows or os_type == os_macosx or os_type == os_linux) and !global.flag_is_browser
+global.flag_is_desktop = !global.flag_is_browser and (os_type == os_windows or os_type == os_macosx or os_type == os_linux)
 
 device_mouse_dbclick_enable(false)
 application_surface_enable(true)
@@ -23,21 +23,51 @@ global.settings = {
 	volume_bgm: 7,
 	fullscreen: false,
 	screenshake: true,
-	
+
+	///@function set_bgm(value)
 	set_bgm: function(value) {
 		global.settings.volume_bgm = value
+		audio_set_gain_bgm(global.settings.volume_bgm / 10)
 	},
 
+	///@function set_sfx(value)
 	set_sfx: function(value) {
 		global.settings.volume_sfx = value
+		audio_set_gain_sfx(global.settings.volume_sfx / 10)
 	},
 
+	///@function get_bgm()
 	get_bgm: function() {
 		return global.settings.volume_bgm
 	},
 
+	///@function get_sfx()
 	get_sfx: function() {
 		return global.settings.volume_sfx
+	},
+
+	///@function set_fullscreen(flag)
+	set_fullscreen: function(flag) {
+		global.settings.fullscreen = flag
+		if global.flag_is_desktop {
+			window_set_fullscreen(flag)
+			global.resolution.update()
+		}
+	},
+
+	///@function get_fullscreen()
+	get_fullscreen: function() {
+		return global.settings.fullscreen
+	},
+
+	///@function set_screen_shake(flag)
+	set_screen_shake: function(flag) {
+		global.settings.screenshake = flag
+	},
+
+	///@function get_screen_shake()
+	get_screen_shake: function() {
+		return global.settings.screenshake
 	},
 }
 
@@ -49,10 +79,17 @@ global.setting_control_gamepad = {
 	
 }
 
-global.client = {
+global.aspect = 2 / 3
+
+var dw = display_get_width()
+global.resolution = {
+	display_width: dw,
+	display_height: display_get_height(),
+	display_height_biased: floor(dw * global.aspect),
+
 	width: 960,
 	height: 640,
-	
+
 	game_width: 960,
 	game_height: 480,
 
@@ -62,11 +99,31 @@ global.client = {
 	view_width: 480,
 	view_height: 240,
 
-	border: 5
-}
+	border: 5,
+	
+	update: function() {
+		if !global.flag_is_desktop
+			exit
 
-window_set_size(global.client.width, global.client.height)
-surface_resize(application_surface, global.client.game_width, global.client.game_height)
+		if window_get_fullscreen() {
+			display_set_gui_maximize(self.display_width / self.width, self.display_height_biased / self.height)
+		} else {
+			var cw = window_get_width()
+			//var ch = window_get_height()
+			var ch_biased = floor(cw * global.aspect)
+			display_set_gui_maximize(cw / self.width, ch_biased / self.height)
+		}
+
+			//self.width = display_get_gui_width() //960
+			//self.height = display_get_gui_height() //640
+	},
+}
+	
+window_set_min_width(global.resolution.width)
+window_set_min_height(global.resolution.height)
+
+window_set_size(global.resolution.width, global.resolution.height)
+surface_resize(application_surface, global.resolution.game_width, global.resolution.game_height)
 
 #macro NONE -1
 #macro LEFT 0
@@ -83,6 +140,7 @@ global.friction_air = 5 / seconds(1)
 global.friction_ground = 95 / seconds(1)
 global.yvel_max = 256 / seconds(1)
 global.speed_interpolation = 1 / sqrt(2)
+global.speed_debri_bounced = 100 / seconds(1)
 
 global.playerid = noone
 global.playerpos = [0, 0]
@@ -132,10 +190,10 @@ if global.flag_is_mobile {
 } else {
 	audio_channel_num(32)
 }
-//if !audio_group_is_loaded(audiogroup_everthing) {
-//	audio_group_load(audiogroup_everthing)
-//	audio_loaded = false
-//}
+if !audio_group_is_loaded(audio_bgm) {
+	audio_group_load(audio_bgm)
+	audio_loaded = false
+}
 
 global.shader_supported = shaders_are_supported()
 if !global.shader_supported {

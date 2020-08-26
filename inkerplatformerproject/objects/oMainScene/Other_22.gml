@@ -79,8 +79,14 @@ with entry_setting {
 	}
 	add_separator()
 	add_header("Graphics")
-	add_setting_indicator("Fullscreen", "fullscreen", callback_indicator_flags)
-	add_setting_indicator("Screenshake", "screenshake", callback_indicator_flags)
+	if global.flag_is_desktop {
+		add_setting_indicator("Fullscreen", "fullscreen", callback_indicator_flags, function() {
+			global.settings.set_fullscreen(!global.settings.get_fullscreen())
+		})
+	}
+	add_setting_indicator("Screenshake", "screenshake", callback_indicator_flags, function() {
+			global.settings.set_screen_shake(!global.settings.get_screen_shake())
+		})
 	add_separator()
 	add_entry("Back", "", menu_goto_back)
 

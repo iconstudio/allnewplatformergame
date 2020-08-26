@@ -110,6 +110,8 @@ mode_menu = new menu_mode(20, function() {
 			with global.menu_opened {
 				menu_goto_back()
 			}
+		} else {
+			select(entry_exit)
 		}
 	} else if global.io_pressed_yes {
 		with global.menu_opened {
@@ -121,6 +123,7 @@ mode_menu = new menu_mode(20, function() {
 			if key_pick != UP {
 				var entry = - 1
 				with global.menu_opened {
+					//entry = menu_focus_up()
 					entry = menu_find_up(child_focused)
 					if entry != -1
 						focus(entry)
@@ -139,6 +142,7 @@ mode_menu = new menu_mode(20, function() {
 					entry = menu_find_down(child_focused)
 					if entry != -1
 						focus(entry)
+					//entry = menu_focus_down()
 				}
 				if entry != -1
 				and (global.menu_opened.pole_first == entry or !entry.pole) and entry.next != -1 {
@@ -152,8 +156,7 @@ mode_menu = new menu_mode(20, function() {
 		var entry = -1
 		if key_pick == UP {
 			with global.menu_opened {
-				entry = menu_find_up(child_focused)
-				menu_focus_up()
+				entry = menu_focus_up()
 			}
 		} else if key_pick == DOWN {
 			with global.menu_opened

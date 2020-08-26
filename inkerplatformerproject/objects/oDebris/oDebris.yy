@@ -5,8 +5,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oDrawnSprite",
-    "path": "objects/oDrawnSprite/oDrawnSprite.yy",
+    "name": "oPhysicalObject",
+    "path": "objects/oPhysicalObject/oPhysicalObject.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -21,17 +21,17 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oGraviton","path":"objects/oGraviton/oGraviton.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"parent":{"name":"oGraviton","path":"objects/oGraviton/oGraviton.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oDebris","path":"objects/oDebris/oDebris.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"parent":{"name":"oDebris","path":"objects/oDebris/oDebris.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Things",
+    "path": "folders/Things.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oGraviton",
+  "name": "oDebris",
   "tags": [],
   "resourceType": "GMObject",
 }

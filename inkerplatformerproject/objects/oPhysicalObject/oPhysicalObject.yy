@@ -5,8 +5,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oEntity",
-    "path": "objects/oEntity/oEntity.yy",
+    "name": "oGravitons",
+    "path": "objects/oGravitons/oGravitons.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -24,8 +24,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Entity",
-    "path": "folders/Entity.yy",
+    "name": "Things",
+    "path": "folders/Things.yy",
   },
   "resourceVersion": "1.0",
   "name": "oPhysicalObject",
