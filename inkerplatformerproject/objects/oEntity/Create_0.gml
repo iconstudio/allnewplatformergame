@@ -1,20 +1,9 @@
 /// @description 초기화
 event_inherited()
 
+attributes_init()
 sid = ""
 loaded = false
-
-img_xscale = 1
-img_angle = 0
-
-status = mob_status.normal
-status_previous = status
-ai_state = mob_ai_states.idle
-
-hp = 1
-mp = 0
-skills = -1
-attributes_init()
 
 function make_flyer() {
 	if get_flyable() {
@@ -176,3 +165,6 @@ function reprise_status() {
 }
 
 event_user(15)
+
+img_xscale = 1
+img_angle = 0

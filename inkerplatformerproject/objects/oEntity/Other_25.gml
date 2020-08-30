@@ -1,6 +1,15 @@
 /// @description 기본 속성 초기화
 property_init()
 
+status = mob_status.normal
+status_previous = status
+ai_state = mob_ai_states.idle
+
+hp = 1
+mp = 0
+skills = -1
+elbereth_respect = false
+
 prop_invincible = new Countdown(-1, function() {
 	invincible_alpha = 0
 	show_debug_message("invincible end")

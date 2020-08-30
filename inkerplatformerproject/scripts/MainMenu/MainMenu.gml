@@ -1,10 +1,7 @@
 ///@function MainEntryIndicator(text, variable_name, [indicate_predicate], [predicate])
 function MainEntryIndicator(caption, var_name, indic_pred, pred): MenuIndicator(caption, var_name, indic_pred, pred) constructor {
 	function find_variable(str) {
-		if variable_struct_exists(global.settings, str)
-			return variable_struct_get(global.settings, str)
-		else
-			return undefined
+		return global.settings.get(str)
 	}
 }
 

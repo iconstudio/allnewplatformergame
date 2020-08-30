@@ -1,0 +1,29 @@
+{
+  "version": "",
+  "sprite": "",
+	"sprite_ico": "",
+	"name": "",
+	"title": "",
+
+	"can_fly": false,
+	"can_move_through": false,
+	"can_swim_level": 1,
+	"flying": false,
+
+	"category": 0,
+	"intelligence": 40,
+	"ai_move_type": 0,
+	"ai_track_type": 0,
+	"ai_attack_type": 0,
+
+	"hd": 0,
+	"maxhp": 1,
+	"maxmp": 0,
+	"ac": 0,
+	"er": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	"mr": 0,
+	"ev": 0,
+	"sh": 0,
+
+	"skills_original": -1
+}

@@ -50,6 +50,7 @@
     {"id":{"name":"sTitleGlyph","path":"sprites/sTitleGlyph/sTitleGlyph.yy",},"order":2,},
     {"id":{"name":"sTitle__","path":"sprites/sTitle__/sTitle__.yy",},"order":1,},
     {"id":{"name":"oSlash","path":"objects/oSlash/oSlash.yy",},"order":3,},
+    {"id":{"name":"sStone","path":"sprites/sStone/sStone.yy",},"order":0,},
     {"id":{"name":"Drawing","path":"scripts/Drawing/Drawing.yy",},"order":8,},
     {"id":{"name":"System","path":"scripts/System/System.yy",},"order":3,},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},"order":1,},

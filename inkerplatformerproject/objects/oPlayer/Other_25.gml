@@ -1,7 +1,7 @@
 /// @description 속성 초기화
 event_inherited()
 hold_thing = noone
-key_attack = false
+key_action = false
 key_hold = false
 key_skill_first = false
 key_skill_second = false
