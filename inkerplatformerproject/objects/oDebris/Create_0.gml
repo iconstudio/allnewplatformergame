@@ -1,6 +1,9 @@
 /// @description 파편 초기화
 event_inherited()
 
+bounce_y = 0.4
+bounce_y_threshold = global.speed_debri_bounced
+
 lifetime = -1
 
 function set_life(duration) {
@@ -11,15 +14,3 @@ function set_life(duration) {
 	}
 	lifetime.set(duration)
 }
-
-/* 바닥 부딫힘 */
-thud = function() {
-	if 0 < yvel {
-		move_outside_solid(90, 1)
-		if global.speed_debri_bounced < yvel
-			yvel *= -0.5
-		else
-			yvel = 0
-	}
-}
-

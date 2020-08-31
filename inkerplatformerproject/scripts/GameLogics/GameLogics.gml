@@ -86,7 +86,3 @@ function element_get_resistance_ratios(type, level) {
 function element_get_name(element) {
 	return global.__element_names[element]
 }
-
-function element_get_name(element) {
-	return global.__element_names[element]
-}

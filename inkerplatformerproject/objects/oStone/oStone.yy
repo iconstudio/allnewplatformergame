@@ -1,12 +1,15 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "sStone",
+    "path": "sprites/sStone/sStone.yy",
+  },
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oPhysicalObject",
-    "path": "objects/oPhysicalObject/oPhysicalObject.yy",
+    "name": "oItemThrows",
+    "path": "objects/oItemThrows/oItemThrows.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -20,9 +23,7 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oItems","path":"objects/oItems/oItems.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-  ],
+  "eventList": [],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
@@ -30,7 +31,7 @@
     "path": "folders/Things.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oItems",
+  "name": "oStone",
   "tags": [],
   "resourceType": "GMObject",
 }

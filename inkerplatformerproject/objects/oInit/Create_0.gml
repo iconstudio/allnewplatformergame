@@ -69,6 +69,7 @@ global.setting_control_gamepad = {
 	
 }
 
+#macro SECOND 100 // seconds(1)
 #macro NONE -1
 #macro LEFT 0
 #macro RIGHT 2
@@ -79,12 +80,15 @@ global.setting_control_gamepad = {
 
 global.timescale = 1.00
 
-global.gravity_normal = 20 / seconds(1)
-global.friction_air = 5 / seconds(1)
-global.friction_ground = 95 / seconds(1)
-global.yvel_max = 256 / seconds(1)
+global.gravity_normal = 20 / SECOND
+global.friction_air = 5 / SECOND
+global.friction_ground = 95 / SECOND
+global.yvel_max = 256 / SECOND
 global.speed_interpolation = 1 / sqrt(2)
-global.speed_debri_bounced = 100 / seconds(1)
+global.speed_bounced_x = 60 / SECOND
+global.speed_bounced_y = 80 / SECOND
+global.speed_debri_bounced = 100 / SECOND
+
 
 global.playerid = noone
 global.playerpos = [0, 0]
@@ -94,26 +98,23 @@ global.inventory_item_preset = function() constructor {
 	
 }
 
-global.inventory_item = (function() constructor {
+global.inventory_item = function() constructor {
 	
-})
+}
 
 global.inventory = new (function() constructor {
 	opened = false
 	
 	/*
-		GUI에 표시됨 (터치 가능)
-			첫번째 칸은 무기
-			두번째 칸은 장비 혹은 소모품
-			세번째 칸은 장비 혹은 소모품
-			네번째 칸은 장비 혹은 소모품
-			다섯번째 칸은 장비 혹은 소모품
-			여섯번째 칸은 장비 혹은 소모품
-
-		인벤토리를 열어야 보임
-			다음 여덟칸은 가방
+			가방은 총 6칸
+			4칸의 일반 인벤토리
+			2칸의 특수 인벤토리
+				1. 퀘스트
+				2. 룬
+			
+			그 외 착용 아이템도 존재한다.
 	*/
-	number = 6 + 8
+	number = 6
 	datas = array_create(number, noone)
 })()
 

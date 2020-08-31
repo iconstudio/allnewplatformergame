@@ -5,8 +5,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oPhysicalObject",
-    "path": "objects/oPhysicalObject/oPhysicalObject.yy",
+    "name": "oItems",
+    "path": "objects/oItems/oItems.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -21,7 +21,7 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oItems","path":"objects/oItems/oItems.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oItemThrows","path":"objects/oItemThrows/oItemThrows.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -30,7 +30,7 @@
     "path": "folders/Things.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oItems",
+  "name": "oItemThrows",
   "tags": [],
   "resourceType": "GMObject",
 }

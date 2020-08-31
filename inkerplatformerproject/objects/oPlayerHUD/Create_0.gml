@@ -42,7 +42,7 @@ skill_icon = function(sp, nx, ny) constructor {
 		}
 	}
 }
-
+/*
 var nx = sk_x_begin
 for (var i = 0; i < 4; ++i) {
 	skill_indicators.add(new skill_icon(-1, nx, y_draw_begin))

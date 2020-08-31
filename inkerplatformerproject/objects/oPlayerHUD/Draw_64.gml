@@ -15,7 +15,7 @@ draw_set_halign(0)
 draw_set_valign(0)
 var health_string = make_percent_caption("Lives", parent.get_health(), parent.get_health_max())
 draw_text(10, y_draw_begin, health_string)
-
+/*
 var target = parent.skills
 if struct_exists(target)
 	skill_number = target.get_number()

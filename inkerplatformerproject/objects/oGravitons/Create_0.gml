@@ -8,6 +8,11 @@ yfric = xfric // *
 can_jump = false
 was_on_ground = false
 now_on_ground = false
+can_bounce = false
+bounce_x = 0.5
+bounce_y = 0.5
+bounce_x_threshold = global.speed_bounced_x
+bounce_y_threshold = global.speed_bounced_y
 
 // ** 일반적인 이동 함수 **
 mover_x = move_horizontal_correction
@@ -130,7 +135,14 @@ update_physics = function() {
 
 /* 좌우 부딫힘 */
 push = function() {
-	xvel = 0
+	if can_bounce {
+		if abs(xvel) < bounce_x_threshold
+			xvel = 0
+		else
+			xvel *= -bounce_x
+	} else {
+		xvel = 0
+	}
 }
 
 /* 천장 부딫힘 */
@@ -145,6 +157,13 @@ pop = function() {
 thud = function() {
 	if 0 < yvel {
 		move_outside_solid(90, 1)
-		yvel = 0
+		if can_bounce {
+			if abs(yvel) < bounce_y_threshold
+				yvel = 0
+			else
+				yvel *= -bounce_y
+		} else {
+			yvel = 0
+		}
 	}
 }
