@@ -1,60 +1,3 @@
-/*
-function make_iterator(list_id, position) {
-	var result = new Iterator(list_id)
-	result.value = list_id.at(position)
-	result.position = position
-}
-
-///@function Iterator(list_id)
-function Iterator(ds) constructor {
-	target = ds
-	position = 0
-
-	///@description Two have same values.
-	function set(value) {
-		return target.set(position, value)
-	}
-
-	///@description Two have same values.
-	function get() {
-		return target.at(position)
-	}
-
-	///@description Two have same values.
-	function is_value_equals(it) {
-		return (get() == it.get())
-	}
-
-	///@description Two have same positions and parent.
-	function is_equivalent(it) {
-		return (position == it.position and target == it.target)
-	}
-
-	function forward() {
-		position++
-		return self
-	}
-
-	///@function next([times])
-	function next(cnt) {
-		return make_iterator(ds, position + select_argument(cnt, 1))
-	}
-
-	function backward() {
-		position--
-		return self
-	}
-
-	///@function before([times])
-	function before(cnt) {
-		if 0 < position
-			return make_iterator(ds, position - select_argument(cnt, 1))
-		else
-			return undefined
-	}
-}
-*/
-
 ///@function List([id] or [items...])
 function List(items) constructor {
 	type = ds_type_list
@@ -62,30 +5,6 @@ function List(items) constructor {
 
 	function data() {
 		return raw
-	}
-
-	///@function copy(begin, end, output)
-	function copy(Begin, End, Output) {
-		for (var it = Begin; it != End; ++it) {
-			set(Output++, get(it))
-		}
-		return Output
-	}
-
-	///@function copy_n(begin, number, output)
-	function copy_n(Begin, Number, Output) {
-		repeat Number {
-			set(Output++, get(Begin++))
-		}
-		return Output
-	}
-
-	///@function copy_to(begin, end, destination, destination_begin)
-	function copy_to(Begin, End, Dst, DstBgn) {
-		for (var it = Begin; it != End; ++it) {
-			Dst.set(DstBgn++, get(it))
-		}
-		return DstBgn
 	}
 
 	function duplicate() {
@@ -145,20 +64,50 @@ function List(items) constructor {
 	}
 
 	///@function ibegin()
-  function ibegin() { 
-		return 0//make_iterator(self, 0)
-	}
+  function ibegin() { return 0 }
 
 	///@function iend()
-  function iend() {
-		return size() - 1//make_iterator(self, size() - 1)
+  function iend() { return size() - 1 }
+
+	///@function check_all(begin, end, predicate)
+	function check_all(Begin, End, Pred) {
+		var pred = method(other, Pred)
+		while (Begin != End) {
+			if !pred(get(Begin))
+				return false
+			Begin++
+		}
+		return true
+	}
+
+	///@function check_any(begin, end, predicate)
+	function check_any(Begin, End, Pred) {
+		var pred = method(other, Pred)
+		while (Begin != End) {
+			if pred(get(Begin))
+				return true
+			Begin++
+		}
+		return false
+	}
+
+	///@function check_none(begin, end, predicate)
+	function check_none(Begin, End, Pred) {
+		var pred = method(other, Pred)
+		while (Begin != End) {
+			if pred(get(Begin))
+				return false
+			Begin++
+		}
+		return true
 	}
 
 	///@function foreach(begin, end, predicate)
 	function foreach(Begin, End, Pred) {
 		var pred = method(other, Pred)
-		for (var it = Begin; it != End; ++it) {
-			pred(get(it))
+		while (Begin != End) {
+			pred(get(Begin))
+			Begin++
 		}
 		return pred
 	}
@@ -169,9 +118,10 @@ function List(items) constructor {
 		if chk == -1 {
 			return End
 		} else {
-			for (var it = Begin; it != End; ++it) {
-				if get(it) == Val
-					return it
+			while (Begin != End) {
+				if get(Begin) == Val
+					return Begin
+				Begin++
 			}
 			return End
 		}
@@ -180,9 +130,10 @@ function List(items) constructor {
 	///@function find_if(begin, end, predicate)
 	function find_if(Begin, End, Pred) {
 		var pred = method(other, Pred)
-		for (var it = Begin; it != End; ++it) {
-			if pred(get(it))
-				return it
+		while (Begin != End) {
+			if pred(get(Begin))
+				return Begin
+			Begin++
 		}
 		return End
 	}
@@ -193,8 +144,7 @@ function List(items) constructor {
 		if chk == -1 {
 			return 0
 		} else {
-			var result = 0
-			for (var it = Begin; it != End; ++it) {
+			for (var it = Begin, result = 0; it != End; ++it) {
 				if get(it) == Val
 					result++
 			}
@@ -204,8 +154,8 @@ function List(items) constructor {
 
 	///@function count_if(begin, end, predicate)
 	function count_if(Begin, End, Pred) {
-		var pred = method(other, Pred), result = 0
-		for (var it = Begin; it != End; ++it) {
+		var pred = method(other, Pred)
+		for (var it = Begin, result = 0; it != End; ++it) {
 			if pred(get(it))
 				result++
 		}
@@ -213,28 +163,52 @@ function List(items) constructor {
 	}
 
 	///@function erase(iterator)
-	function erase(i) { ds_list_delete(raw, i) }
+	function erase(i) { 
+		var temp = get(i)
+		ds_list_delete(raw, i)
+		return temp
+	}
 
 	///@function pop_back()
 	function pop_back() { erase(size() - 1) }
 
+	///@function swap(a, b)
+	function swap(ItA, ItB) {
+		var temp = get(ItA)
+		set(ItA, get(ItB))
+		set(ItB, temp)
+	}
+
 	///@function remove(begin, end, value)
 	function remove(Begin, End, Val) {
-		for (var it = Begin; it != End; ++it) {
-			if get(it) == Val
-				erase(it)
+		for (var it = Begin, result = Begin; it != End; ++it) {
+			if get(it) == Val {
+				erase(result)
+			} else {
+				result++
+			}
 		}
-		return Begin
+		return result
 	}
 
 	///@function remove_if(begin, end, predicate)
 	function remove_if(Begin, End, Pred) {
 		var pred = method(other, Pred)
-		for (var it = Begin; it != End; ++it) {
-			if pred(get(it))
+		for (var it = Begin, result = Begin; it != End; ++it) {
+			if pred(get(result)) {
+				erase(result)
+			} else {
 				result++
+			}
 		}
-		return Begin
+		return result
+	}
+
+	///@function remove_all(begin, end)
+	function remove_all(Begin, End) {
+		for (var it = Begin; it != End; ++it) {
+			erase(Begin)
+		}
 	}
 
 	///@function resize(size, [value_fill])
@@ -269,28 +243,124 @@ function List(items) constructor {
 	///@function sort(ascending)
   function sort(ascending) { ds_list_sort(raw, ascending) }
 
+	///@function nth_element(begin, nth, end, [comparator])
+	function nth_element(Begin, Nth, End, Comparator) {
+		var comp = select_argument(Comparator, comparator_default)
+		for (var it = Begin; it != End; ++it) {
+			
+		}
+	}
+
+	///@function move(begin, end, output)
+	function move(Begin, End, Output) {
+		copy(Begin, End, Output)
+		remove_all(Begin, End)
+	}
+
+	///@function replace(begin, end, old_value, new_value)
+	function replace(Begin, End, OldVal, NewVal) {
+		while (Begin != End) {
+			if get(Begin) == OldVal
+				set(Begin, NewVal)
+			Begin++
+		}
+	}
+
+	///@function replace_if(begin, end, predicate, new_value)
+	function replace_if(Begin, End, Pred, NewVal) {
+		var pred = method(other, Pred)
+		while (Begin != End) {
+			if pred(get(Begin))
+				set(Begin, NewVal)
+			Begin++
+		}
+	}
+
+	///@function replace_copy(begin, end, output, old_value, new_value)
+	function replace_copy(Begin, End, Output, OldVal, NewVal) {
+		while (Begin != End) {
+			if get(Begin) == OldVal
+				set(Output, NewVal)
+			else
+				set(Output, get(Begin))
+			Begin++
+			Output++
+		}
+		return Output
+	}
+
+	///@function replace_copy_to(begin, end, destination, destination_begin, old_value, new_value)
+	function replace_copy_to(Begin, End, Dst, DstBgn, OldVal, NewVal) {
+		while (Begin != End) {
+			if get(Begin) == OldVal
+				Dst.set(DstBgn++, NewVal)
+			else
+				Dst.set(DstBgn++, get(Begin))
+			Begin++
+		}
+		return DstBgn
+	}
+
+	///@function copy(begin, end, output)
+	function copy(Begin, End, Output) {
+		while (Begin != End) {
+			set(Output++, get(Begin))
+			Begin++
+		}
+		return Output
+	}
+
+	///@function copy_n(begin, number, output)
+	function copy_n(Begin, Number, Output) {
+		repeat Number {
+			set(Output++, get(Begin++))
+		}
+		return Output
+	}
+
+	///@function copy_to(begin, end, destination, destination_begin)
+	function copy_to(Begin, End, Dst, DstBgn) {
+		for (var it = Begin; it != End; ++it) {
+			Dst.set(DstBgn++, get(it))
+		}
+		return DstBgn
+	}
+
+	///@function copy_if(begin, end, output, predicate)
+	function copy_if(Begin, End, Output, Pred) {
+		var pred = method(other, Pred), val = 0
+		while (Begin != End) {
+			val = get(Begin)
+			if pred(val)
+				set(Output++, val)
+			Begin++
+		}
+		return Output
+	}
+
 	///@function fill(begin, end, value)
 	function fill(Begin, End, Val) {
-		for (var it = Begin; it != End; ++it) {
-			set(it, Val)
+		while (Begin != End) {
+			set(Begin, Val)
+			Begin++
 		}
 	}
 
 	///@function transform(begin, end, output, predicate)
 	function transform(Begin, End, Output, Pred) {
 		var pred = method(other, Pred)
-		for (var it = Begin; it != End; ++it) {
-			set(Output++, pred(get(it)))
+		while (Begin != End) {
+			set(Output++, pred(get(Begin)))
+			Begin++
 		}
 		return Output
 	}
 
 	if 0 < argument_count {
-		if argument_count == 1 {
+		if argument_count == 1 and !is_undefined(argument[0]) {
 			var item = argument[0]
 
-			if is_undefined(item) {
-			} else if ds_exists(item, ds_type_list) {
+			if ds_exists(item, ds_type_list) {
 				ds_list_copy(raw, item)
 			} else if is_struct(item) and instanceof(item) == "List" {
 				ds_list_copy(raw, item.data())
@@ -303,4 +373,8 @@ function List(items) constructor {
 			}
 		}
 	}
+}
+
+function comparator_default(a, b) {
+	return bool(a < b)
 }
