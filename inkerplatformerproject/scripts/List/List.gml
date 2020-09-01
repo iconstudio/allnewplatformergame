@@ -212,15 +212,29 @@ function List(items) constructor {
 		return result
 	}
 
-	///@function erase(index)
+	///@function erase(iterator)
 	function erase(i) { ds_list_delete(raw, i) }
 
 	///@function pop_back()
 	function pop_back() { erase(size() - 1) }
 
-	///@function remove(begin, end)
-	function remove(i) { 
-		
+	///@function remove(begin, end, value)
+	function remove(Begin, End, Val) {
+		for (var it = Begin; it != End; ++it) {
+			if get(it) == Val
+				erase(it)
+		}
+		return Begin
+	}
+
+	///@function remove_if(begin, end, predicate)
+	function remove_if(Begin, End, Pred) {
+		var pred = method(other, Pred)
+		for (var it = Begin; it != End; ++it) {
+			if pred(get(it))
+				result++
+		}
+		return Begin
 	}
 
 	///@function resize(size, [value_fill])
