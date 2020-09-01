@@ -1,112 +1,4 @@
 
-///@function List([id] or [items...])
-function List(items) constructor {
-	type = ds_type_list
-	data_raw = ds_list_create()
-
-	///@function destroy(do_remove_children)
-	destroy = function(cleanup) {
-		if (cleanup == undefined) {
-			cleanup = false;	
-		}
-		if is_undefined(data_raw) {
-			show_error("List does not exist: " + debug_get_callstack(), false)
-		} else {
-			if cleanup {
-				var _iter = new Iterator(self)
-				while (_iter.next() != undefined) {
-					var _item = _iter.value()
-					if (is_struct(_item)) {
-						switch (instanceof(_item)) {
-							case "List":
-							case "Map":
-							case "Grid":
-							case "Queue":
-							case "Priority":
-							case "Stack":
-								_item.destroy()
-							break;
-						}
-					}
-				}
-			}
-			ds_list_destroy(data_raw)
-		}
-		data_raw = undefined
-	}
-
-	///@function get(index)
-  get = function(i) { return data_raw[| i]}
-
-	///@function set(index, value)
-  set = function(i, v) { data_raw[| i] = v; }
-
-	///@function add(value)
-  add = function(v) { ds_list_add(data_raw,v) }
-
-	///@function insert(index, value)
-  insert = function(i, v) { ds_list_insert(data_raw, i, v) }
-
-	///@function shuffle()
-  shuffle = function() { ds_list_shuffle(data_raw) }
-
-	///@function sort(ascending)
-  sort = function(ascending) { ds_list_sort(data_raw,ascending) }
-
-	///@function mark_list(index)
-  mark_list = function(i) { ds_list_mark_as_list(data_raw, i) }
-
-	///@function mark_map(index)
-  mark_map = function(i) { ds_list_mark_as_map(data_raw,i) }
-
-	///@function remove(index)
-	remove = function(i) { ds_list_delete(data_raw,i) }
-
-	///@function foreach(predicate)
-	foreach = function(cb) {
-		for (var i=0,s=get_size();i<s;i++) {
-			if (cb(data_raw[| i],i,self) == true) {
-				break;	
-			}
-		}
-	}
-
-	///@function map(predicate, do_destroy_self)
-	map = function(cb,remove) {
-		if (remove == undefined) {
-			remove = false;	
-		}
-		var _nds = new List()
-		for (var i=0,s=get_size();i<s;i++) {
-			_nds.add(cb(data_raw[| i], i, self))
-		}
-		if remove {
-			self.destroy(true)
-		}
-		return _nds;
-	}
-
-	///@function filter(predicate, do_destroy_self)
-	filter = function(cb,remove) {
-		if (remove == undefined) {
-			remove = false;	
-		}
-		var _nds = new List()
-		for (var i=0, s=get_size(); i<s; i++) {
-			if (cb(data_raw[| i],i,self) == true) {
-				_nds.add(data_raw[| i])	
-			}
-		}
-		if remove {
-			self.destroy(true)	
-		}
-	}
-
-	virtual_add = add
-	virtual_get_size = ds_list_size
-	virtual_destroy = ds_list_destroy
-	init()
-}
 
 ///@function DataStructure([items...])
 function DataStructure(items) constructor {
@@ -302,7 +194,7 @@ function Grid(_width, _height): DataStructure() constructor {
 	virtual_destroy = ds_grid_destroy
 }
 
-///@function List([items...])
+///@function _List([items...])
 function _List(items): DataStructure(items) constructor {
 	type = ds_type_list
 	data_raw = ds_list_create()

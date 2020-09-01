@@ -44,14 +44,12 @@ function Setting(filepath) constructor {
 		file_text_close(target)
 	}
 
-	///@function set(variable_name, value)
-	function set(var_name, val) {
-		ds_map_set(options, var_name, val)
+	function set(variable_name, value) {
+		ds_map_set(options, variable_name, value)
 	}
 
-	///@function get(variable_name)
-	function get(vars_name) {
-		return ds_map_find_value(options, vars_name)
+	function get(variable_name) {
+		return ds_map_find_value(options, variable_name)
 	}
 }
 
