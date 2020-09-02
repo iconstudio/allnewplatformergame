@@ -205,12 +205,6 @@ function List(items) constructor {
 		set(ItB, temp)
 	}
 
-	///@function move(begin, end, output)
-	function move(Begin, End, Output) {
-		copy(Begin, End, Output)
-		remove_all(Begin, End)
-	}
-
 	///@function fill(begin, end, value)
 	function fill(Begin, End, Val) {
 		while Begin != End {
@@ -306,6 +300,18 @@ function List(items) constructor {
 			Begin++
 		}
 		return DstBgn
+	}
+
+	///@function move(begin, end, output)
+	function move(Begin, End, Output) {
+		copy(Begin, End, Output)
+		remove_all(Begin, End)
+	}
+
+	///@function move_to(begin, end, destination, destination_begin)
+	function move_to(Begin, End, Dst, DstBgn) {
+		copy_to(Begin, End, Dst, DstBgn)
+		remove_all(Begin, End)
 	}
 
 	///@function transform(begin, end, output, predicate)
