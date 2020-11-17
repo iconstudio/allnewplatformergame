@@ -2,7 +2,7 @@
 xvel = 0
 yvel = 0
 grav = global.gravity_normal
-xfric = get_friction_ground()
+xfric = global.friction_ground
 yfric = xfric // *
 
 can_jump = false
@@ -104,9 +104,9 @@ function set_friction_y(value) {
 
 function update_friction(on_ground) {
 	if on_ground
-		set_friction_x(get_friction_ground())
+		set_friction_x(global.friction_ground)
 	else
-		set_friction_x(get_friction_air())
+		set_friction_x(global.friction_air)
 }
 
 update_physics = function() {
@@ -149,7 +149,7 @@ push = function() {
 pop = function() {
 	if yvel < 0 {
 		move_outside_solid(270, 1)
-		yvel = 0
+		yvel *= 0.1
 	}
 }
 

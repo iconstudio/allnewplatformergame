@@ -87,8 +87,8 @@ function update_friction(on_ground) {
 		if move_dir != 0
 			set_friction_x(0)
 		else
-			set_friction_x(get_friction_ground())
+			set_friction_x(global.friction_ground)
 	} else {
-		set_friction_x(get_friction_air())
+		set_friction_x(global.friction_air)
 	}
 }

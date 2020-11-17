@@ -16,47 +16,26 @@ gpu_set_ztestenable(true)
 gpu_set_zwriteenable(true)
 
 var dw = display_get_width()
-global.aspect = 2 / 3
+global.aspect = 1 / 2
 global.resolution = {
 	display_width: dw,
 	display_height: display_get_height(),
 	display_height_biased: floor(dw * global.aspect),
 
 	width: 960,
-	height: 640,
-
-	game_width: 960,
-	game_height: 480,
-
-	panel_width: 960,
-	panel_height: 150,
+	height: 480,
 
 	view_width: 480,
 	view_height: 240,
 
 	border: 5,
 	
-	update: function() {
-		if !global.flag_is_desktop
-			exit
-
-		if window_get_fullscreen() {
-			display_set_gui_maximize(self.display_width / self.width, self.display_height_biased / self.height)
-		} else {
-			var cw = window_get_width()
-			//var ch = window_get_height()
-			var ch_biased = floor(cw * global.aspect)
-			display_set_gui_maximize(cw / self.width, ch_biased / self.height)
-		}
-
-			//self.width = display_get_gui_width() //960
-			//self.height = display_get_gui_height() //640
-	}
+	update: function() { display_set_gui_maximize() }
 }
 window_set_min_width(global.resolution.width)
 window_set_min_height(global.resolution.height)
-window_set_size(global.resolution.width, global.resolution.height)
-surface_resize(application_surface, global.resolution.game_width, global.resolution.game_height)
+//window_set_size(global.resolution.width, global.resolution.height)
+//surface_resize(application_surface, global.resolution.game_width, global.resolution.game_height)
 
 global.settings = new MainSetting()
 global.settings.init()

@@ -159,11 +159,3 @@ function move_vertical(range) {
 
 	return result
 }
-
-function get_friction_ground() {
-	return global.friction_ground
-}
-
-function get_friction_air() {
-	return global.friction_air
-}
