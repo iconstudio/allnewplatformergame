@@ -12,6 +12,14 @@ y_draw_begin = y_border + border
 panel_bezel_pos_begin = [border, y_border]
 panel_bezel_pos_end = [global.resolution.width - border, y + global.resolution.height]
 
+// ** 조작 키 **
+ctrl_icon_padding = 6
+ctrl_icon_width = global.resolution.width * 0.08
+ctrl_icon_height = ctrl_icon_width
+ctrl_pos = [ctrl_icon_padding, global.resolution.height - ctrl_icon_padding - ctrl_icon_height]
+virtual_key_add(ctrl_pos[0], ctrl_pos[1], ctrl_icon_width, ctrl_icon_height, vk_left)
+
+
 // ** 스킬 아이콘 초기화 **
 sk_icon_org_width = 64
 sk_icon_org_height = 64
@@ -22,7 +30,6 @@ sk_icons_width = sk_icon_width * 4 - sk_icon_padding
 sk_x_begin = (global.resolution.width - sk_icons_width) * 0.5
 
 skill_indicators = new List()
-
 skill_icon = function(sp, nx, ny) constructor {
 	sprite = sp
 	x = nx

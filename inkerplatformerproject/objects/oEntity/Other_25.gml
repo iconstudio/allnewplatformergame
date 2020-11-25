@@ -7,6 +7,8 @@ ai_state = mob_ai_states.idle
 
 hp = 1
 mp = 0
+actions = -1
+action_number = 0
 skills = -1
 elbereth_respect = false
 

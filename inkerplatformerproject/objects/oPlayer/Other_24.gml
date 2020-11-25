@@ -85,5 +85,7 @@ if jumping {
 	}
 }
 
-global.playerpos = [x, y]
-global.playerpos_visible = [x, y]
+global.playerpos[0] = x
+global.playerpos[1] = y
+global.playerpos_visible[0] = x
+global.playerpos_visible[1] = y

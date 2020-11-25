@@ -23,10 +23,10 @@ global.resolution = {
 	display_height_biased: floor(dw * global.aspect),
 
 	width: 960,
-	height: 480,
+	height: 720,
 
 	view_width: 480,
-	view_height: 240,
+	view_height: 360,
 
 	border: 5,
 	
