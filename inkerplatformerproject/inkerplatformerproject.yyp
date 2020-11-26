@@ -63,6 +63,7 @@
     {"id":{"name":"oDirt","path":"objects/oDirt/oDirt.yy",},"order":4,},
     {"id":{"name":"oFireElemental","path":"objects/oFireElemental/oFireElemental.yy",},"order":4,},
     {"id":{"name":"sPlankWood","path":"sprites/sPlankWood/sPlankWood.yy",},"order":4,},
+    {"id":{"name":"oCollectible","path":"objects/oCollectible/oCollectible.yy",},"order":0,},
     {"id":{"name":"sTitle","path":"sprites/sTitle/sTitle.yy",},"order":3,},
     {"id":{"name":"oEnemyParent","path":"objects/oEnemyParent/oEnemyParent.yy",},"order":0,},
     {"id":{"name":"oPlankWood","path":"objects/oPlankWood/oPlankWood.yy",},"order":6,},
