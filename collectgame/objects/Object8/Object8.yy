@@ -1,12 +1,11 @@
 {
-  "name": "Object8",
   "spriteId": null,
-  "spriteMaskId": null,
-  "visible": true,
   "solid": false,
+  "visible": true,
+  "spriteMaskId": null,
   "persistent": false,
-  "physicsObject": false,
   "parentObjectId": null,
+  "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
   "physicsGroup": 1,
@@ -26,6 +25,7 @@
     "path": "folders/Objects.yy",
   },
   "resourceVersion": "1.0",
+  "name": "Object8",
   "tags": [],
   "resourceType": "GMObject",
 }

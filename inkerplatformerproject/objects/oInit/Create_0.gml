@@ -77,8 +77,9 @@ while running {
 	ui_update(ftime)
 }
 
-var meter_per_microsecond = 1 / 1000000
-var 
+var millimeter_per_microsecond = 1 / 1000000
+var centimeter_per_microsecond = millimeter_per_microsecond * 10
+var meter_per_microsecond = centimeter_per_microsecond * 100
 
 // 10 픽셀 == 1 미터
 phy_mess = 10.0 / 1
