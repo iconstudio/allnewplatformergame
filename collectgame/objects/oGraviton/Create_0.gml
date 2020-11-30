@@ -1,3 +1,6 @@
-meter_per_second = 10
+grounded_state = TERRAIN_TYPE.GROUND
+
+velocity_x = 0
+velocity_y = 0
 
 actions = []

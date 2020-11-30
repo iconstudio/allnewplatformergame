@@ -60,7 +60,7 @@
     "eventStubScript": null,
     "parent": {"name":"sTest2","path":"sprites/sTest2/sTest2.yy",},
     "resourceVersion": "1.3",
-    "name": "sTest2",
+    "name": "sTest",
     "tags": [],
     "resourceType": "GMSequence",
   },
