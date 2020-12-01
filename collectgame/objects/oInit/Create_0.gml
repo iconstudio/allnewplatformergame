@@ -1,4 +1,3 @@
-
 #macro SECOND_TO_STEP 100 // room_speed (fps)
 #macro STEP_TO_SECOND 0.01
 
@@ -9,9 +8,9 @@
 		1000m / 3600s == 10 / 36 = 5 / 18;
 		5 / 18 * 8px = 40 / 18 = 20 / 9;
 */
-#macro KILOMETER_PER_MILLISECOND 0.000001 * 20 / 9
+#macro KILOMETER_PER_MILLISECOND 0.00002 / 9
 
-#macro GRAVITY (50)
+#macro GRAVITY (3)
 
 globalvar FRICTION_HORIZONTAL;
 FRICTION_HORIZONTAL = [
@@ -40,5 +39,7 @@ enum TERRAIN_TYPE {
 	WATER = 3,
 	VISCOSITY = 4
 }
+
+instance_create_layer(0, 0, layer, oGlobal)
 
 alarm[0] = 1
