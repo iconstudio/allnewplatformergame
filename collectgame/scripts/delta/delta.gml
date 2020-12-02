@@ -1,2 +1,2 @@
 /// @function delta(speed)
-function delta(Value) { return Value * delta_time * KILOMETER_PER_MILLISECOND }
+function delta(Value) { return Value * frame_global * KILOMETER_PER_SECOND }
