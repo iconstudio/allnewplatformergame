@@ -1,2 +1,2 @@
-/// @description 룸 재시작
+/// @description Restart a room
 room_restart()

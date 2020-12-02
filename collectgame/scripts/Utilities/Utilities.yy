@@ -6,7 +6,7 @@
     "path": "folders/Scripts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "delta_to_step",
+  "name": "Utilities",
   "tags": [],
   "resourceType": "GMScript",
 }

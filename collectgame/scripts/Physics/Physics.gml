@@ -9,11 +9,13 @@ function Physics() {
 	velocity_y = 0
 	friction_x = 0
 	friction_y = 0
-	slope_mount_max = dsin(45)
+	slope_mount_max = dsin(45) * 3
 
 	horizontal_precedure = accel_x
 	vertical_precedure = accel_y
 }
+/// @function make_speed(speed)
+function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
 
 /// @function check_block_by(vector_x, vector_y)
 function check_block_by(Distance_x, Distance_y) {
@@ -37,10 +39,26 @@ function check_horizontal(Distance) {
 
 /// @function check_vertical(vector)
 function check_vertical(Distance) {
-	if 0 < Distance
-		return place_meeting(x, y + Distance, oObstacle)
-	else
+	if 0 < Distance {
+		if place_meeting(x, y + Distance, oSolid) {
+			return true
+		} else {
+			var condition = false
+			var in_platform = instance_place(x, y, oPlatform)
+			if in_platform == noone {
+				if place_meeting(x, y + Distance, oPlatform)
+					condition = true
+			} else {
+				var under_platform = collision_line(bbox_left, bbox_bottom + 1, bbox_right - 1, bbox_bottom + 1, oPlatform, true, true)
+				if under_platform != noone and in_platform != under_platform
+					condition = true
+			}
+		
+			return condition
+		}
+	} else {
 		return place_meeting(x, y + Distance, oSolid)
+	}
 }
 
 /// @function move_x(vector)
@@ -48,16 +66,20 @@ function move_x(Vector) {
 	var Distance = abs(Vector)
 	if 0 < Vector {
 		for (; 1 < Distance; Distance--) {
-			if check_horizontal(1)
+			if check_horizontal(1) {
+				move_contact_solid(0, -1)
 				return Distance
+			}
 			x++
 		}
 		if !check_horizontal(Distance)
 			x += Distance
 	} else {
 		for (; 1 < Distance; Distance--) {
-			if check_horizontal(-1)
+			if check_horizontal(-1) {
+				move_contact_solid(180, -1)
 				return Distance
+			}
 			x--
 		}
 		if !check_horizontal(-Distance)

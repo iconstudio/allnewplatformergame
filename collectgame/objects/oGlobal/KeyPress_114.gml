@@ -1,2 +1,2 @@
-/// @description 게임 재시작
+/// @description Restart the game
 game_restart()

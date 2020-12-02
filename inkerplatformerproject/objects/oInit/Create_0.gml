@@ -59,39 +59,6 @@ global.setting_control_gamepad = {
 
 global.timescale = 1.00
 #macro SECOND 100 // seconds(1)
-
-game_realtime = 0
-paused = false
-function get_frame_time() {
-	//var frame_time = get_time() - current_time
-	//current_time += frame_time
-	if not paused
-		game_realtime += delta_time//frame_time
-	return delta_time//frame_time
-}
-var time_passed = delta_time / 1000000
-
-while running {
-	var ftime = get_frame_time()
-	keyboard_update()
-	ui_update(ftime)
-}
-
-var millimeter_per_microsecond = 1 / 1000000
-var centimeter_per_microsecond = millimeter_per_microsecond * 10
-var meter_per_microsecond = centimeter_per_microsecond * 100
-
-// 10 픽셀 == 1 미터
-phy_mess = 10.0 / 1
-phy_velocity = (((1000.0 / 60) / 60) * phy_mess)
-phy_gravity = phy_velocity * 100
-var xdist = delta_velocity(self.xVel) * frame_time
-var xc = xdist + sign(xdist)
-phy_collide = {}
-if place_free(xc, y)
-    x += xdist
-else
-    phy_collide(xdist)
 		
 global.gravity_normal = 20 / SECOND
 global.friction_air = 5 / SECOND

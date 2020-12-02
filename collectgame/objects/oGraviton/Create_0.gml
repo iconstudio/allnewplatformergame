@@ -1,3 +1,4 @@
+/// @description Initialization
 grounded_state = TERRAIN_TYPE.GROUND
 
 Physics()
