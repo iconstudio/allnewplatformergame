@@ -38,5 +38,5 @@ if velocity_x != 0
 	img_xscale = move_dir
 
 if global.io_pressed_jump
-	velocity_y = -190
-// 120
+	velocity_y = -jump_speed
+
