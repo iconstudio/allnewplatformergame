@@ -1,10 +1,13 @@
 /// @description Physics Update
 if velocity_x != 0 {
+	var CollideResult
 	if 0 == slope_mount_max {
-		horizontal_precedure(velocity_x)
+		CollideResult = horizontal_precedure(velocity_x)
 	} else {
-		horizontal_precedure(velocity_x, velocity_y, slope_mount_max)
+		CollideResult = horizontal_precedure(velocity_x, velocity_y, slope_mount_max)
 	}
+
+	
 }
 
 var check_bottom = check_vertical(1)
@@ -14,5 +17,6 @@ if !check_bottom {
 }
 
 if velocity_y != 0 {
-	vertical_precedure(velocity_y)
+	var CollideResult = vertical_precedure(velocity_y)
+	
 }
