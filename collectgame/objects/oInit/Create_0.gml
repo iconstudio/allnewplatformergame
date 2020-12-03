@@ -62,5 +62,7 @@ enum PHYSICS_MASS {
 #macro NONE 0
 #macro LEFT -1
 #macro RIGHT 1
+#macro UP -1
+#macro DOWN 1
 
 alarm[0] = 1
