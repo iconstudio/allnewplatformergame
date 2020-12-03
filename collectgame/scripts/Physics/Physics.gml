@@ -10,9 +10,6 @@ function Physics() {
 	friction_x = 0
 	friction_y = 0
 	slope_mount_max = dsin(45) * 3
-
-	horizontal_precedure = accel_x
-	vertical_precedure = accel_y
 }
 /// @function make_speed(speed)
 function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
@@ -35,6 +32,11 @@ function check_plate_by(Distance_x, Distance_y) {
 /// @function check_horizontal(vector)
 function check_horizontal(Distance) {
 	return place_meeting(x + Distance, y, oSolid)
+}
+
+/// @function check_on_horizontal(vector)
+function check_on_horizontal(Distance) {
+	return instance_place(x + Distance, y, oSolid)
 }
 
 /// @function check_vertical(vector)
@@ -64,28 +66,29 @@ function check_vertical(Distance) {
 /// @function move_x(vector)
 function move_x(Vector) {
 	var Distance = abs(Vector)
+	var Part = floor(Distance)
 	if 0 < Vector {
-		for (; 1 < Distance; Distance--) {
-			if check_horizontal(1) {
-				move_contact_solid(0, -1)
-				return Distance
-			}
-			x++
-		}
-		if !check_horizontal(Distance)
+		if Part != 0
+			move_contact_solid(0, Part)
+		if check_horizontal(1)
+			return LEFT
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(Distance)
 			x += Distance
+		move_outside_solid(180, 1)
 	} else {
-		for (; 1 < Distance; Distance--) {
-			if check_horizontal(-1) {
-				move_contact_solid(180, -1)
-				return Distance
-			}
-			x--
-		}
-		if !check_horizontal(-Distance)
+		if Part != 0
+			move_contact_solid(180, Part)
+		if check_horizontal(-1)
+			return RIGHT
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(-Distance)
 			x -= Distance
+		move_outside_solid(0, 1)
 	}
-	return abs(Vector)
+	return NONE
 }
 
 /// @function move_y(vector)
@@ -94,21 +97,25 @@ function move_y(Vector) {
 	if 0 < Vector {
 		for (; 1 < Distance; Distance--) {
 			if check_vertical(1)
-				return Distance
+				return DOWN
 			y++
 		}
 		if !check_vertical(Distance)
 			y += Distance
+		move_outside_solid(90, 1)
 	} else {
-		for (; 1 < Distance; Distance--) {
-			if check_vertical(-1)
-				return Distance
-			y--
-		}
-		if !check_vertical(-Distance)
+		var Part = floor(Distance)
+		if Part != 0
+			move_contact_solid(90, Part)
+		if check_vertical(-1)
+			return UP
+
+		Distance -= Part
+		if Distance != 0 and !check_vertical(-Distance)
 			y -= Distance
+		move_outside_solid(270, 1)
 	}
-	return abs(Vector)
+	return NONE
 }
 
 /// @function accel_x(vector)
@@ -139,7 +146,7 @@ function accel_x_slope(Vector_x, Vector_y, Mount) {
 						move_y(MountDistance)
 					}
 				} else {
-					return Distance
+					return RIGHT
 				}
 			} else {
 				x++
@@ -162,7 +169,7 @@ function accel_x_slope(Vector_x, Vector_y, Mount) {
 						move_y(MountDistance)
 					}
 				} else {
-					return Distance
+					return LEFT
 				}
 			} else {
 				x--
@@ -174,6 +181,7 @@ function accel_x_slope(Vector_x, Vector_y, Mount) {
 		if !check_horizontal(Distance)
 			x -= Distance
 	}
-	return abs(Vector)
+
+	return NONE
 }
 
