@@ -1,13 +1,15 @@
 /// @description Physics Update
+var CollideResult_x = NONE
 if velocity_x != 0 {
-	var CollideResult
-	if 0 == slope_mount_max {
-		CollideResult = horizontal_precedure(velocity_x)
+	if !slope_mountable {
+		CollideResult_x = horizontal_precedure(velocity_x)
 	} else {
-		CollideResult = horizontal_precedure(velocity_x, velocity_y, slope_mount_max)
+		CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
 	}
 
-	
+	if CollideResult_x != NONE { // push
+		velocity_x = 0
+	}
 }
 
 var check_bottom = check_vertical(1)
@@ -18,5 +20,17 @@ if !check_bottom {
 
 if velocity_y != 0 {
 	var CollideResult = vertical_precedure(velocity_y)
-	
+
+	if CollideResult != NONE {
+		if velocity_y < 0 { // pop
+			if CollideResult_x == NONE {
+				var repulse_y = max(1, velocity_x * mass_ratio)
+				velocity_y = max(0, velocity_y - repulse_y)
+			} else {
+				velocity_y *= 0.5
+			}
+		} else { // thud
+			velocity_y = 0
+		}
+	}
 }
