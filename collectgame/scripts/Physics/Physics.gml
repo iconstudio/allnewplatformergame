@@ -1,15 +1,17 @@
 function Physics() {
 	static set_mass = function(Mass) {
 		mass = Mass
-		slope_mount_max = dsin(sqr(3 - Mass) * 15) * 3
+		mass_ratio = (Mass + 2) * 0.25
+		slope_mountable = (Mass != PHYSICS_MASS.TINY)
 	}
 
 	mass = PHYSICS_MASS.NORMAL
+	mass_ratio = 0.5
+	slope_mountable = true
 	velocity_x = 0
 	velocity_y = 0
 	friction_x = 0
 	friction_y = 0
-	slope_mount_max = dsin(45) * 3
 }
 /// @function make_speed(speed)
 function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
@@ -113,7 +115,7 @@ function move_y(Vector) {
 		Distance -= Part
 		if Distance != 0 and !check_vertical(-Distance)
 			y -= Distance
-		move_outside_solid(270, 1)
+		//move_outside_solid(270, 1)
 	}
 	return NONE
 }
@@ -128,60 +130,133 @@ function accel_y(Vector) {
 	return move_y(make_speed(Vector))
 }
 
-/// @function accel_x_slope(vector_x, vector_y, mount)
-function accel_x_slope(Vector_x, Vector_y, Mount) {
+/// @function accel_x_slope(vector_x, vector_y)
+function accel_x_slope(Vector_x, Vector_y) {
 	var Distance = abs(make_speed(Vector_x))
-	var CanMount = (0 < Mount)
-	var MountDistance = Mount * 2//Mount + Mount * Distance
+	var Part = floor(Distance)
+	var MoveDistance = Part
+	var MountDistance = Distance
 
+	xprevious = x
 	if 0 < Vector_x {
-		for (; 1 < Distance; Distance--) {
-			if check_horizontal(1) {
-				if CanMount {
-					move_y(-MountDistance)
-					if !check_horizontal(1)
-						x++
+		if Part != 0 {
+			move_contact_solid(0, Part)
+			MoveDistance = floor(x - xprevious)
+		}
 
-					if Vector_y <= 0 {
-						move_y(MountDistance)
-					}
-				} else {
-					return RIGHT
-				}
+		if check_horizontal(1) {
+			if MoveDistance < Part { // go up to slope
+				move_y(-MountDistance)
+				move_contact_solid(0, Part - MoveDistance)
+				move_y(MountDistance)
 			} else {
-				x++
-				if 0 <= Vector_y {
-					move_y(MountDistance)
-				}
+				return RIGHT
+			}
+		} else {
+			if 0 <= Vector_y {
+				move_y(Part * 2)
+			} else {
+				
 			}
 		}
-		if !check_horizontal(Distance)
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(Distance)
 			x += Distance
+		move_outside_solid(180, 1)
 	} else {
-		for (; 1 < Distance; Distance--) {
-			if check_horizontal(-1) {
-				if CanMount {
-					move_y(-MountDistance)
-					if !check_horizontal(-1)
-						x--
+		if Part != 0 {
+			move_contact_solid(180, Part)
+			MoveDistance = xprevious - x
+		}
 
-					if Vector_y <= 0 {
-						move_y(MountDistance)
-					}
-				} else {
-					return LEFT
-				}
+		if check_horizontal(-1) {
+			if MoveDistance < Part { // go up to slope
+				move_y(-MountDistance)
+				move_contact_solid(180, Part - MoveDistance)
+				move_y(MountDistance)
 			} else {
-				x--
-				if 0 <= Vector_y {
-					move_y(MountDistance)
-				}
+				return LEFT
+			}
+		} else {
+			if 0 <= Vector_y {
+				move_y(Part * 2)
+			} else {
+				
 			}
 		}
-		if !check_horizontal(Distance)
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(Distance)
 			x -= Distance
+		move_outside_solid(0, 1)
 	}
 
 	return NONE
 }
 
+/// @function accel_y_slope(vector_x, vector_y)
+function accel_y_slope(Vector_x, Vector_y) {
+	var Distance = abs(make_speed(Vector_y))
+	var Part = floor(Distance)
+	var MoveDistance = Part
+	var MountDistance = 3 // 30cm
+
+	xprevious = x
+	if 0 < Vector_x {
+		if Part != 0 {
+			move_contact_solid(0, Part)
+			MoveDistance = x - xprevious
+		}
+
+		if check_horizontal(1) {
+			if MoveDistance < Part { // go up to slope
+				move_contact_solid(90, MountDistance)
+				//TODO: using add to coordinate x
+				move_contact_solid(0, Part - MoveDistance)
+				move_y(MountDistance)
+			} else {
+				return RIGHT
+			}
+		} else {
+			if 0 <= Vector_y {
+				move_y(Part * 2)
+			} else {
+				
+			}
+		}
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(Distance)
+			x += Distance
+		move_outside_solid(180, 1)
+	} else {
+		if Part != 0 {
+			move_contact_solid(180, Part)
+			MoveDistance = xprevious - x
+		}
+
+		if check_horizontal(-1) {
+			if MoveDistance < Part { // go up to slope
+				move_y(-MountDistance)
+				move_contact_solid(180, Part - MoveDistance)
+				move_y(MountDistance)
+			} else {
+				return LEFT
+			}
+		} else {
+			if 0 <= Vector_y {
+				move_y(Part * 2)
+			} else {
+				
+			}
+		}
+
+		Distance -= Part
+		if Distance != 0 and !check_horizontal(Distance)
+			x -= Distance
+		move_outside_solid(0, 1)
+	}
+
+	return NONE
+}
