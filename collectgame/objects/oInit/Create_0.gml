@@ -51,6 +51,7 @@ enum TERRAIN_TYPE {
 	VISCOSITY = 4
 }
 
+#macro MASS_MAX 2
 enum PHYSICS_MASS {
 	TINY = -2,
 	LIGHT = -1,
