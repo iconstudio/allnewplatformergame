@@ -14,8 +14,11 @@ if velocity_x != 0 {
 
 var check_bottom = check_vertical(1)
 if !check_bottom {
+	grounded_state = TERRAIN_TYPE.AIR
 	if velocity_y < TERMINAL_SPEED_VERTICAL
 		velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
+} else {
+	grounded_state = TERRAIN_TYPE.GROUND
 }
 
 if velocity_y != 0 {
@@ -27,7 +30,7 @@ if velocity_y != 0 {
 				var repulse_y = max(1, velocity_x * mass_ratio)
 				velocity_y = max(0, velocity_y - repulse_y)
 			} else {
-				velocity_y *= 0.5
+				velocity_y *= 0.9
 			}
 		} else { // thud
 			velocity_y = 0
