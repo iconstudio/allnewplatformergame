@@ -1,6 +1,6 @@
 {
   "resources": [
-    {"id":{"name":"Object12","path":"objects/Object12/Object12.yy",},"order":8,},
+    {"id":{"name":"o","path":"objects/o/o.yy",},"order":8,},
     {"id":{"name":"oGamepad","path":"objects/oGamepad/oGamepad.yy",},"order":2,},
     {"id":{"name":"Object14","path":"objects/Object14/Object14.yy",},"order":10,},
     {"id":{"name":"sTest","path":"sprites/sTest/sTest.yy",},"order":0,},

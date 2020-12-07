@@ -13,6 +13,7 @@ function Physics() {
 	friction_x = 0
 	friction_y = 0
 }
+
 /// @function make_speed(speed)
 function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
 
@@ -104,7 +105,6 @@ function move_y(Vector) {
 		}
 		if !check_vertical(Distance)
 			y += Distance
-		move_outside_solid(90, 1)
 	} else {
 		var Part = floor(Distance)
 		if Part != 0

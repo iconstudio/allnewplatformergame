@@ -30,10 +30,10 @@ if velocity_y != 0 {
 				var repulse_y = max(1, velocity_x * mass_ratio)
 				velocity_y = max(0, velocity_y - repulse_y)
 			} else {
-				velocity_y *= 0.9
+				ceiling()
 			}
 		} else { // thud
-			velocity_y = 0
+			thud()
 		}
 	}
 }
