@@ -79,7 +79,7 @@ function move_x(Vector) {
 		if Part != 0
 			move_contact_solid(0, Part)
 		if check_horizontal(1)
-			return LEFT
+			return RIGHT
 
 		Distance -= Part
 		if Distance != 0 and !check_horizontal(Distance)
@@ -89,7 +89,7 @@ function move_x(Vector) {
 		if Part != 0
 			move_contact_solid(180, Part)
 		if check_horizontal(-1)
-			return RIGHT
+			return LEFT
 
 		Distance -= Part
 		if Distance != 0 and !check_horizontal(-Distance)
