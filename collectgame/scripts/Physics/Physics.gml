@@ -32,6 +32,11 @@ function check_plate_by(Distance_x, Distance_y) {
 	return place_meeting(x + Distance_x, y + Distance_y, oPlatform)
 }
 
+/// @function check_solid_line(vector_x, vector_y)
+function check_solid_line(Distance_x, Distance_y) {
+	return (noone != collision_line(x, y, x + Distance_x, y + Distance_y, oSolid, true, true))
+}
+
 /// @function check_horizontal(vector)
 function check_horizontal(Distance) {
 	return place_meeting(x + Distance, y, oSolid)
@@ -140,10 +145,19 @@ function accel_x_slope(Vector_x, Vector_y) {
 	xprevious = x
 	if 0 < Vector_x {
 		if Part != 0 {
-			move_contact_solid(0, Part)
+			//move_contact_solid(0, Part)
 			MoveDistance = floor(x - xprevious)
 		}
 
+		if check_solid_line(Distance, 0) {
+			
+		} else {
+			move_contact_solid(0, Part)
+			if 0 <= Vector_y
+				move_y(Part * 2)
+		}
+			
+		//check_solid_line
 		if check_horizontal(1) {
 			if MoveDistance < Part { // go up to slope
 				move_y(-MountDistance)
@@ -151,12 +165,6 @@ function accel_x_slope(Vector_x, Vector_y) {
 				move_y(MountDistance)
 			} else {
 				return RIGHT
-			}
-		} else {
-			if 0 <= Vector_y {
-				move_y(Part * 2)
-			} else {
-				
 			}
 		}
 
