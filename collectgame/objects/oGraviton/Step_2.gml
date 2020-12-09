@@ -26,9 +26,8 @@ if velocity_y != 0 {
 
 	if CollideResult != NONE {
 		if velocity_y < 0 { // pop
-			if CollideResult_x == NONE {
-				var repulse_y = max(1, velocity_x * mass_ratio)
-				velocity_y = max(0, velocity_y - repulse_y)
+			if check_bottom and CollideResult_x == NONE {
+				// do nothing
 			} else {
 				ceiling()
 			}

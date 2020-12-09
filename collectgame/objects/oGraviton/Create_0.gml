@@ -7,7 +7,7 @@ vertical_precedure = accel_y
 
 /// @function ceiling()
 ceiling = function() {
-	velocity_y *= 0.9
+	velocity_y = 0
 	y = ceil(y)
 	move_outside_solid(270, 1)
 }
