@@ -42,8 +42,18 @@ function check_horizontal(Distance) {
 	return place_meeting(x + Distance, y, oSolid)
 }
 
-/// @function check_on_horizontal(vector)
-function check_on_horizontal(Distance) {
+/// @function check_box_horizontal(vector_x, vector_y)
+function check_box_horizontal(Distance_x, Distance_y) {
+	var result = false
+	if Distance_x < 0
+		result = (noone != collision_rectangle(bbox_left + Distance_x, bbox_top + Distance_y, bbox_right, bbox_bottom + Distance_y, oSolid, true, true))
+	else
+		result = (noone != collision_rectangle(bbox_left, bbox_top + Distance_y, bbox_right + Distance_x, bbox_bottom + Distance_y, oSolid, true, true))
+	return result
+}
+
+/// @function check_what_horizontal(vector)
+function check_what_horizontal(Distance) {
 	return instance_place(x + Distance, y, oSolid)
 }
 
@@ -71,7 +81,7 @@ function check_vertical(Distance) {
 	}
 }
 
-/// @function move_x(vector)
+/// @function move_x(vector_pixel)
 function move_x(Vector) {
 	var Distance = abs(Vector)
 	var Part = floor(Distance)
@@ -99,7 +109,7 @@ function move_x(Vector) {
 	return NONE
 }
 
-/// @function move_y(vector)
+/// @function move_y(vector_pixel)
 function move_y(Vector) {
 	var Distance = abs(Vector)
 	if 0 < Vector {
@@ -137,72 +147,44 @@ function accel_y(Vector) {
 
 /// @function accel_x_slope(vector_x, vector_y)
 function accel_x_slope(Vector_x, Vector_y) {
-	var Distance = abs(make_speed(Vector_x))
-	var Part = floor(Distance)
-	var MoveDistance = Part
-	var MountDistance = Distance
+	if 0 == Vector_x
+		return NONE
 
-	xprevious = x
-	if 0 < Vector_x {
-		if Part != 0 {
-			//move_contact_solid(0, Part)
-			MoveDistance = floor(x - xprevious)
-		}
+	var Vector = make_speed(Vector_x), Identity = sign(Vector_x)
+	var Distance = abs(Vector)
 
-		if check_solid_line(Distance, 0) {
-			
-		} else {
-			move_contact_solid(0, Part)
-			if 0 <= Vector_y
-				move_y(Part * 2)
-		}
-			
-		//check_solid_line
-		if check_horizontal(1) {
-			if MoveDistance < Part { // go up to slope
-				move_y(-MountDistance)
-				move_contact_solid(0, Part - MoveDistance)
-				move_y(MountDistance)
-			} else {
-				return RIGHT
-			}
-		}
-
-		Distance -= Part
-		if Distance != 0 and !check_horizontal(Distance)
-			x += Distance
-		move_outside_solid(180, 1)
+	if !check_horizontal(Vector) {
+		x += Vector
+		if 0 <= Vector_y
+			move_y(SLOPE_MOUNT_VALUE)
 	} else {
-		if Part != 0 {
-			move_contact_solid(180, Part)
-			MoveDistance = xprevious - x
-		}
-
-		if check_horizontal(-1) {
-			if MoveDistance < Part { // go up to slope
-				move_y(-MountDistance)
-				move_contact_solid(180, Part - MoveDistance)
-				move_y(MountDistance)
-			} else {
-				return LEFT
+		var Cx = Identity, Cy = SLOPE_MOUNT_VALUE
+		for (var i = 0; i < Distance; ++i) {
+			if !check_solid_by(Cx, -Cy) {
+				break
 			}
-		} else {
-			if 0 <= Vector_y {
-				move_y(Part * 2)
-			} else {
-				
-			}
+			Cx += Identity
+			Cy += SLOPE_RATIO
 		}
+		move_y(-Cy)
+		move_x(Cx)
+		move_y(Cy)
+	}
 
-		Distance -= Part
-		if Distance != 0 and !check_horizontal(Distance)
-			x -= Distance
+	if 0 < Vector_x {
+		if check_horizontal(1)
+			return RIGHT
+		move_outside_solid(180, 1)
+	} else if Vector_x < 0 {
+		if check_horizontal(-1)
+			return LEFT
 		move_outside_solid(0, 1)
 	}
 
 	return NONE
 }
 
+//TODO: complete y grapping
 /// @function accel_y_slope(vector_x, vector_y)
 function accel_y_slope(Vector_x, Vector_y) {
 	var Distance = abs(make_speed(Vector_y))
