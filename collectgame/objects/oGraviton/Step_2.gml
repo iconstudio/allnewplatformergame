@@ -1,5 +1,5 @@
 /// @description Physics Update
-var CollideResult_x = NONE
+var CollideResult_x = NONE, Sign_x = sign(velocity_x)
 if velocity_x != 0 {
 	if !slope_mountable {
 		CollideResult_x = horizontal_precedure(velocity_x)
@@ -8,7 +8,7 @@ if velocity_x != 0 {
 	}
 
 	if CollideResult_x != NONE { // push
-		velocity_x = 0
+		//velocity_x = 0
 	}
 }
 
@@ -24,13 +24,11 @@ if !check_bottom {
 if velocity_y != 0 {
 	var CollideResult = vertical_precedure(velocity_y)
 
-	if CollideResult != NONE {
+	if CollideResult == NONE {
+		
+	} else {
 		if velocity_y < 0 { // pop
-			if check_bottom and CollideResult_x == NONE {
-				// do nothing
-			} else {
-				ceiling()
-			}
+			ceiling()
 		} else { // thud
 			thud()
 		}
