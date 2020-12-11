@@ -187,7 +187,7 @@ function accel_x_slope(Vector_x, Vector_y) {
 		if 0 <= Vector_y
 			move_y(SLOPE_MOUNT_VALUE)
 	} else {
-		var Cx = 0, Cy = -SLOPE_MOUNT_VALUE - SLOPE_RATIO * Distance
+		var Cx = 1, Cy = -SLOPE_MOUNT_VALUE - SLOPE_RATIO * Distance
 		for (var i = Distance; 0 < i; --i) {
 			Cx = Identity * i
 			if !check_solid_by(Cx, Cy) and !check_solid_line(Cx, Cy) {
