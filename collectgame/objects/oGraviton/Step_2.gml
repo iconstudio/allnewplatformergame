@@ -7,8 +7,8 @@ if velocity_x != 0 {
 		CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
 	}
 
-	if CollideResult_x != NONE { // push
-		//velocity_x = 0
+	if CollideResult_x != NONE {
+		push()
 	}
 }
 
@@ -27,9 +27,9 @@ if velocity_y != 0 {
 	if CollideResult == NONE {
 		
 	} else {
-		if velocity_y < 0 { // pop
+		if velocity_y < 0 {
 			ceiling()
-		} else { // thud
+		} else {
 			thud()
 		}
 	}
