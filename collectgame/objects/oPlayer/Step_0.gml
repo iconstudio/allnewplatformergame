@@ -19,12 +19,18 @@ or (!global.io_pressed_left and global.io_right and was_right) {
 var mover = move_key_peek//duet(move_key_peek == RIGHT, 1, duet(move_key_peek == LEFT, -1, 0))
 if mover != 0 {
 	if mover == -1 { // 왼쪽
+		if 0 < velocity_x and velocity_x < move_speed {
+			velocity_x = 0
+		}
 		if -move_speed < velocity_x {
 			velocity_x -= move_accel
 			if velocity_x < -move_speed
 				velocity_x = -move_speed
 		}
 	} else { // 오른쪽
+		if -move_speed < velocity_x and velocity_x < 0 {
+			velocity_x = 0
+		}
 		if velocity_x < move_speed {
 			velocity_x += move_accel
 			if move_speed < velocity_x
