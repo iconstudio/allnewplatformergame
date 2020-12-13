@@ -28,7 +28,7 @@
     "path": "folders/Blocks.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oObstacle",
+  "name": "oBlocks",
   "tags": [],
   "resourceType": "GMObject",
 }

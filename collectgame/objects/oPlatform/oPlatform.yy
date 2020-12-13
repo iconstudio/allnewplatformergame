@@ -8,8 +8,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "oObstacle",
-    "path": "objects/oObstacle/oObstacle.yy",
+    "name": "oBlocks",
+    "path": "objects/oBlocks/oBlocks.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
