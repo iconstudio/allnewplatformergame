@@ -24,7 +24,7 @@ function check_solid_by(Distance_x, Distance_y) {
 
 /// @function check_block_by(vector_x, vector_y)
 function check_block_by(Distance_x, Distance_y) {
-	return place_meeting(x + Distance_x, y + Distance_y, oObstacle)
+	return place_meeting(x + Distance_x, y + Distance_y, oBlocks)
 }
 
 /// @function check_plate_by(vector_x, vector_y)
@@ -85,9 +85,9 @@ function check_solid_box_vertical(Vector_x, Vector_y) {
 function check_block_box_vertical(Vector_x, Vector_y) {
 	var result = false
 	if Vector_y < 0
-		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_top + Vector_y, bbox_right + Vector_x, bbox_top, oObstacle, true, true))
+		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_top + Vector_y, bbox_right + Vector_x, bbox_top, oBlocks, true, true))
 	else
-		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_bottom, bbox_right + Vector_x, bbox_bottom + Vector_y, oObstacle, true, true))
+		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_bottom, bbox_right + Vector_x, bbox_bottom + Vector_y, oBlocks, true, true))
 	return result
 }
 
@@ -181,18 +181,19 @@ function accel_x_slope(Vector_x, Vector_y) {
 
 	var Vector = make_speed(Vector_x), Identity = sign(Vector_x)
 	var Distance = abs(Vector)
+	var Result = NONE
 
 	if !check_solid_horizontal(Vector) {
-		move_x(Vector)
+		Result = move_x(Vector)
 		if 0 <= Vector_y
 			move_y(SLOPE_MOUNT_VALUE)
 	} else {
-		var Cx = 1, Cy = -SLOPE_MOUNT_VALUE - SLOPE_RATIO * Distance
+		var Cx = 0, Cy = -SLOPE_MOUNT_VALUE - (SLOPE_RATIO * Distance)
 		for (var i = Distance; 0 < i; --i) {
 			Cx = Identity * i
 			if !check_solid_by(Cx, Cy) and !check_solid_line(Cx, Cy) {
 				move_y(Cy)
-				move_x(Cx)
+				Result = move_x(Cx)
 				move_y(-Cy)
 				break
 			}
@@ -200,17 +201,7 @@ function accel_x_slope(Vector_x, Vector_y) {
 		}
 	}
 
-	if 0 < Vector_x {
-		if check_solid_horizontal(1)
-			return RIGHT
-		move_outside_solid(180, 1)
-	} else if Vector_x < 0 {
-		if check_solid_horizontal(-1)
-			return LEFT
-		move_outside_solid(0, 1)
-	}
-
-	return NONE
+	return Result
 }
 
 //TODO: complete y grapping
