@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sTest",
-    "path": "sprites/sTest/sTest.yy",
+    "name": "sPlayerMask",
+    "path": "sprites/sPlayerMask/sPlayerMask.yy",
   },
   "solid": false,
   "visible": true,
