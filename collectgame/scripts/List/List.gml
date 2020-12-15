@@ -5,8 +5,19 @@ function _Container_Null() {}
 /// @function iterator_destroy(iterator)
 function iterator_destroy(Target_iterator) { Target_iterator._Data = 0; delete Target_iterator }
 
+/// @function less(a, b)
+function less(A, B) { return (A < B) }
+
 /// @function Iterator(container)
-function Iterator(Container) constructor {
+function Iterator(Parent) constructor {
+	/// @function equals_to(other)
+	static equals_to = function(Other) { return (_Serial_number == Other._Serial_number
+		and _Container == Other._Container and _Index == Other._Index) }
+
+	/// @function not_equals_to(other)
+	static not_equals_to = function(Other) { return (_Serial_number != Other._Serial_number
+		or _Container != Other._Container or _Index != Other._Index) }
+
 	/// @function vailidate()
 	static vailidate = function() { return (_Serial_number == _Container._Serial_number) }
 
@@ -26,6 +37,9 @@ function Iterator(Container) constructor {
 			return _Data[_Index]
 	}
 
+	/// @function set_index(index)
+	static set_index = function(Index) { _Index = Index; return self }
+
 	/// @function go_next()
 	static go_next = function() {
 		if _Index < _Size - 1
@@ -40,18 +54,18 @@ function Iterator(Container) constructor {
 		return self
 	}
 
-	_Container = weak_ref_create(Container)
+	_Container = weak_ref_create(Parent)
 	_Size = 0
-	var NewSize = Container._Size
+	var NewSize = Parent._Size
 	if 0 < NewSize {
 		_Data = array_create(NewSize)
 		_Size = NewSize
-		array_copy(_Data, 0, Container._Data, 0, _Size)
+		array_copy(_Data, 0, Parent._Data, 0, _Size)
 	} else {
 		_Data = undefined
 	}
 	_Index = 0
-	_Serial_number = Container._Serial_number
+	_Serial_number = Parent._Serial_number
 }
 
 /// @function List()
@@ -97,7 +111,10 @@ function List() constructor {
 	static back = function() { return (0 < _Size ? _Data[_Size - 1] : pointer_null) }
 
 	/// @function first()
-	static first = function() { return new Iterator(self) }
+	static first = function() { return (new Iterator(self)) }
+
+	/// @function last()
+	static last = function() { return (new Iterator(self).set_index(_Size)) }
 
 	/// @function set_at(index, value)
 	static set_at = function(Index, Value) {
@@ -122,25 +139,49 @@ function List() constructor {
 
 	/// @function erase_at(index)
 	static erase_at = function(Index) {
-		if is_undefined(Index) or is_nan(Index)
-			return false
+		if _Size <= 0 or is_undefined(Index) or is_nan(Index)
+			return undefined
 
 		if is_struct(Index) {
 			_Serial_change()
-			array_delete(_Data, Index._Index, 1)
-			return true
+			var Number = Index._Index
+			array_delete(_Data, Number, 1)
+			return (new Iterator(self).set_index(Number))
 		} else {
 			if Index < 0 or _Size <= Index
 				return false
 			_Serial_change()
 			array_delete(_Data_, Index, 1)
-			return true
+			return (new Iterator(self).set_index(_Size))
 		}
 	}
 
 	/// @function erase(begin, end)
-	static erase = function(First, End) {
-		_Serial_change()
+	static erase = function(First, Last) {
+		if _Size <= 0
+			return undefined
+
+		if is_struct(First)
+			First = First._Index
+		if is_struct(Last)
+			Last = Last._Index
+
+		if First < 0 or Last < 0 or _Size <= First or _Size < Last {
+			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nOut of bound."
+		} else if Last < First {
+			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nFirst is greater then Last."
+		} else {
+			_Serial_change()
+			var Count = Last - First
+			if Count == _Size {
+				array_resize(_Data, 1)
+				_Capacity = 1
+			} else {
+				array_delete(_Data, First, Count)
+				_Capacity -= Count
+			}
+			_Size -= Count
+		}
 	}
 
 	/// @function pop_back()
