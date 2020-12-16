@@ -1,7 +1,7 @@
 /// @description Things Update
 if velocity_x != 0 {
 	try {
-		friction_x = FRICTION_HORIZONTAL[grounded_state]
+		event_user(10)
 		if 0 != friction_x {
 			if 0 < velocity_x {
 				if friction_x < velocity_x
