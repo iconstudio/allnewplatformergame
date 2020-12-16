@@ -1,6 +1,5 @@
 /// @description Input Update
 global.io_left = keyboard_check(vk_left)
-show_debug_message("left")
 global.io_right = keyboard_check(vk_right)
 global.io_up = keyboard_check(vk_up)
 global.io_down = keyboard_check(vk_down)
