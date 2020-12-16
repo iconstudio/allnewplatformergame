@@ -140,7 +140,7 @@ function move_y(Vector) {
 	var Distance = abs(Vector)
 	if 0 < Vector {
 		if check_block_box_vertical(0, Vector) {
-			for (; 1 < Distance; Distance--) {
+			for (; 1 <= Distance; Distance--) {
 				if check_vertical(1)
 					return DOWN
 				y++
