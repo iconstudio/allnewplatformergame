@@ -21,8 +21,7 @@ if mover != 0 {
 	if mover == -1 { // 왼쪽
 		if 0 < velocity_x and velocity_x < move_speed {
 			velocity_x = 0
-		}
-		if -move_speed < velocity_x {
+		} else if -move_speed < velocity_x {
 			velocity_x -= move_accel
 			if velocity_x < -move_speed
 				velocity_x = -move_speed
@@ -30,14 +29,14 @@ if mover != 0 {
 	} else { // 오른쪽
 		if -move_speed < velocity_x and velocity_x < 0 {
 			velocity_x = 0
-		}
-		if velocity_x < move_speed {
+		} else if velocity_x < move_speed {
 			velocity_x += move_accel
 			if move_speed < velocity_x
 				velocity_x = move_speed
 		}
 	}
 	move_dir = mover
+	friction_x = 0
 }
 
 if velocity_x != 0
