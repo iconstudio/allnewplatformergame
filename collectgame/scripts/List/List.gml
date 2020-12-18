@@ -7,6 +7,9 @@ function _Container_Null() {
 /// @function iterator_destroy(iterator)
 function iterator_destroy(Target_iterator) { Target_iterator._Data = 0; delete Target_iterator }
 
+/// @function container_destroy(container)
+function container_destroy(Container) { Container._Data = 0; delete Container }
+
 /// @function less(a, b)
 function less(A, B) { return (A < B) }
 
@@ -151,7 +154,7 @@ function List() constructor {
 			return (new Iterator(self).set_index(Number))
 		} else {
 			if Index < 0 or _Size <= Index
-				return false
+				return NULL
 			_Serial_change()
 			array_delete(_Data_, Index, 1)
 			return (new Iterator(self).set_index(_Size))
