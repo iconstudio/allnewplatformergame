@@ -1,2 +1,2 @@
-if move_key_peek == NONE
+if move_key_anchor == NONE
 	event_inherited()

@@ -1,4 +1,4 @@
-/// @description Collecting items
+/// @description Collecting
 with other {
 	instance_destroy()
 }
