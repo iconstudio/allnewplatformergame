@@ -63,12 +63,19 @@ enum PHYSICS_MASS {
 	GIANT = 2,
 }
 
+enum TAG_TYPES {
+	CIRCLE, EYE, GLYPH, FIRE, DIAMOND
+}
+
 #macro NONE 0
 #macro LEFT -1
 #macro RIGHT 1
 #macro UP -1
 #macro DOWN 1
 
+#macro GAME_BOARD_WIDTH_MAX 10
+#macro GAME_BOARD_HEIGHT_MAX 10
+globalvar game_scene;
 
 print = function(Container) {
 	for (var i = 0; i < Container.get_size(); ++i)
