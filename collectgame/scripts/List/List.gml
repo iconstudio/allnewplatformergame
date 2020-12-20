@@ -174,7 +174,7 @@ function List() constructor {
 		var Count = LastIndex - FirstIndex
 		_Size -= Count
 		if 0 == _Size {
-			_Data = 0 // delete _Data
+			_Data = 0 // deletes _Data
 			_Data = []
 			_Capacity = 1
 			return undefined
