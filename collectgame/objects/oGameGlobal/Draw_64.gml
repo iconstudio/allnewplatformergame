@@ -1,10 +1,12 @@
 /// @description Test drawing
+/*
+
 draw_set_alpha(0.5)
 
 var i, j, data, dx, dy
 for (j = 0; j < GAME_BOARD_HEIGHT_MAX; ++j) {
 	for (i = 0; i < GAME_BOARD_WIDTH_MAX; ++i) {
-		data = game_scene.board[# i, j]
+		data = board[# i, j]
 		if data == 1
 			draw_set_color($ff8000)
 		else
