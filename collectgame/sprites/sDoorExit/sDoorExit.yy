@@ -24,12 +24,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"7b76cfb9-7b60-44cd-9673-27cbbfe6cb3e","path":"sprites/Sprite12/Sprite12.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"7b76cfb9-7b60-44cd-9673-27cbbfe6cb3e","path":"sprites/Sprite12/Sprite12.yy",},"LayerId":{"name":"e3d4bb6c-ccbd-48fd-911f-0a981b05772f","path":"sprites/Sprite12/Sprite12.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"Sprite12","path":"sprites/Sprite12/Sprite12.yy",},"resourceVersion":"1.0","name":"7b76cfb9-7b60-44cd-9673-27cbbfe6cb3e","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"4093de97-300f-41b7-abba-b7e89d7a09c4","path":"sprites/sDoorExit/sDoorExit.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"4093de97-300f-41b7-abba-b7e89d7a09c4","path":"sprites/sDoorExit/sDoorExit.yy",},"LayerId":{"name":"87b3e7f3-c1b9-4da5-80a0-5b7d92a42f31","path":"sprites/sDoorExit/sDoorExit.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},"resourceVersion":"1.0","name":"4093de97-300f-41b7-abba-b7e89d7a09c4","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
-    "spriteId": {"name":"Sprite12","path":"sprites/Sprite12/Sprite12.yy",},
+    "spriteId": {"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -41,10 +41,10 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"39f5f3b6-a70a-4b93-bde3-fdc1b57e3322","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"7b76cfb9-7b60-44cd-9673-27cbbfe6cb3e","path":"sprites/Sprite12/Sprite12.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"d05b1af8-ff39-444c-acf1-3177ea54d11d","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"4093de97-300f-41b7-abba-b7e89d7a09c4","path":"sprites/sDoorExit/sDoorExit.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -58,21 +58,21 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"Sprite12","path":"sprites/Sprite12/Sprite12.yy",},
+    "parent": {"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},
     "resourceVersion": "1.3",
-    "name": "Sprite12",
+    "name": "sDoorExit",
     "tags": [],
     "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"e3d4bb6c-ccbd-48fd-911f-0a981b05772f","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"87b3e7f3-c1b9-4da5-80a0-5b7d92a42f31","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
     "name": "Sprites",
     "path": "folders/Sprites.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Sprite12",
+  "name": "sDoorExit",
   "tags": [],
   "resourceType": "GMSprite",
 }
