@@ -1,7 +1,5 @@
 /// @function 
-function _Container_Null() {
-	static toString = function() { return "%NULL%" }
-}
+function _Container_Null() constructor { static toString = function() { return "%NULL%" } }
 #macro NULL _Container_Null
 
 /// @function iterator_destroy(iterator)
