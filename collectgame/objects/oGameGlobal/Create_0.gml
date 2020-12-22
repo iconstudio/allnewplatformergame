@@ -9,11 +9,16 @@ enum SCENE_STATE {
 	EXIT_TO_MENU = 99
 }
 
-game_scene = (function() {
+game_scene = new (function() constructor {
+	static board_clear = function() {
+		ds_grid_clear(board, 0)
+		ds_grid_set(board, player_board_pos[0], player_board_pos[1], 1)
+	}
+
 	state = SCENE_STATE.READY_1
-
 	board = ds_grid_create(GAME_BOARD_WIDTH_MAX, GAME_BOARD_HEIGHT_MAX)
+	player_board_pos = [5, 5]
+	player_board_pos_previous = [5, 5]
 
-	player_index = 0
-	player_index_previous = 0
+	board_clear()
 })()
