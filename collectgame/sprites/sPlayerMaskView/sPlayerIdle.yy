@@ -9,7 +9,7 @@
   "swfPrecision": 2.525,
   "bbox_left": 4,
   "bbox_right": 19,
-  "bbox_top": 3,
+  "bbox_top": 8,
   "bbox_bottom": 23,
   "HTile": false,
   "VTile": false,
@@ -100,8 +100,8 @@
     4278231211,
     4281367321,
   ],
-  "gridX": 8,
-  "gridY": 8,
+  "gridX": 0,
+  "gridY": 0,
   "frames": [
     {"compositeImage":{"FrameId":{"name":"b14f545d-d570-4df7-8494-86888ed03ac7","path":"sprites/sPlayerIdle/sPlayerIdle.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"b14f545d-d570-4df7-8494-86888ed03ac7","path":"sprites/sPlayerIdle/sPlayerIdle.yy",},"LayerId":{"name":"55979bfb-a44c-4db7-a2f5-ea76e142e49e","path":"sprites/sPlayerIdle/sPlayerIdle.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
