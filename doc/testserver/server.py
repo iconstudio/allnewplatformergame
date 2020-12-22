@@ -11,6 +11,10 @@ api = Api(app)
 def hello():
 	name = request.args.get("name", "World")
 	return f'Hello, {escape(name)}!'
+ 
+@app.route('/environments/<language>')
+def environments(language):
+	return jsonify({"language":language})
 
 @app.route("/subroot1")
 def fn_subroot1():
@@ -32,10 +36,6 @@ class RegistUser(Resource):
 """app_route("/user")
 """
 api.add_resource(RegistUser, '/user')
- 
-@app.route('/environments/<language>')
-def environments(language):
-	return jsonify({"language":language})
 
 if __name__ == "__main__":
 	app.run()
