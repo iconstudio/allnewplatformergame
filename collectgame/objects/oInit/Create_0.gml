@@ -75,6 +75,7 @@ enum TAG_TYPES {
 
 #macro GAME_BOARD_WIDTH_MAX 10
 #macro GAME_BOARD_HEIGHT_MAX 10
+#macro GAME_BOARD_SIZE 100
 globalvar game_scene;
 
 print = function(Container) {
