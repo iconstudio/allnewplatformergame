@@ -1,29 +1,44 @@
 /// @description Initialization
-enum SCENE_STATE {
-	READY_1 = 0,
-	READY_2 = 1,
-	GAME = 10,
-	SCORE = 50,
-	END = 80,
-	CLEAN = 90,
-	EXIT_TO_MENU = 99
-}
-
 board_data = function() constructor {
 	seed = random_get_seed()
 	category = BOARD_CELL_CATEGORY.NORMAL
 	level = 0
+	chunk = ""
+
+	static toString = function() { // json
+		return "{\n"
+		+ "\tseed: " + string(seed) + ", "
+		+ "\tcategory: " + string(category) + ", "
+		+ "\tlevel: " + string(level) + ", "
+		+ "\tchunk: " + string(chunk) + ", "
+		+ "\n}"
+	}
 }
 
 board_clear = function() {
-	ds_grid_clear(board, 0)
-	ds_grid_set(board, player_board_pos[0], player_board_pos[1], 1)
+	ds_grid_clear(board, undefined)
+	gc_collect()
+}
+
+board_meet = function(xpos, ypos) {
+	if player_board_pos[0] == xpos and player_board_pos[1] == ypos
+		return false
+
+	player_board_pos_previous[0] = player_board_pos[0]
+	player_board_pos_previous[1] = player_board_pos[1]
+	player_board_pos[0] = xpos
+	player_board_pos[1] = ypos
+
+	
+
+	return true
 }
 
 state = SCENE_STATE.READY_1
-board = ds_grid_create(GAME_BOARD_WIDTH_MAX, GAME_BOARD_HEIGHT_MAX)
+board = ds_grid_create(GAME_BOARD_W, GAME_BOARD_H)
 player_board_pos = [5, 5]
 player_board_pos_previous = [5, 5]
+ds_grid_set(board, player_board_pos[0], player_board_pos[1], undefined)
 
 board_clear()
 
