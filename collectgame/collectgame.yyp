@@ -60,7 +60,11 @@
   "tutorialPath": "",
   "configs": {
     "name": "Default",
-    "children": [],
+    "children": [
+      {"name":"Desktop","children":[],},
+      {"name":"Mobile","children":[],},
+      {"name":"Web","children":[],},
+    ],
   },
   "RoomOrderNodes": [
     {"roomId":{"name":"roomInit","path":"rooms/roomInit/roomInit.yy",},},

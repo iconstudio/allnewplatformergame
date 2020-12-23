@@ -1,6 +1,4 @@
-globalvar frame_global;
-frame_global = 0
-
+#region Physics
 #macro SECOND_TO_STEP 100 // room_speed (fps)
 #macro STEP_TO_SECOND 0.01
 #macro SECONDS *SECOND_TO_STEP
@@ -62,6 +60,18 @@ enum PHYSICS_MASS {
 	HEAVY = 1,
 	GIANT = 2,
 }
+#endregion
+
+#region Game
+enum SCENE_STATE {
+	READY_1 = 0,
+	READY_2 = 1,
+	GAME = 10,
+	SCORE = 50,
+	END = 80,
+	CLEAN = 90,
+	EXIT_TO_MENU = 99
+}
 
 enum TAG_TYPES {
 	CIRCLE, EYE, GLYPH, FIRE, DIAMOND
@@ -73,16 +83,39 @@ enum BOARD_CELL_CATEGORY {
 	BORDER = 99
 }
 
+#macro GAME_CELL_SIZE 16
+#macro GAME_CELL_W 20
+#macro GAME_CELL_H 20
+#macro GAME_WIDTH 320
+#macro GAME_HEIGHT 320
+
+#macro GAME_BOARD_W 10
+#macro GAME_BOARD_H 10
+#macro GAME_BOARD_NUMBER 100
+globalvar game_scene;
+#endregion
+
+#region Resolutions
+global.window_scale = 2.0
+#macro WINDOW_WIDTH 640
+#macro WINDOW_HEIGHT 480
+window_set_min_width(WINDOW_WIDTH)
+window_set_min_height(WINDOW_HEIGHT)
+window_set_size(WINDOW_WIDTH * global.window_scale, WINDOW_HEIGHT * global.window_scale)
+
+for (var i = room_first; room_exists(i); i = room_next(i)) {
+	room_set_view_enabled(i, true)
+	room_set_viewport(i, 0, true, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+}
+
+application_surface_enable(true)
+#endregion
+
 #macro NONE 0
 #macro LEFT -1
 #macro RIGHT 1
 #macro UP -1
 #macro DOWN 1
-
-#macro GAME_BOARD_WIDTH_MAX 10
-#macro GAME_BOARD_HEIGHT_MAX 10
-#macro GAME_BOARD_SIZE 100
-globalvar game_scene;
 
 print = function(Container) {
 	for (var i = 0; i < Container.get_size(); ++i)
@@ -107,6 +140,5 @@ show_debug_message("Popping: ")
 repeat TestSize show_debug_message(TestList.pop_back())
 show_debug_message(TestList.back())
 show_debug_message("size: " + string(TestList.get_size()))
-
 
 alarm[0] = 1
