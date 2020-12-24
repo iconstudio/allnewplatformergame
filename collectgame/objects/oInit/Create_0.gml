@@ -1,3 +1,8 @@
+#region Generals
+globalvar configuration;
+configuration = os_get_config()
+#endregion
+
 #region Physics
 #macro SECOND_TO_STEP 100 // room_speed (fps)
 #macro STEP_TO_SECOND 0.01
@@ -83,11 +88,9 @@ enum BOARD_CELL_CATEGORY {
 	BORDER = 99
 }
 
-#macro GAME_CELL_SIZE 16
-#macro GAME_CELL_W 20
-#macro GAME_CELL_H 20
-#macro GAME_WIDTH 320
-#macro GAME_HEIGHT 320
+#macro BLOCK_SIZE 16
+#macro BLOCK_W 20
+#macro BLOCK_H 20
 
 #macro GAME_BOARD_W 10
 #macro GAME_BOARD_H 10
@@ -95,20 +98,38 @@ enum BOARD_CELL_CATEGORY {
 globalvar game_scene;
 #endregion
 
-#region Resolutions
-global.window_scale = 2.0
+#region Graphics
+#macro GAME_WIDTH BLOCK_W * BLOCK_SIZE
+#macro GAME_HEIGHT BLOCK_H * BLOCK_SIZE
+#macro PORT_WIDTH 640
+#macro PORT_HEIGHT 640
+
 #macro WINDOW_WIDTH 640
 #macro WINDOW_HEIGHT 480
+#macro APP_SCALE 2.0
+#macro APP_WIDTH WINDOW_WIDTH * APP_SCALE
+#macro APP_HEIGHT WINDOW_HEIGHT * APP_SCALE
+global.app_position = [
+	(APP_WIDTH - PORT_WIDTH) * 0.5,
+	(APP_HEIGHT - PORT_HEIGHT) * 0.25
+]
+
 window_set_min_width(WINDOW_WIDTH)
 window_set_min_height(WINDOW_HEIGHT)
-window_set_size(WINDOW_WIDTH * global.window_scale, WINDOW_HEIGHT * global.window_scale)
+window_set_size(APP_WIDTH, APP_HEIGHT)
 
-for (var i = room_first; room_exists(i); i = room_next(i)) {
+var i, cam
+for (i = room_first; room_exists(i); i = room_next(i)) {
 	room_set_view_enabled(i, true)
-	room_set_viewport(i, 0, true, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+
+	cam = camera_create_view(0, 0, GAME_WIDTH, GAME_HEIGHT, 0, oPlayer, -1, -1, GAME_WIDTH * 0.5, GAME_HEIGHT * 0.5)
+	room_set_camera(i, 0, cam)
+	room_set_viewport(i, 0, true, 0, 0, PORT_WIDTH, PORT_HEIGHT)
 }
 
 application_surface_enable(true)
+application_surface_draw_enable(false)
+surface_resize(application_surface, GAME_WIDTH, GAME_HEIGHT)
 #endregion
 
 #macro NONE 0
