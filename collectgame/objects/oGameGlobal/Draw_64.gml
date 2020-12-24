@@ -4,8 +4,8 @@
 draw_set_alpha(0.5)
 
 var i, j, data, dx, dy
-for (j = 0; j < GAME_BOARD_H; ++j) {
-	for (i = 0; i < GAME_BOARD_W; ++i) {
+for (j = 0; j < GAME_BOARD_NUMBER_H; ++j) {
+	for (i = 0; i < GAME_BOARD_NUMBER_W; ++i) {
 		data = board[# i, j]
 		if data == 1
 			draw_set_color($ff8000)
