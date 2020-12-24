@@ -91,31 +91,27 @@ enum BOARD_CELL_CATEGORY {
 #macro BLOCK_SIZE 16
 #macro BLOCK_W 20
 #macro BLOCK_H 20
+#macro GAME_WIDTH BLOCK_W * BLOCK_SIZE
+#macro GAME_HEIGHT BLOCK_H * BLOCK_SIZE
 
-#macro GAME_BOARD_W 10
-#macro GAME_BOARD_H 10
+#macro GAME_BOARD_NUMBER_W 10
+#macro GAME_BOARD_NUMBER_H 10
 #macro GAME_BOARD_NUMBER 100
 globalvar game_scene;
 #endregion
 
 #region Graphics
-#macro GAME_WIDTH BLOCK_W * BLOCK_SIZE
-#macro GAME_HEIGHT BLOCK_H * BLOCK_SIZE
 #macro PORT_WIDTH 640
 #macro PORT_HEIGHT 640
-
-#macro WINDOW_WIDTH 640
-#macro WINDOW_HEIGHT 480
-#macro APP_SCALE 2.0
-#macro APP_WIDTH WINDOW_WIDTH * APP_SCALE
-#macro APP_HEIGHT WINDOW_HEIGHT * APP_SCALE
+#macro APP_WIDTH 1280
+#macro APP_HEIGHT 960
 global.app_position = [
 	(APP_WIDTH - PORT_WIDTH) * 0.5,
 	(APP_HEIGHT - PORT_HEIGHT) * 0.25
 ]
 
-window_set_min_width(WINDOW_WIDTH)
-window_set_min_height(WINDOW_HEIGHT)
+window_set_min_width(APP_WIDTH)
+window_set_min_height(APP_HEIGHT)
 window_set_size(APP_WIDTH, APP_HEIGHT)
 
 var i, cam
