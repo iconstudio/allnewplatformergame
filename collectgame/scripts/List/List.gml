@@ -73,8 +73,8 @@ function Iterator(Parent) constructor {
 
 /// @function List()
 function List() constructor {
-	/// @function data()
-	static data = function() { return _Data }
+	/// @function raw_data()
+	static raw_data = function() { return _Data }
 
 	/// @function get_size()
 	static get_size = function() { return _Size }
