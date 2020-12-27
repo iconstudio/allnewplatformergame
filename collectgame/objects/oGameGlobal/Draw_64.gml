@@ -1,20 +1,26 @@
 /// @description Test drawing
-/*
+draw_set_halign(1)
+draw_set_valign(1)
 
-draw_set_alpha(0.5)
-
-var i, j, data, dx, dy
-for (j = 0; j < GAME_BOARD_NUMBER_H; ++j) {
-	for (i = 0; i < GAME_BOARD_NUMBER_W; ++i) {
+var i, j, data, dx, dy, color, dist = 0
+for (j = 0; j < GAME_BOARD_NUMBER_S; ++j) {
+	for (i = 0; i < GAME_BOARD_NUMBER_S; ++i) {
 		data = board[# i, j]
-		if data == 1
-			draw_set_color($ff8000)
-		else
-			draw_set_color($ff)
+		dx = floor(32 + i * 24)
+		dy = floor(32 + j * 24)
 
-		dx = 32 + i * 24
-		dy = 32 + j * 24
-		draw_rectangle(dx, dy, dx + 16, dy + 16, false)
+		if is_real(data) {
+			draw_set_alpha((data / DIFFICULTY_MAX))
+			draw_set_color(c_fuchsia)
+			draw_rectangle(dx, dy, dx + 16, dy + 16, false)
+			draw_set_alpha(1)
+			draw_set_color(0)
+			draw_text(dx + 8, dy + 8, string(data))
+		} else {
+			draw_set_alpha(1)
+			draw_set_color($0070aa)
+			draw_rectangle(dx, dy, dx + 16, dy + 16, false)
+		}
 	}
 }
 
