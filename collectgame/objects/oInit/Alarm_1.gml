@@ -1,10 +1,9 @@
-/// @description Setting up
+/// @description Setting up window
 switch configuration {
 	case "Default":
 	case "Desktop":
 		window_center()
 		window_set_position(window_get_x(), 40)
-		audio_channel_num(128)
 	break
 
 	default:
