@@ -1,6 +1,0 @@
-
-
-/// @function Map
-function Map() {
-
-}
