@@ -15,7 +15,7 @@ get_ratio_from_diestance = function(xpos, ypos) {
 }
 
 ///@description trying to change to a new cell.
-try_new_xell = function(pX, pY) {
+try_new_xell = function() {
 	ds_grid_copy(board, global.board_default)
 }
 
@@ -55,6 +55,8 @@ board_init = function() {
 }
 
 state = SCENE_STATE.READY_1
+state_methods = ds_map_create()
+
 initial_seed = random_get_seed()
 board = ds_grid_create(GAME_BOARD_NUMBER_S, GAME_BOARD_NUMBER_S)
 board_transitioning = false
