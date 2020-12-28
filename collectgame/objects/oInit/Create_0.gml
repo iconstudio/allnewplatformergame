@@ -95,6 +95,8 @@ enum SCENE_STATE {
 	READY_1 = 0,
 	READY_2 = 1,
 	GAME = 10,
+	TRANSITION = 11,
+	PAUSED = 30,
 	SCORE = 50,
 	END = 80,
 	CLEAN = 90,
@@ -107,14 +109,18 @@ enum BOARD_CELL_STATES { NOTHING = -1, DISABLED, ENABLED }
 
 enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99 }
 
+globalvar view_xview, view_yview;
+global.player_x = 0
+global.player_y = 0
+
 #macro BLOCK_FINE_SIZE 8
 #macro BLOCK_FINE_W 40
 #macro BLOCK_FINE_H 40
 #macro BLOCK_SIZE 16
 #macro BLOCK_W 20
 #macro BLOCK_H 20
-#macro GAME_WIDTH BLOCK_W * BLOCK_SIZE
-#macro GAME_HEIGHT BLOCK_H * BLOCK_SIZE
+#macro XELL_WIDTH BLOCK_W * BLOCK_SIZE
+#macro XELL_HEIGHT BLOCK_H * BLOCK_SIZE
 
 #macro GAME_BOARD_NUMBER_S 35
 #macro GAME_BOARD_NUMBER_H 17
@@ -159,16 +165,16 @@ var i, cam
 for (i = room_first; room_exists(i); i = room_next(i)) {
 	room_set_view_enabled(i, true)
 
-	cam = camera_create_view(0, 0, GAME_WIDTH, GAME_HEIGHT, 0, oPlayer, -1, -1, GAME_WIDTH * 0.5, GAME_HEIGHT * 0.5)
+	cam = camera_create_view(0, 0, XELL_WIDTH, XELL_HEIGHT, 0, oPlayer, -1, -1, XELL_WIDTH * 0.5, XELL_HEIGHT * 0.5)
 	room_set_camera(i, 0, cam)
 	room_set_viewport(i, 0, true, 0, 0, PORT_WIDTH, PORT_HEIGHT)
 }
-room_set_width(roomGame, GAME_BOARD_NUMBER_S * GAME_WIDTH)
-room_set_height(roomGame, GAME_BOARD_NUMBER_S * GAME_HEIGHT)
+room_set_width(roomGame, GAME_BOARD_NUMBER_S * XELL_WIDTH)
+room_set_height(roomGame, GAME_BOARD_NUMBER_S * XELL_HEIGHT)
 
 application_surface_enable(true)
 application_surface_draw_enable(false)
-surface_resize(application_surface, GAME_WIDTH, GAME_HEIGHT)
+surface_resize(application_surface, XELL_WIDTH, XELL_HEIGHT)
 #endregion
 
 print = function(Container) {
