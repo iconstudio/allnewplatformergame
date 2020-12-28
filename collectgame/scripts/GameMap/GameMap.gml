@@ -31,12 +31,12 @@ function xell() constructor {
 
 	static activate = function() {
 		enable_phase = BOARD_CELL_STATES.ENABLED
-		instance_activate_region(x, y, x + GAME_WIDTH, y + GAME_HEIGHT, true)
+		instance_activate_region(x, y, x + XELL_WIDTH, y + XELL_HEIGHT, true)
 	}
 
 	static deactivate = function() {
 		enable_phase = BOARD_CELL_STATES.DISABLED
-		instance_deactivate_region(x, y, x + GAME_WIDTH, y + GAME_HEIGHT, true, false)
+		instance_deactivate_region(x, y, x + XELL_WIDTH, y + XELL_HEIGHT, true, false)
 		instance_activate_object(oPlayer)
 	}
 
@@ -53,15 +53,20 @@ function xell() constructor {
 /// @function make_xell(x_index, y_index)
 function make_xell(U, V) {
 	var thexell = new xell(U, V)
-	thexell.x = U * GAME_WIDTH
-	thexell.y = V * GAME_HEIGHT
+	thexell.x = U * XELL_WIDTH
+	thexell.y = V * XELL_HEIGHT
 	return thexell
 }
 
 /// @function make_special_xell(contents, x_index, y_index)
 function make_special_xell(Content, U, V) {
 	var thexell = new xell(U, V)
-	thexell.x = U * GAME_WIDTH
-	thexell.y = V * GAME_HEIGHT
+	thexell.x = U * XELL_WIDTH
+	thexell.y = V * XELL_HEIGHT
 	return thexell
+}
+
+/// @function xell_snap(x, y)
+function xell_snap(X, Y) {
+	return [floor(X / XELL_WIDTH) * XELL_WIDTH, floor(Y / XELL_HEIGHT) * XELL_HEIGHT]
 }
