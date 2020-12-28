@@ -119,14 +119,26 @@ enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99
 #macro GAME_BOARD_NUMBER_S 35
 #macro GAME_BOARD_NUMBER_H 17
 #macro GAME_BOARD_NUMBER GAME_BOARD_NUMBER_S * GAME_BOARD_NUMBER_S
-globalvar game_scene, game_board_chunks;
-game_board_chunks = ds_map_create()
+globalvar game_scene;
+global.game_board_chunks = ds_map_create()
 
 #macro DIFFICULTY_MAX 10
 global.diff_board_distribution = array_create(DIFFICULTY_MAX, 2)
 global.diff_board_distribution[7] = 3
 global.diff_board_distribution[6] = 3
 //diff_board_distribution[3] = 1
+
+global.board_default = ds_grid_create(GAME_BOARD_NUMBER_S, GAME_BOARD_NUMBER_S)
+var range = GAME_BOARD_NUMBER_H + 3
+ds_grid_clear(global.board_default, DIFFICULTY_MAX) // 10
+
+var idiff = DIFFICULTY_MAX - 1, i
+for (i = 0; 0 < idiff and i < DIFFICULTY_MAX and 0 < range; ++i) {
+	ds_grid_add_disk(global.board_default, GAME_BOARD_NUMBER_H, GAME_BOARD_NUMBER_H, range, -1)
+	range -= global.diff_board_distribution[idiff]
+	idiff--
+}
+ds_grid_set(global.board_default, GAME_BOARD_NUMBER_H, GAME_BOARD_NUMBER_H, 0)
 #endregion
 
 #region Graphics
