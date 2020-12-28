@@ -1,4 +1,7 @@
 {
+  "ConfigValues": {
+    "Desktop": {"option_lastchanged":"28 December 2020 8:55:29","option_author":"Iconstudio","option_mips_for_3d_textures":"true",},
+  },
   "option_gameguid": "3e624ee2-f822-48d5-9b0a-110c55350ef4",
   "option_game_speed": 100,
   "option_mips_for_3d_textures": false,
