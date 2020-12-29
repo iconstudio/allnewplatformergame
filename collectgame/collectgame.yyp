@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"oEditor","path":"objects/oEditor/oEditor.yy",},"order":2,},
     {"id":{"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},"order":16,},
     {"id":{"name":"oSpellBook","path":"objects/oSpellBook/oSpellBook.yy",},"order":5,},
     {"id":{"name":"oGameGlobal","path":"objects/oGameGlobal/oGameGlobal.yy",},"order":3,},
