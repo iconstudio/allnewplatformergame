@@ -109,7 +109,7 @@ enum BOARD_CELL_STATES { NOTHING = -1, DISABLED, ENABLED }
 
 enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99 }
 
-globalvar view_xview, view_yview;
+globalvar view_x, view_y;
 global.player_x = 0
 global.player_y = 0
 
@@ -145,6 +145,10 @@ for (i = 0; 0 < idiff and i < DIFFICULTY_MAX and 0 < range; ++i) {
 	idiff--
 }
 ds_grid_set(global.board_default, GAME_BOARD_NUMBER_H, GAME_BOARD_NUMBER_H, 0)
+#endregion
+#macro BLK 10
+#region Editor
+
 #endregion
 
 #region Graphics
