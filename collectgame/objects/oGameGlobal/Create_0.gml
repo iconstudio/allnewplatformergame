@@ -41,9 +41,6 @@ board_meet = function(xpos, ypos) {
 	board_transitioning = true
 	board_transition_value = 0
 
-	//cell_deactivate(player_board_pos[0], player_board_pos[1])
-	//cell_activate(xpos, ypos)
-
 	player_board_pos[0] = xpos
 	player_board_pos[1] = ypos
 	return true
