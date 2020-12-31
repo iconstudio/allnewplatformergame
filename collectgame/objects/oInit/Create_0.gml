@@ -146,9 +146,21 @@ for (i = 0; 0 < idiff and i < DIFFICULTY_MAX and 0 < range; ++i) {
 }
 ds_grid_set(global.board_default, GAME_BOARD_NUMBER_H, GAME_BOARD_NUMBER_H, 0)
 #endregion
-#macro BLK 10
-#region Editor
 
+#region Editor
+#macro BLK 10
+
+global.GAME_LAYER_NUMBER = 7
+global.GAME_LAYERS = [
+	["Background", "BG"],
+	["Block_1", "Blocks Below"],
+	["Traps", "Traps"],
+	["Block_2", "Blocks"],
+	["Instances", "Instances"],
+	["interactions", "interactions"],
+	["Player", "Player"],
+	["Block_3", "Blocks Above"]
+]
 #endregion
 
 #region Graphics
