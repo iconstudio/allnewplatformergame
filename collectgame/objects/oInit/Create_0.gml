@@ -148,6 +148,10 @@ ds_grid_set(global.board_default, GAME_BOARD_NUMBER_H, GAME_BOARD_NUMBER_H, 0)
 #endregion
 
 #region Editor
+enum EDITOR_STATE {
+	READY_1 = 0,
+}
+
 #macro BLK 10
 
 global.GAME_LAYER_NUMBER = 7

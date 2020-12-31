@@ -9,6 +9,7 @@ function Editor() {
 	scale_min = 50
 	scale_max = 500
 
+	mode = -1
 	tools = new List()
 	selected_tool_index = 0
 
@@ -24,7 +25,9 @@ function Editor() {
 
 	/// @function tool_add(name, icon, predicate, [shortcut_method])
 	tool_add = function(Name, Icon, Predicate, Hotkey) {
-		tools.push_back(new EditorTool(Name, Icon, Predicate, Hotkey))
+		var one = new EditorTool(Name, Icon, Predicate, Hotkey)
+		tools.push_back(one)
+		return one
 	}
 
 	/// @function position_adjust()
