@@ -1,36 +1,37 @@
 /// @description Initialization
 Editor()
 
-tool_add("Brush", sEditorToolBrush, function() {
-	
+TOOL_BRUSH = tool_add("Brush", sEditorToolBrush, function() {
+	//mode = TOOL_BRUSH
 }, function() {
 	return keyboard_check_pressed(ord("1")) or keyboard_check_pressed(ord("B"))
 })
 
-tool_add("Eraser", sEditorToolBrush, function() {
-	
+TOOL_ERASER = tool_add("Eraser", sEditorToolBrush, function() {
+	//mode = TOOL_ERASER
 }, function() {
 	return keyboard_check_pressed(ord("2")) or keyboard_check_pressed(ord("E"))
 })
 
-tool_add("Fill", sEditorToolBrush, function() {
-	
+TOOL_FILL = tool_add("Fill", sEditorToolBrush, function() {
+	//mode = TOOL_FILL
 }, function() {
 	return keyboard_check_pressed(ord("3")) or keyboard_check_pressed(ord("F"))
 })
 
-tool_add("Select Region", sEditorToolBrush, function() {
-	
+TOOL_SELECTR = tool_add("Select Region", sEditorToolBrush, function() {
+	mode = TOOL_SELECTR
 }, function() {
 	return keyboard_check_pressed(ord("4")) or keyboard_check_pressed(ord("S"))
 })
 
-tool_add("Cursor", sEditorToolBrush, function() {
-	
+TOOL_CURSOR = tool_add("Cursor", sEditorToolBrush, function() {
+	//mode = TOOL_CURSOR
 }, function() {
 	return keyboard_check_pressed(ord("5")) or keyboard_check_pressed(ord("C"))
 })
 
+tool_number = tools.get_size()
 grid_on = true
 grid_surface = -1
 grid_size = 16
@@ -39,8 +40,4 @@ grid_h_count = ceil(PORT_HEIGHT / grid_size)
 event_user(0)
 
 editor_surface = -1
-editor_position = [
-	(APP_WIDTH - XELL_WIDTH * 2) * 0.5,
-	(APP_HEIGHT - XELL_HEIGHT * 2) * 0.25
-]
 //event_user(1)

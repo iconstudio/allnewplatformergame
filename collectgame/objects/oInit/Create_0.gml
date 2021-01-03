@@ -1,4 +1,8 @@
 #region Generals
+#macro SECOND_TO_STEP 100 // room_speed (fps)
+#macro STEP_TO_SECOND 0.01
+#macro SECONDS *SECOND_TO_STEP
+
 globalvar configuration;
 configuration = os_get_config()
 switch configuration {
@@ -27,9 +31,6 @@ switch configuration {
 #endregion
 
 #region Physics
-#macro SECOND_TO_STEP 100 // room_speed (fps)
-#macro STEP_TO_SECOND 0.01
-#macro SECONDS *SECOND_TO_STEP
 #macro MILLISECOND_TO_SECOND 0.000001
 #macro METER_TO_PIXEL 10 // 1m == 10px
 
@@ -168,6 +169,7 @@ global.GAME_LAYERS = [
 #endregion
 
 #region Graphics
+#macro PORT_SCALE 2
 #macro PORT_WIDTH 640
 #macro PORT_HEIGHT 640
 #macro APP_WIDTH 1280

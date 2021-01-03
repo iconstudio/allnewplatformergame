@@ -2,6 +2,9 @@ delete tools
 keyboard_set_map(vk_backspace, vk_backspace)
 window_set_cursor(cr_none)
 
+view_x = 0
+view_y = 0
+
 if surface_exists(grid_surface)
 	surface_free(grid_surface)
 if surface_exists(editor_surface)
