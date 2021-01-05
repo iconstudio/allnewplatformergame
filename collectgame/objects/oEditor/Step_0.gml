@@ -1,4 +1,7 @@
 /// @description Update and smooth scaling
+mx = device_mouse_x_to_gui(0)
+my = device_mouse_y_to_gui(0)
+
 var h_check = global.io_right - global.io_left
 var v_check = global.io_down - global.io_up
 

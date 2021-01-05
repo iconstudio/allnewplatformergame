@@ -3,6 +3,9 @@ function Editor() {
 	keyboard_set_map(vk_backspace, vk_escape)
 	window_set_cursor(cr_default)
 
+	mx = -1
+	my = -1
+
 	scaling = false
 	scale_time = 0
 	scale_period = seconds(0.5)
@@ -40,6 +43,9 @@ function Editor() {
 	tool_number = 0
 	selected_tool_index = 0
 
+	gui_x_begin = 8
+	gui_y_begin = 8
+
 	selected_layer_index = 0
 	selected_layer = global.GAME_LAYERS[0]
 	block_group_index = 0
@@ -50,11 +56,17 @@ function Editor() {
 		selected_layer = global.GAME_LAYERS[Index]
 	}
 
-	/// @function tool_add(name, icon, predicate, [shortcut_method])
-	tool_add = function(Name, Icon, Predicate, Hotkey) {
-		var one = new EditorTool(Name, Icon, method(self, Predicate), Hotkey)
-		tools.push_back(one)
-		return one
+	/// @function tool_create(name, icon, predicate, [shortcut_method])
+	tool_create = function(Name, Icon, Predicate, Hotkey) {
+		return new EditorTool(Name, Icon, method(self, Predicate), Hotkey)
+	}
+
+	/// @function toolbar_add(tool)
+	toolbar_add = function(Tool) {
+		Tool.x = gui_x_begin
+		Tool.y = gui_y_begin + tool_number * 90
+		tools.push_back(Tool)
+		tool_number = tools.get_size()
 	}
 
 	/// @function tool_changable()
@@ -73,25 +85,59 @@ function Editor() {
 		width = XELL_WIDTH * SCL
 		height = XELL_HEIGHT * SCL
 
-		view_w = ceil(XELL_WIDTH / SCL)
-		view_h = ceil(XELL_HEIGHT / SCL)
+		view_w = (XELL_WIDTH / SCL)
+		view_h = (XELL_HEIGHT / SCL)
 		if SCL <= 1 {
-			x_min = 0
-			y_min = 0
 			x_max = 0
 			y_max = 0
 		} else {
-			x_min = 0
-			y_min = 0
 			x_max = XELL_WIDTH - view_w
 			y_max = XELL_HEIGHT - view_h
 		}
 	}
 
 	EditorTool = function(Name, Icon, Predicate, Hotkey) constructor {
+		x = 0
+		y = 0
 		title = Name
 		icon = Icon
 		predicate = Predicate
 		shortcut = Hotkey
 	}
+
+	TOOL_BRUSH = tool_create("Brush", sEditorToolBrush, function() {
+		//mode = TOOL_BRUSH
+	}, function() {
+		return keyboard_check_pressed(ord("B"))
+	})
+
+	TOOL_ERASER = tool_create("Eraser", sEditorToolBrush, function() {
+		//mode = TOOL_ERASER
+	}, function() {
+		return keyboard_check_pressed(ord("E"))
+	})
+
+	TOOL_FILL = tool_create("Fill", sEditorToolBrush, function() {
+		//mode = TOOL_FILL
+	}, function() {
+		return keyboard_check_pressed(ord("F"))
+	})
+
+	TOOL_SELECTR = tool_create("Select Region", sEditorToolBrush, function() {
+		mode = TOOL_SELECTR
+	}, function() {
+		return keyboard_check_pressed(ord("S"))
+	})
+
+	TOOL_CURSOR = tool_create("Cursor", sEditorToolBrush, function() {
+		//mode = TOOL_CURSOR
+	}, function() {
+		return keyboard_check_pressed(vk_escape) or keyboard_check_pressed(ord("C"))
+	})
+
+	toolbar_add(TOOL_BRUSH)
+	toolbar_add(TOOL_ERASER)
+	toolbar_add(TOOL_FILL)
+	toolbar_add(TOOL_SELECTR)
+	toolbar_add(TOOL_CURSOR)
 }

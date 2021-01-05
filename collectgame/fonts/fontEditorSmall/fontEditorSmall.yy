@@ -19,8 +19,8 @@
   "includeTTF": false,
   "TTFName": "",
   "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default",
+    "name": "TexEditor",
+    "path": "texturegroups/TexEditor",
   },
   "ascenderOffset": 0,
   "glyphs": {
