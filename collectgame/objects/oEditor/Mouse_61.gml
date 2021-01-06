@@ -1,6 +1,6 @@
 /// @description Scaling down
 var increment = 10
-if keyboard_check(vk_lcontrol) {
+if keyboard_check(vk_lcontrol) or keyboard_check(vk_rcontrol) {
 	increment = 30
 }
 

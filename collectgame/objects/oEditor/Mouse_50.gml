@@ -1,9 +1,6 @@
-/// @description Using tools
-switch selected_tool_index {
-	case 0: // brush
-	
-	break;
-	default:
-	
-	break;
+/// @description Using tools flawlessly
+if !is_undefined(mode) {
+	var predicate = mode.predicate
+	predicate()
 }
+

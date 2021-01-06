@@ -27,3 +27,6 @@ draw_set_font(fontEditorSmall)
 draw_set_halign(0)
 draw_set_valign(2)
 draw_text(8, APP_HEIGHT - 8, string(scale_target) + "%")
+
+draw_set_halign(2)
+//draw_text(APP_WIDTH - 8, APP_HEIGHT - 8, "Mode: " + string(mode))
