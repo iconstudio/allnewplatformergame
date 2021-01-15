@@ -199,6 +199,17 @@ application_surface_draw_enable(false)
 surface_resize(application_surface, XELL_WIDTH, XELL_HEIGHT)
 #endregion
 
+randomize()
+TestEngine = new MersenneTwister()
+repeat 1000
+	show_debug_message(TestEngine.make_integer(51))
+
+repeat 1000
+	show_debug_message(TestEngine.make_float(0.5))
+
+repeat 1000
+	show_debug_message(TestEngine.make_boolean())
+/*
 print = function(Container) {
 	for (var i = 0; i < Container.get_size(); ++i)
 		show_debug_message(Container.at(i))
@@ -222,5 +233,5 @@ show_debug_message("Popping: ")
 repeat TestSize show_debug_message(TestList.pop_back())
 show_debug_message(TestList.back())
 show_debug_message("size: " + string(TestList.get_size()))
-
+*/
 alarm[0] = 1
