@@ -48,4 +48,8 @@ key_v = ord("V")
 key_comma = ord(",")
 key_dot = ord(".")
 
-global.test_value = 0
+
+globalvar view_x, view_y;
+global.player_x = 0
+global.player_y = 0
+
