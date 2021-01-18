@@ -42,6 +42,6 @@ if mover != 0 {
 if velocity_x != 0
 	img_xscale = move_dir
 
-if global.io_pressed_jump
+if global.io_pressed_jump and grounded_state == TERRAIN_TYPE.GROUND
 	velocity_y = -jump_speed
 
