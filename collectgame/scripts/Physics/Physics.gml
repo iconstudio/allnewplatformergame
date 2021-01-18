@@ -1,13 +1,20 @@
 function Physics() {
-	static set_mass = function(Mass) {
+	set_mass = function(Mass) {
 		mass = Mass
 		mass_ratio = (Mass + 2) * 0.25
 		slope_mountable = (Mass != PHYSICS_MASS.TINY)
 	}
 
+	grounded_state = TERRAIN_TYPE.GROUND
 	mass = PHYSICS_MASS.NORMAL
 	mass_ratio = 0.5
+
 	slope_mountable = true
+	ground_coyote_time = 0
+	ground_coyote_period = 0
+	wall_coyote_time = 0
+	wall_coyote_period = 0
+
 	velocity_x = 0
 	velocity_y = 0
 	friction_x = 0

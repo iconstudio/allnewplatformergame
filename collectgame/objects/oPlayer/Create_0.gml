@@ -1,5 +1,7 @@
 /// @description Initialization
 event_inherited()
+ground_coyote_period = COYOTE_GROUND_PERIOD
+wall_coyote_period = COYOTE_GROUND_PERIOD
 
 Collection = ds_list_create()
 

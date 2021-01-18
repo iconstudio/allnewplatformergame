@@ -14,11 +14,25 @@ if velocity_x != 0 {
 
 var check_bottom = check_vertical(1)
 if !check_bottom {
-	grounded_state = TERRAIN_TYPE.AIR
-	if velocity_y < TERMINAL_SPEED_VERTICAL
-		velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
+	if grounded_state != TERRAIN_TYPE.AIR {
+		if 0 < ground_coyote_period {
+			if ground_coyote_time < ground_coyote_period {
+				ground_coyote_time++
+			} else {
+				ground_coyote_time = 0
+				grounded_state = TERRAIN_TYPE.AIR
+			}
+			
+		} else {
+			grounded_state = TERRAIN_TYPE.AIR
+		}
+	}
 } else {
 	grounded_state = TERRAIN_TYPE.GROUND
+}
+if grounded_state == TERRAIN_TYPE.AIR {
+	if velocity_y < TERMINAL_SPEED_VERTICAL
+		velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
 }
 
 if velocity_y != 0 {

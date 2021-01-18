@@ -56,6 +56,7 @@ globalvar FRICTION_HORIZONTAL, FRICTION_VERTICAL;
 #macro TERMINAL_SPEED_VERTICAL KILOMETER_PER_HOUR(140)
 #macro SLOPE_RATIO 0.7071067811 // sqrt(2) / 2
 #macro SLOPE_MOUNT_VALUE 3
+#macro COYOTE_GROUND_PERIOD seconds(0.07)
 
 enum TERRAIN_TYPE {
 	GROUND = 0,
@@ -109,10 +110,6 @@ enum TAG_TYPES { CIRCLE, EYE, GLYPH, FIRE, DIAMOND }
 enum BOARD_CELL_STATES { NOTHING = -1, DISABLED, ENABLED }
 
 enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99 }
-
-globalvar view_x, view_y;
-global.player_x = 0
-global.player_y = 0
 
 #macro BLOCK_FINE_SIZE 8
 #macro BLOCK_FINE_W 40
@@ -200,15 +197,7 @@ surface_resize(application_surface, XELL_WIDTH, XELL_HEIGHT)
 #endregion
 
 randomize()
-TestEngine = new MersenneTwister()
-repeat 1000
-	show_debug_message(TestEngine.make_integer(51))
 
-repeat 1000
-	show_debug_message(TestEngine.make_float(0.5))
-
-repeat 1000
-	show_debug_message(TestEngine.make_boolean())
 /*
 print = function(Container) {
 	for (var i = 0; i < Container.get_size(); ++i)
