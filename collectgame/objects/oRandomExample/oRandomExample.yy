@@ -23,8 +23,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Random Engine",
-    "path": "folders/Random Engine.yy",
+    "name": "Generator",
+    "path": "folders/Generator.yy",
   },
   "resourceVersion": "1.0",
   "name": "oRandomExample",
