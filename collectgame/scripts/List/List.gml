@@ -8,9 +8,6 @@ function iterator_destroy(Target_iterator) { Target_iterator._Data = 0; delete T
 /// @function container_destroy(container)
 function container_destroy(Container) { Container._Data = 0; delete Container }
 
-/// @function less(a, b)
-function less(A, B) { return (A < B) }
-
 /// @function Iterator(container)
 function Iterator(Parent) constructor {
 	/// @function equals_to(other)
@@ -195,16 +192,29 @@ function List() constructor {
 		}
 	}
 
-	/// @function sort(begin, end, [comparator=less])
+	///@function foreach(begin, end, predicate)
+	static foreach = function(First, Last, Pred) {
+		First = check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		while First != Last {
+			Pred(at(First))
+			First++
+		}
+		return Pred
+	}
+
+	/// @function sort(begin, end, [comparator=compare_less])
 	static sort = function(First, Last) {
 		if _Size <= 0
 			exit
 
-		var FirstIndex = (is_struct(First) ? First._Index : First)
-		var LastIndex = (is_struct(Last) ? Last._Index : Last)
+		var FirstIndex = _Check_iterator(First)
+		var LastIndex = _Check_iterator(Last)
 		_Check_range(FirstIndex, LastIndex)
 
-		var Comparator = (2 < argument_count ? argument[2] : less)
+		var Comparator = (2 < argument_count ? argument[2] : compare_less)
 		var Range = LastIndex - FirstIndex
 		if Range == 1 {
 			exit
@@ -216,6 +226,211 @@ function List() constructor {
 			Temp = 0
 		}
 	}
+
+	///@function find(begin, end, value, [comparator=compare_equal])
+	static find = function(First, Last, Value) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Compare
+		if 3 < argument_count
+			Compare = argument[3]
+		else
+			Compare = compare_equal
+		while First != Last {
+			if Compare(at(First), Value)
+				return First
+			First++
+		}
+		return undefined
+	}
+
+	///@function find_if(begin, end, predicate)
+	static find_if = function(First, Last, Pred) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		while First != Last {
+			if Pred(at(First))
+				return First
+			First++
+		}
+		return undefined
+	}
+
+	///@function count(begin, end, value)
+	static count = function(First, Last, Value) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Result = 0
+		while First != Last {
+			if at(First) == Value
+				Result++
+			First++
+		}
+		return Result
+	}
+
+	///@function count_if(begin, end, predicate)
+	static count_if = function(First, Last, Pred) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Result = 0
+		while First != Last {
+			if Pred(at(First))
+				Result++
+			First++
+		}
+		return Result
+	}
+
+	///@function accumulate(begin, end, init, predicate)
+	static accumulate = function(First, Last, Init) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Pred
+		if 2 < argument_count
+			Pred = argument[3]
+		else
+			Pred = function(a, b) { return a + b }
+
+		while First != Last {
+	        Init = Pred(Init, at(First))
+			First++
+		}
+		return Init
+	}
+
+	///@function min_element(begin, end, [comparator=compare_less])
+	static min_element = function(First, Last) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+		if First == Last
+			return Last
+
+		var Compare, Result = First, Cursor = First + 1
+		if 2 < argument_count
+			Compare = argument[2]
+		else
+			Compare = compare_less
+
+		while Cursor != Last {
+			if Compare(at(Cursor), at(Result)) {
+				Result = Cursor
+			}
+			Cursor++
+		}
+		return Result
+	}
+
+	///@function max_element(begin, end, [comparator=compare_less])
+	static max_element = function(First, Last) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+		if First == Last
+			return Last
+
+		var Compare, Result = First, Cursor = First + 1
+		if 2 < argument_count
+			Compare = argument[2]
+		else
+			Compare = compare_less
+
+		while Cursor != Last {
+			if Compare(at(Result), at(Cursor)) {
+				Result = Cursor
+			}
+			Cursor++
+		}
+		return Result
+	}
+
+	///@function lower_bound(begin, end, value, [comparator=compare_less])
+	static lower_bound = function(First, Last, Value) { // return the first and largest element which less than value.
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Compare
+		if 3 < argument_count
+			Compare = argument[3]
+		else
+			Compare = compare_less
+
+		var It, Step, count = Last - First
+		while 0 < count {
+			Step = count * 0.5
+			It = First + Step
+
+			if Compare(at(It), Value) {
+				It++
+
+				First = It
+				count -= Step + 1
+			} else {
+				count = Step
+			}
+		}
+		return First
+	}
+
+	///@function upper_bound(begin, end, value, [comparator=compare_less])
+	static upper_bound = function(First, Last, Value) { // return a greater element to the value.
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Compare
+		if 3 < argument_count
+			Compare = argument[3]
+		else
+			Compare = compare_less
+
+		var It, Step, count = Last - First
+		while 0 < count {
+			Step = count * 0.5
+			It = First + Step
+
+			if !Compare(Value, at(It)) {
+				It++
+
+				First = It
+				count -= Step + 1
+			} else {
+				count = Step
+			}
+		}
+		return First
+	}
+
+	///@function binary_search(begin, end, value, [comparator=compare_less])
+	static binary_search = function(First, Last, Value) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Compare
+		if 3 < argument_count
+			Compare = argument[3]
+		else
+			Compare = compare_less
+
+		First = lower_bound(First, Last, Value, Compare)
+		return bool(First != Last and !Compare(Value, at(First)))
+	}
+
+	/// @function 
+	static _Check_iterator = function(Iter) { return (is_struct(Iter) ? Iter._Index : Iter) }
 
 	/// @function 
 	static _Check_range = function(First, Last) {

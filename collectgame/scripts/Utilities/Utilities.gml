@@ -10,6 +10,12 @@ function duet(condition, value_true, value_false) {
 	return condition ? value_true : value_false
 }
 
+/// @function compare_equal(a, b)
+function compare_equal(A, B) { return (A == B) }
+
+/// @function compare_less(a, b)
+function compare_less(A, B) { return (A < B) }
+
 /// @function string_split(string, seperator)
 function string_split(String, Seperator) {
 	var count = 0, result = [], temp = String
