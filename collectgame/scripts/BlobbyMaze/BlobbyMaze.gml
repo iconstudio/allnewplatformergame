@@ -1,112 +1,80 @@
 function BlobbyCell(row, col) constructor {
-	static name = "r#{row}c#{col}"
-
-	static north = "r#{row-1}c#{col}"
-	static south = "r#{row+1}c#{col}"
-	static east = "r#{row}c#{col+1}"
-	static west = "r#{row}c#{col-1}"
+	state = "active"
+	name = "r#{row}c#{col}"
+	north = "r#{row-1}c#{col}"
+	south = "r#{row+1}c#{col}"
+	east = "r#{row}c#{col+1}"
+	west = "r#{row}c#{col-1}"
 }
 
-function BlobbyRegion() constructor {
-	cells = []
-
-	static addCell = function(cell) {
+function BlobbyRegion(): List() constructor {
+	static add_cell = function(cell) {
 		cell.name = cell
 		cells.push(cell)
 	}
 }
 
 function BlobbyMaze(maze) constructor {
-	START = 1
-	PLANT = 2
-	GROW  = 3
-	WALL  = 4
-
-	threshold = 6
-	growSpeed = 5
-	wallSpeed = 2
-
-	stack = []
-
-	region = new BlobbyRegion()
-	for (var row = 0; row < maze.height; ++row) {
-	    for (var col = 0; col < maze.width; ++col) {
-		    var cell = new BlobbyCell(row, col)
-		    region.addCell(cell)
-
-		    if row > 0 {
-		        maze.carve(col, row, Maze.Direction.N)
-		        maze.carve(col, row-1, Maze.Direction.S)
-			}
-
-		    if col > 0 {
-		        maze.carve(col, row, Maze.Direction.W)
-		        maze.carve(col-1, row, Maze.Direction.E)
-			}
-		}
-	}
-
-	stack.push(region)
-	state = START
-
 	static stateAt = function(col, row) {
-		name = "r#{row}c#{col}"
-		cell = region?[name]
+		var Name = "r#{row}c#{col}"
+		cell = region[name]
 
 		if cell
-		    return cell.state ? "active"
+		    return cell.state
 		else
 		    return "blank"
 	}
 
 	static step = function() {
-		switch state
-		    when START then startRegion()
-		    when PLANT then plantSeeds()
-		    when GROW  then growSeeds()
-		    when WALL  then drawWall()
+		switch state {
+		    case START: startRegion() break
+		    case PLANT: plantSeeds() break
+		    case GROW: growSeeds() break
+		    case WALL: drawWall() break
+		}
 	}
 
 	static startRegion = function() {
 		delete boundary
 		region = stack.pop()
 
-		if region
-		    delete cell.state for cell in region.cells
+		if region {
+			//for cell in region.cells { delete cell.state }
 		    highlightRegion(region)
 		    state = PLANT
 		    return true
-		else
+		} else {
 		    return false
+		}
 	}
 
 	static plantSeeds = function() {
-		indexes = rand.randomizeList([0...region.cells.length])
+		var indexes = irandom(region.cells.length)
+		var subregions = {
+			a: new BlobbyRegion(),
+			b: new BlobbyRegion()
+		}
 
-		subregions = { a = new BlobbyRegion, b = new BlobbyRegion }
+		var A = region.cells[indexes[0]]
+		var B = region.cells[indexes[1]]
 
-		a = region.cells[indexes[0]]
-		b = region.cells[indexes[1]]
+		A.state = "a"
+		B.state = "b"
 
-		a.state = "a"
-		b.state = "b"
+		subregions.a.add_cell(A)
+		subregions.b.add_cell(B)
 
-		subregions.a.addCell a
-		subregions.b.addCell b
+		updateAt(A.col, A.row)
+		updateAt(B.col, B.row)
 
-		updateAt a.col, a.row
-		updateAt b.col, b.row
-
-		frontier = [a, b]
-
+		frontier = [A, B]
 		state = GROW
-
 		return true
 	}
 
 	static growSeeds = function() {
 		growCount = 0
-		while frontier.length > 0 && growCount < growSpeed {
+		while 0 < frontier.length and growCount < growSpeed {
 		    index = rand.nextInteger(frontier.length)
 		    cell = frontier[index]
 
@@ -115,25 +83,33 @@ function BlobbyMaze(maze) constructor {
 		    e = region[cell.east()]
 		    w = region[cell.west()]
 
-		    list = []
-		    list.push n if n && !n.state
-		    list.push s if s && !s.state
-		    list.push e if e && !e.state
-		    list.push w if w && !w.state
+		    var list = []
+			if n && !n.state
+				list.push(n)
+			if s && !s.state
+				list.push(s)
+			if e && !e.state
+				list.push(e)
+			if w && !w.state
+				list.push(w)
 
 		    if list.length > 0 {
 			    neighbor = rand.randomElement(list)
 			    neighbor.state = cell.state
-			    subregions[cell.state].addCell neighbor
-			    frontier.push neighbor
-			    updateAt neighbor.col, neighbor.row
-			    growCount += 1
+			    subregions[cell.state].add_cell(neighbor)
+			    frontier.push(neighbor)
+			    updateAt(neighbor.col, neighbor.row)
+			    growCount++
 			} else {
 				frontier.splice(index, 1)
 			}
 		}
 
-		state = if frontier.length == 0 then WALL else GROW
+		if frontier.length == 0
+			state = WALL
+		else
+			state = GROW
+
 		return true
 	}
 
@@ -147,7 +123,7 @@ function BlobbyMaze(maze) constructor {
 		    w = region[cell.west()]
 
 		    if n && n.state != cell.state
-		    boundary.push { from = cell, to = n, dir = Maze.Direction.N }
+			boundary.push { from = cell, to = n, dir = Maze.Direction.N }
 		    if s && s.state != cell.state
 		    boundary.push { from = cell, to = s, dir = Maze.Direction.S }
 		    if e && e.state != cell.state
@@ -160,7 +136,8 @@ function BlobbyMaze(maze) constructor {
 	}
 
 	static drawWall = function() {
-		findWall() if !boundary
+		if !boundary
+			findWall()
 
 		wallCount = 0
 		while boundary.length > 0 && wallCount < wallSpeed
@@ -192,11 +169,44 @@ function BlobbyMaze(maze) constructor {
 
 		return true
 	}
+
+	START = 1
+	PLANT = 2
+	GROW  = 3
+	WALL  = 4
+
+	threshold = 6 // large
+	growSpeed = 5
+	wallSpeed = 2
+
+	stack = new List()
+	region = new BlobbyRegion()
+
+	for (var row = 0; row < maze.height; ++row) {
+	    for (var col = 0; col < maze.width; ++col) {
+		    var cell = new BlobbyCell(row, col)
+		    region.add_cell(cell)
+
+		    if row > 0 {
+		        maze.carve(col, row, Maze.Direction.N)
+		        maze.carve(col, row-1, Maze.Direction.S)
+			}
+
+		    if col > 0 {
+		        maze.carve(col, row, Maze.Direction.W)
+		        maze.carve(col-1, row, Maze.Direction.E)
+			}
+		}
+	}
+
+	stack.push_back(region)
+	state = START
+
 }
 
 highlightRegion = function(region) {
 	for (var i = 0; i < region.cells.length; ++i) {
 		var cell = region.cells[i]
-	    updateAt cell.col, cell.row
+	    updateAt(cell.col, cell.row)
 	}
 }
