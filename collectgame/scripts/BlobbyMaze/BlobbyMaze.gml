@@ -1,212 +1,211 @@
-function BlobbyCell(row, col) constructor {
-	state = "active"
-	name = "r#{row}c#{col}"
-	north = "r#{row-1}c#{col}"
-	south = "r#{row+1}c#{col}"
-	east = "r#{row}c#{col+1}"
-	west = "r#{row}c#{col-1}"
+/// @function BlobbyCell(row, column)
+function BlobbyCell(Row, Col) constructor {
+	x = Col
+	y = Row
+
+	marked = false
 }
 
-function BlobbyRegion(): List() constructor {
-	static add_cell = function(cell) {
-		cell.name = cell
-		cells.push(cell)
-	}
-}
-
-function BlobbyMaze(maze) constructor {
-	static stateAt = function(col, row) {
-		var Name = "r#{row}c#{col}"
-		cell = region[name]
-
-		if cell
-		    return cell.state
-		else
-		    return "blank"
+function BlobbyMaze(Width, Height) constructor {
+	static get_xell_index_on = function(X, Y) {
+		return X + Y * width
 	}
 
-	static step = function() {
-		switch state {
-		    case START: startRegion() break
-		    case PLANT: plantSeeds() break
-		    case GROW: growSeeds() break
-		    case WALL: drawWall() break
-		}
-	}
-
-	static startRegion = function() {
+	static region_orgarnizate = function() {
 		delete boundary
-		region = stack.pop()
 
-		if region {
-			//for cell in region.cells { delete cell.state }
-		    highlightRegion(region)
-		    state = PLANT
-		    return true
+		territory = ds_stack_pop(region_preceed_stack)
+		if !is_undefined(territory) {
+			with territory {
+				foreach(0, get_size(), function(Cell) {
+					Cell.marked = false
+				})
+			}
+			state_methods = plant
 		} else {
-		    return false
+			state_methods = undefined
+			exit
 		}
+		
 	}
 
-	static plantSeeds = function() {
-		var indexes = irandom(region.cells.length)
-		var subregions = {
-			a: new BlobbyRegion(),
-			b: new BlobbyRegion()
-		}
+	static plant = function() {
+		var indexes = irandom(territory.get_size() - 1)
+		fields.a = new List()
+		fields.b = new List()
 
-		var A = region.cells[indexes[0]]
-		var B = region.cells[indexes[1]]
-
+		var A = territory.at(indexes[0])
+		var B = territory.at(indexes[1])
 		A.state = "a"
 		B.state = "b"
 
-		subregions.a.add_cell(A)
-		subregions.b.add_cell(B)
+		fields.a.push_back(A)
+		fields.b.push_back(B)
 
-		updateAt(A.col, A.row)
-		updateAt(B.col, B.row)
+		pot = [A, B]
 
-		frontier = [A, B]
-		state = GROW
-		return true
+		state_methods = growth
 	}
 
-	static growSeeds = function() {
-		growCount = 0
-		while 0 < frontier.length and growCount < growSpeed {
-		    index = rand.nextInteger(frontier.length)
-		    cell = frontier[index]
+	static growth = function() {
+		var cultivation_time = 0
+		var Thresh = array_length(pot)
+		while 0 < Thresh and cultivation_time < self.cultivation_max {
+		    var Front_Index = irandom(Thresh - 1)
+		    var Xell = pot[Front_Index]
 
-		    n = region[cell.north()]
-		    s = region[cell.south()]
-		    e = region[cell.east()]
-		    w = region[cell.west()]
-
-		    var list = []
-			if n && !n.state
-				list.push(n)
-			if s && !s.state
-				list.push(s)
-			if e && !e.state
-				list.push(e)
-			if w && !w.state
-				list.push(w)
-
-		    if list.length > 0 {
-			    neighbor = rand.randomElement(list)
-			    neighbor.state = cell.state
-			    subregions[cell.state].add_cell(neighbor)
-			    frontier.push(neighbor)
-			    updateAt(neighbor.col, neighbor.row)
-			    growCount++
-			} else {
-				frontier.splice(index, 1)
+		    var N = undefined, S = undefined, E = undefined, W = undefined
+			var Sprout_list = []
+			if 0 < Xell.y {
+				N = territory[get_xell_index_on(Xell.x, Xell.y - 1)]
+				if !N.marked
+					array_push(Sprout_list, N)
 			}
+			if Xell.x < width - 1 {
+				E = territory[get_xell_index_on(Xell.x + 1, Xell.y)]
+				if !E.marked
+					array_push(Sprout_list, E)
+			}
+			if 0 < Xell.x {
+				W = territory[get_xell_index_on(Xell.x - 1, Xell.y)]
+				if !W.marked
+					array_push(Sprout_list, W)
+			}
+			if Xell.y < height - 1 {
+				S = territory[get_xell_index_on(Xell.x, Xell.y + 1)]
+				if !S.marked
+					array_push(Sprout_list, S)
+			}
+
+			var Sprout_size = array_length(Sprout_list)
+			if 0 < Sprout_size {
+				var neighbor = Sprout_list[irandom(Sprout_size - 1)]
+				neighbor.state = Xell.state
+				neighbor.marked = true
+				array_push(pot, neighbor)
+
+				fields[$ Xell.state].push_back(neighbor) // "a" or "b"
+			    cultivation_time++
+			} else {
+				var Subfield = pot[Front_Index]
+				delete Subfield
+				array_delete(pot, Front_Index, 1)
+			}
+			Thresh = array_length(pot)
 		}
 
-		if frontier.length == 0
-			state = WALL
+		if Thresh == 0
+			state_methods = findWall
 		else
-			state = GROW
-
-		return true
+			state_methods = growth
 	}
 
 	static findWall = function() {
-		boundary = []
+		boundary = new List()
 
-		for cell in subregions.a.cells {
-		    n = region[cell.north()]
-		    s = region[cell.south()]
-		    e = region[cell.east()]
-		    w = region[cell.west()]
+		with fields.a {
+			foreach(0, get_size(), function(Xell) {
+				var N = undefined, S = undefined, E = undefined, W = undefined
+				if 0 < Xell.y {
+					N = territory[get_xell_index_on(Xell.x, Xell.y - 1)]
+				}
+				if Xell.x < width - 1 {
+					E = territory[get_xell_index_on(Xell.x + 1, Xell.y)]
+				}
+				if 0 < Xell.x {
+					W = territory[get_xell_index_on(Xell.x - 1, Xell.y)]
+				}
+				if Xell.y < height - 1 {
+					S = territory[get_xell_index_on(Xell.x, Xell.y + 1)]
+				}
 
-		    if n && n.state != cell.state
-			boundary.push { from = cell, to = n, dir = Maze.Direction.N }
-		    if s && s.state != cell.state
-		    boundary.push { from = cell, to = s, dir = Maze.Direction.S }
-		    if e && e.state != cell.state
-		    boundary.push { from = cell, to = e, dir = Maze.Direction.E }
-		    if w && w.state != cell.state
-		    boundary.push { from = cell, to = w, dir = Maze.Direction.W }
+			    if n && n.state != Cell.state
+					boundary.push({ from: Cell, to: n, dir: Maze.Direction.N })
+			    if s && s.state != Cell.state
+					boundary.push({ from: Cell, to: s, dir: Maze.Direction.S })
+			    if e && e.state != Cell.state
+					boundary.push({ from: Cell, to: e, dir: Maze.Direction.E })
+			    if w && w.state != Cell.state
+					boundary.push({ from: Cell, to: w, dir: Maze.Direction.W })
+			})
 		}
 
-		rand.removeRandomElement(boundary)
+		boundary.erase_at(irandom(boundary.get_size() - 1))
+		state_methods = dirt_cover
 	}
 
-	static drawWall = function() {
-		if !boundary
+	static dirt_cover = function() {
+		if is_undefined(boundary)
 			findWall()
 
-		wallCount = 0
-		while boundary.length > 0 && wallCount < wallSpeed
+		var wallCount = 0
+		while boundary.length > 0 && wallCount < wallSpeed {
 		    wall = rand.removeRandomElement(boundary)
 
 		    maze.uncarve(wall.from.col, wall.from.row, wall.dir)
 		    maze.uncarve(wall.to.col, wall.to.row, Maze.Direction.opposite[wall.dir])
-		    updateAt wall.from.col, wall.from.row
-		    wallCount += 1
+
+		    wallCount++
+		}
 
 		if boundary.length == 0 {
-		    cell.state = "blank" for cell in region.cells
+			//for cell in territory.cells cell.state = "blank"
 
-		    if subregions.a.cells.length >= threshold || (subregions.a.cells.length > 4 && rand.nextInteger() % 10 < 5)
-		    stack.push subregions.a
-		    else
-		    cell.state = "in" for cell in subregions.a.cells
+		    if fields.a.cells.length >= threshold || (fields.a.cells.length > 4 && rand.nextInteger() % 10 < 5) {
+				ds_stack_push(region_preceed_stack, fields.a)
+			} else {
+				with fields.a {
+					foreach(0, get_size(), function(Cell) {
+						Cell.marked = true
+					})
+				}
+			}
 
-		    if subregions.b.cells.length >= threshold || (subregions.b.cells.length > 4 && rand.nextInteger() % 10 < 5)
-		    stack.push subregions.b
-		    else
-		    cell.state = "in" for cell in subregions.b.cells
+		    if fields.b.cells.length >= threshold || (fields.b.cells.length > 4 && rand.nextInteger() % 10 < 5) {
+				ds_stack_push(region_preceed_stack, fields.b)
+			} else {
+				with fields.b {
+					foreach(0, get_size(), function(Cell) {
+						Cell.marked = true
+					})
+				}
+			}
 
-		    highlightRegion subregions.a
-		    highlightRegion subregions.b
-
-		    state = START
+		    state_method = startRegion
 		}
 
 		return true
 	}
 
-	START = 1
-	PLANT = 2
-	GROW  = 3
-	WALL  = 4
-
+	width = Width
+	height = Height
 	threshold = 6 // large
-	growSpeed = 5
+	cultivation_max = 5
 	wallSpeed = 2
 
-	stack = new List()
-	region = new BlobbyRegion()
+	state_method = startRegion
+	region_preceed_stack = ds_stack_create()
+	territory = undefined
+	fields = { a: undefined, b: undefined }
+	pot = -1
+	boundary = undefined
+	ds_stack_push(region_preceed_stack, new List())
 
-	for (var row = 0; row < maze.height; ++row) {
-	    for (var col = 0; col < maze.width; ++col) {
-		    var cell = new BlobbyCell(row, col)
-		    region.add_cell(cell)
+	var Col, Row, Xell
+	for (var row = 0; Row < Height; ++Row) {
+	    for (var Col = 0; Col < Width; ++Col) {
+		    var Xell = new BlobbyCell(Row, Col)
+		    territory.push_back(Xell)
 
-		    if row > 0 {
-		        maze.carve(col, row, Maze.Direction.N)
-		        maze.carve(col, row-1, Maze.Direction.S)
+		    if 0 < Row {
+		        //maze.carve(Col, Row, Maze.Direction.N)
+		        //maze.carve(Col, Row-1, Maze.Direction.S)
 			}
 
-		    if col > 0 {
-		        maze.carve(col, row, Maze.Direction.W)
-		        maze.carve(col-1, row, Maze.Direction.E)
+		    if 0 < Col {
+		        //maze.carve(Col, Row, Maze.Direction.W)
+		        //maze.carve(Col-1, Row, Maze.Direction.E)
 			}
 		}
-	}
-
-	stack.push_back(region)
-	state = START
-
-}
-
-highlightRegion = function(region) {
-	for (var i = 0; i < region.cells.length; ++i) {
-		var cell = region.cells[i]
-	    updateAt(cell.col, cell.row)
 	}
 }
