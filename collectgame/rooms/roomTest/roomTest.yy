@@ -6,7 +6,7 @@
     "path": "rooms/roomInit/roomInit.yy",
   },
   "views": [
-    {"inherit":true,"visible":true,"xview":0,"yview":0,"wview":640,"hview":480,"xport":0,"yport":0,"wport":640,"hport":480,"hborder":320,"vborder":240,"hspeed":-1,"vspeed":-1,"objectId":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},},
+    {"inherit":true,"visible":true,"xview":0,"yview":0,"wview":320,"hview":320,"xport":0,"yport":0,"wport":640,"hport":640,"hborder":320,"vborder":240,"hspeed":-1,"vspeed":-1,"objectId":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":960,"hview":480,"xport":0,"yport":0,"wport":960,"hport":480,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":960,"hview":480,"xport":0,"yport":0,"wport":960,"hport":480,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":960,"hview":480,"xport":0,"yport":0,"wport":960,"hport":480,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
@@ -465,8 +465,8 @@
   "sequenceId": null,
   "roomSettings": {
     "inheritRoomSettings": true,
-    "Width": 640,
-    "Height": 480,
+    "Width": 320,
+    "Height": 320,
     "persistent": false,
   },
   "viewSettings": {
