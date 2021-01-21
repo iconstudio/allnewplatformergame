@@ -3,14 +3,11 @@ function BlobbyCell(Row, Col) constructor {
 	x = Col
 	y = Row
 
+	state = "blank"
 	marked = false
 }
 
 function BlobbyMaze(Width, Height) constructor {
-	static get_xell_index_on = function(X, Y) {
-		return X + Y * width
-	}
-
 	static region_orgarnizate = function() {
 		delete boundary
 
@@ -18,7 +15,7 @@ function BlobbyMaze(Width, Height) constructor {
 		if !is_undefined(territory) {
 			with territory {
 				foreach(0, get_size(), function(Cell) {
-					Cell.marked = false
+					Cell.state = "blank"
 				})
 			}
 			state_methods = plant
@@ -30,12 +27,12 @@ function BlobbyMaze(Width, Height) constructor {
 	}
 
 	static plant = function() {
-		var indexes = irandom(territory.get_size() - 1)
+		var Size = territory.get_size()
 		fields.a = new List()
 		fields.b = new List()
 
-		var A = territory.at(indexes[0])
-		var B = territory.at(indexes[1])
+		var A = territory.at(irandom(Size - 1))
+		var B = territory.at(irandom(Size - 1))
 		A.state = "a"
 		B.state = "b"
 
@@ -108,25 +105,24 @@ function BlobbyMaze(Width, Height) constructor {
 				var N = undefined, S = undefined, E = undefined, W = undefined
 				if 0 < Xell.y {
 					N = territory[get_xell_index_on(Xell.x, Xell.y - 1)]
+					if N.state != Xell.state
+						array_push(boundary, { from: Xell, to: N, dir: Maze.Direction.N })
 				}
 				if Xell.x < width - 1 {
 					E = territory[get_xell_index_on(Xell.x + 1, Xell.y)]
+					if E.state != Xell.state
+						array_push(boundary, { from: Xell, to: E, dir: Maze.Direction.E })
 				}
 				if 0 < Xell.x {
 					W = territory[get_xell_index_on(Xell.x - 1, Xell.y)]
+					if W.state != Xell.state
+						array_push(boundary, { from: Xell, to: W, dir: Maze.Direction.W })
 				}
 				if Xell.y < height - 1 {
 					S = territory[get_xell_index_on(Xell.x, Xell.y + 1)]
+					if S.state != Xell.state
+						array_push(boundary, { from: Xell, to: S, dir: Maze.Direction.S })
 				}
-
-			    if n && n.state != Cell.state
-					boundary.push({ from: Cell, to: n, dir: Maze.Direction.N })
-			    if s && s.state != Cell.state
-					boundary.push({ from: Cell, to: s, dir: Maze.Direction.S })
-			    if e && e.state != Cell.state
-					boundary.push({ from: Cell, to: e, dir: Maze.Direction.E })
-			    if w && w.state != Cell.state
-					boundary.push({ from: Cell, to: w, dir: Maze.Direction.W })
 			})
 		}
 
@@ -138,44 +134,58 @@ function BlobbyMaze(Width, Height) constructor {
 		if is_undefined(boundary)
 			findWall()
 
-		var wallCount = 0
-		while boundary.length > 0 && wallCount < wallSpeed {
-		    wall = rand.removeRandomElement(boundary)
+		var Csize = boundary.get_size(), wallCount = 0
+		while 0 < Csize and wallCount < wallSpeed {
+		    var Wall = boundary.erase_at(irandom(boundary.get_size() - 1))
 
-		    maze.uncarve(wall.from.col, wall.from.row, wall.dir)
-		    maze.uncarve(wall.to.col, wall.to.row, Maze.Direction.opposite[wall.dir])
+		    uncarve(Wall.from.x, Wall.from.y, Wall.dir)
+		    uncarve(Wall.to.x, Wall.to.y, Maze.Direction.opposite[Wall.dir])
 
 		    wallCount++
 		}
 
-		if boundary.length == 0 {
-			//for cell in territory.cells cell.state = "blank"
-
-		    if fields.a.cells.length >= threshold || (fields.a.cells.length > 4 && rand.nextInteger() % 10 < 5) {
+		Csize = boundary.get_size()
+		if Csize == 0 {
+			var Asize = fields.a.get_size()
+		    if threshold <= Asize or (4 < Asize and irandom(10) < 5) {
 				ds_stack_push(region_preceed_stack, fields.a)
 			} else {
 				with fields.a {
-					foreach(0, get_size(), function(Cell) {
+					foreach(0, Asize, function(Cell) {
 						Cell.marked = true
 					})
 				}
 			}
 
-		    if fields.b.cells.length >= threshold || (fields.b.cells.length > 4 && rand.nextInteger() % 10 < 5) {
+		    var Bsize = fields.b.get_size()
+			if threshold <= Bsize or (4 < Bsize && irandom(10) < 5) {
 				ds_stack_push(region_preceed_stack, fields.b)
 			} else {
 				with fields.b {
-					foreach(0, get_size(), function(Cell) {
+					foreach(0, Bsize, function(Cell) {
 						Cell.marked = true
 					})
 				}
 			}
 
-		    state_method = startRegion
+			state_method = region_orgarnizate
 		}
-
-		return true
 	}
+
+	static get_xell_index_on = function(X, Y) { return X + Y * width }
+
+	static carve = function(X, Y, Bits) { maze[# X, Y] |= Bits }
+
+	static uncarve = function(X, Y, Bits) { maze[# X, Y] &= ~Bits }
+
+	static isMarked = function(X, Y, Bits) { return ((maze[# X, Y] & Bits) == Bits) }
+
+	N = 0x01
+	S = 0x02
+	E = 0x04
+	W = 0x08
+	U = 0x10
+	DIRT_MASK = (N | S |  E | W | U)
 
 	width = Width
 	height = Height
@@ -183,7 +193,10 @@ function BlobbyMaze(Width, Height) constructor {
 	cultivation_max = 5
 	wallSpeed = 2
 
-	state_method = startRegion
+	maze = ds_grid_create(Width, Height)
+	ds_grid_clear(maze, 0)
+
+	state_method = region_orgarnizate
 	region_preceed_stack = ds_stack_create()
 	territory = undefined
 	fields = { a: undefined, b: undefined }
@@ -198,13 +211,13 @@ function BlobbyMaze(Width, Height) constructor {
 		    territory.push_back(Xell)
 
 		    if 0 < Row {
-		        //maze.carve(Col, Row, Maze.Direction.N)
-		        //maze.carve(Col, Row-1, Maze.Direction.S)
+		        carve(Col, Row, Maze.Direction.N)
+		        carve(Col, Row-  1, Maze.Direction.S)
 			}
 
 		    if 0 < Col {
-		        //maze.carve(Col, Row, Maze.Direction.W)
-		        //maze.carve(Col-1, Row, Maze.Direction.E)
+		        carve(Col, Row, Maze.Direction.W)
+		        carve(Col-  1, Row, Maze.Direction.E)
 			}
 		}
 	}
