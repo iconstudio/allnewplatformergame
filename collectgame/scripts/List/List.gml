@@ -142,18 +142,18 @@ function List() constructor {
 		if _Size <= 0 or is_undefined(Index) or is_nan(Index)
 			return NULL
 
-		if is_struct(Index) {
-			_Serial_change()
-			var Number = Index._Index
-			array_delete(_Data, Number, 1)
-			return (new Iterator(self).set_index(Number))
-		} else {
-			if Index < 0 or _Size <= Index
-				return NULL
-			_Serial_change()
-			array_delete(_Data_, Index, 1)
-			return (new Iterator(self).set_index(_Size))
-		}
+		var Result = NULL, RIndex
+		if is_struct(Index)
+			RIndex = Index._Index
+		else
+			RIndex = Index
+
+		if RIndex < 0 or _Size <= RIndex
+			return NULL
+		Result = _Data[RIndex]
+		_Serial_change()
+		array_delete(_Data_, RIndex, 1)
+		return Result
 	}
 
 	/// @function erase(begin, end)
