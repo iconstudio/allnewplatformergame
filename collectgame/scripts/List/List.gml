@@ -194,7 +194,7 @@ function List() constructor {
 
 	///@function foreach(begin, end, predicate)
 	static foreach = function(First, Last, Pred) {
-		First = check_iterator(First)
+		First = _Check_iterator(First)
 		Last = _Check_iterator(Last)
 		_Check_range(First, Last)
 
@@ -428,6 +428,9 @@ function List() constructor {
 		First = lower_bound(First, Last, Value, Compare)
 		return bool(First != Last and !Compare(Value, at(First)))
 	}
+
+	/// @function toString()
+	static toString = function() { return "List (" + string(_Serial_number) + ") - Size: " + string(_Size) + ", Cash: " + string(_Capacity) }
 
 	/// @function 
 	static _Check_iterator = function(Iter) { return (is_struct(Iter) ? Iter._Index : Iter) }
