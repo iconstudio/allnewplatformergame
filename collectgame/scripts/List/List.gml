@@ -103,13 +103,13 @@ function List() constructor {
 	static shrink_to_fit = function() { _Capacity_set(max(1, _Size)) }
 
 	/// @function at(index)
-	static at = function(Index) { return (0 < _Size and Index < _Size ? _Data[Index] : NULL) }
+	static at = function(Index) { return (0 < _Size and Index < _Size ? _Data[Index] : undefined) }
 
 	/// @function front()
-	static front = function() { return (0 < _Size ? _Data[0] : NULL) }
+	static front = function() { return (0 < _Size ? _Data[0] : undefined) }
 
 	/// @function back()
-	static back = function() { return (0 < _Size ? _Data[_Size - 1] : NULL) }
+	static back = function() { return (0 < _Size ? _Data[_Size - 1] : undefined) }
 
 	/// @function first()
 	static first = function() { return (new Iterator(self)) }
@@ -139,7 +139,7 @@ function List() constructor {
 
 	/// @function erase_at(index)
 	static erase_at = function(Index) {
-		if _Size <= 0 or is_undefined(Index) or is_nan(Index)
+		if _Capacity <= 0 or _Size <= 0 or is_undefined(Index) or is_nan(Index)
 			return NULL
 
 		var Result = NULL, RIndex
@@ -151,8 +151,9 @@ function List() constructor {
 		if RIndex < 0 or _Size <= RIndex
 			return NULL
 		Result = _Data[RIndex]
+		_Size--
 		_Serial_change()
-		array_delete(_Data_, RIndex, 1)
+		array_delete(_Data, RIndex, 1)
 		return Result
 	}
 
@@ -309,6 +310,40 @@ function List() constructor {
 		return Init
 	}
 
+	///@function remove(begin, end, value)
+	static remove = function(First, Last, Value) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Result = First
+		while First != Last {
+			if at(First) == Value
+				erase_at(Result)
+			else
+				Result++
+			First++
+		}
+		return Result
+	}
+
+	///@function remove_if(begin, end, predicate)
+	static remove_if = function(First, Last, Pred) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Result = First
+		while First != Last {
+			if Pred(at(First))
+				erase_at(Result)
+			else
+				Result++
+			First++
+		}
+		return Result
+	}
+
 	///@function min_element(begin, end, [comparator=compare_less])
 	static min_element = function(First, Last) {
 		First = _Check_iterator(First)
@@ -429,6 +464,34 @@ function List() constructor {
 		return bool(First != Last and !Compare(Value, at(First)))
 	}
 
+	///@function swap(iterator_1, iterator_2)
+	static swap = function(ItA, ItB) {
+		ItA = _Check_iterator(ItA)
+		ItB = _Check_iterator(ItB)
+		var Temp = at(ItA)
+		set_at(ItA, at(ItB))
+		set_at(ItB, Temp)
+	}
+
+	///@function shuffle(begin, end, [engine=irandom_range])
+	static shuffle = function(First, Last) {
+		First = _Check_iterator(First)
+		Last = _Check_iterator(Last)
+		_Check_range(First, Last)
+
+		var Urng, Dist
+		if 2 < argument_count
+			Urng = argument[2]
+		else
+			Urng = irandom_range
+		Dist = Last - First - 1
+		if 0 < Dist {
+			for (var i = Dist; 0 < i; --i) {
+				swap(First + i, First + Urng(0, i))
+			}
+		}
+	}
+
 	/// @function toString()
 	static toString = function() { return "List (" + string(_Serial_number) + ") - Size: " + string(_Size) + ", Cash: " + string(_Capacity) }
 
@@ -437,9 +500,10 @@ function List() constructor {
 
 	/// @function 
 	static _Check_range = function(First, Last) {
-		if First < 0 or Last < 0 or _Size <= First or _Size < Last
-			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nOut of bound."
-		else if Last < First
+		//if First < 0 or Last < 0 or _Size <= First or _Size < Last
+		//	throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nOut of bound."
+		//else
+		if Last < First
 			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nFirst is greater then Last."
 	}
 

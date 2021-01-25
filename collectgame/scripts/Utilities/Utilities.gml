@@ -2,7 +2,7 @@ function Utilities(){}
 
 /// @function seconds(time)
 function seconds(Time) {
-	return (Time)SECONDS
+	return (Time) * SECOND_TO_STEP
 }
 
 /// @function duet

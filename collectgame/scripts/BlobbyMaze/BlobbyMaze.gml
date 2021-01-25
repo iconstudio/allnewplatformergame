@@ -12,7 +12,7 @@ function BlobbyCell(Row, Col) constructor {
 /// @function BlobbyMaze(width, height)
 function BlobbyMaze(Width, Height) constructor {
 	/// @function region_orgarnizate()
-	static region_orgarnizate = function() {						show_debug_message("1. Pop a region")
+	static region_orgarnizate = function() {					show_debug_message("1. Pop a region")
 		delete boundary
 
 		territory = ds_stack_pop(region_preceed_stack)
@@ -50,7 +50,7 @@ function BlobbyMaze(Width, Height) constructor {
 	}
 
 	/// @function growth()
-	static growth = function() {									show_debug_message("3. extend the subregions")
+	static growth = function() {								show_debug_message("3. extend the subregions")
 		var cultivation_time = 0
 		var Thresh = array_length(pot)							show_debug_message("Number of the rest subregions: " + string(Thresh))
 		while 0 < Thresh and cultivation_time < self.cultivation_max {
@@ -88,14 +88,14 @@ function BlobbyMaze(Width, Height) constructor {
 			if 0 < Sprout_size {
 				var neighbor = Sprout_list[irandom(Sprout_size - 1)]	show_debug_message("by neighbor " + string(neighbor))
 				neighbor.state = Xell.state
-				neighbor.marked = true
+				//neighbor.marked = true
 				array_push(pot, neighbor)
 
-				fields[$ Xell.state].push_back(neighbor) // "a" or "b"
+				var Target = fields[$ Xell.state]				show_debug_message("Chosen neighbor is pushed to  " + string(Target))
+				Target.push_back(neighbor) // "a" or "b"
 			    cultivation_time++
 			} else {
 				var Subfield = pot[Front_Index]					show_debug_message("Cannot extend it so delete the " + string(Subfield))
-				delete Subfield
 				array_delete(pot, Front_Index, 1)
 			}
 			Thresh = array_length(pot)
@@ -113,28 +113,29 @@ function BlobbyMaze(Width, Height) constructor {
 
 		var First = fields.a
 		with First {
-			var Terrain = other.territory, Procedure = get_xell_index_on, Dirs = other.directions
 			foreach(0, get_size(), function(Xell) {
+				var Terrain = other.territory, Procedure = method(other, other.get_xell_index_on), Bound = other.boundary
+				var Width = other.width, Height = other.height, Dirs = other.directions
 				var N = undefined, S = undefined, E = undefined, W = undefined
 				if 0 < Xell.y {
-					N = Terrain[Procedure(Xell.x, Xell.y - 1)]
+					N = Terrain.at(Procedure(Xell.x, Xell.y - 1))
 					if N.state != Xell.state
-						array_push(boundary, { from: Xell, to: N, dir: Dirs.N })
+						Bound.push_back({ from: Xell, to: N, dir: Dirs.N })
 				}
-				if Xell.x < width - 1 {
-					E = Terrain[Procedure(Xell.x + 1, Xell.y)]
+				if Xell.x < Width - 1 {
+					E = Terrain.at(Procedure(Xell.x + 1, Xell.y))
 					if E.state != Xell.state
-						array_push(boundary, { from: Xell, to: E, dir: Dirs.E })
+						Bound.push_back({ from: Xell, to: E, dir: Dirs.E })
 				}
 				if 0 < Xell.x {
-					W = Terrain[Procedure(Xell.x - 1, Xell.y)]
+					W = Terrain.at(Procedure(Xell.x - 1, Xell.y))
 					if W.state != Xell.state
-						array_push(boundary, { from: Xell, to: W, dir: Dirs.W })
+						Bound.push_back({ from: Xell, to: W, dir: Dirs.W })
 				}
-				if Xell.y < height - 1 {
-					S = Terrain[Procedure(Xell.x, Xell.y + 1)]
+				if Xell.y < Height - 1 {
+					S = Terrain.at(Procedure(Xell.x, Xell.y + 1))
 					if S.state != Xell.state
-						array_push(boundary, { from: Xell, to: S, dir: Dirs.S })
+						Bound.push_back({ from: Xell, to: S, dir: Dirs.S })
 				}
 			})
 		}														show_debug_message("Status of the first subregion: " + string(First))
@@ -144,18 +145,16 @@ function BlobbyMaze(Width, Height) constructor {
 	}
 
 	/// @function dirt_cover()
-	static dirt_cover = function() {								show_debug_message("5. Update the maze from sub regions")
+	static dirt_cover = function() {							show_debug_message("5. Update the maze from sub regions")
 		if is_undefined(boundary)
 			findWall()
 
-		var Csize = boundary.get_size(), wallCount = 0			show_debug_message("Size of boundary: " + string(Csize))
-		while 0 < Csize and wallCount < wallSpeed {
-		    var Wall = boundary.erase_at(irandom(boundary.get_size() - 1))
+		var Csize = boundary.get_size()							show_debug_message("Size of boundary: " + string(Csize))
+		while 0 < Csize{
+		    var Wall = boundary.erase_at(irandom(boundary.get_size() - 1))	show_debug_message("Proceed wall: " + string(Wall))
 
 		    uncarve(Wall.from.x, Wall.from.y, Wall.dir)
-		    uncarve(Wall.to.x, Wall.to.y, directions.opposite[Wall.dir])	show_debug_message("Proceed wall: " + string(Wall))
-
-		    wallCount++
+		    uncarve(Wall.to.x, Wall.to.y, bit_opposite_dir[Wall.dir])
 		}
 
 		Csize = boundary.get_size()
@@ -202,20 +201,32 @@ function BlobbyMaze(Width, Height) constructor {
 	/// @function is_set_on(x, y, data)
 	static is_set_on = function(X, Y, Bits) { return ((maze[# X, Y] & Bits) == Bits) }
 
+	bit_dir = [0x01, 0x02, 0x04, 0x08]
+
+	bit_opposite_dir = [0x08, 0x04, 0x02, 0x01]
+
 	directions = {
-		N: 0x01,
-		E: 0x02,
-		W: 0x04,
-		S: 0x08,
-		U: 0x10,
+		N: 0,
+		E: 1,
+		W: 2,
+		S: 3,
+		U: 4,
 	}
+
+	directions_opposites = {
+		N: 3,
+		E: 2,
+		W: 1,
+		S: 0,
+		U: 4,
+	}
+
 	DIRT_MASK = (directions.N | directions.S | directions.E | directions.W | directions.U)
 
 	width = Width
 	height = Height
 	threshold = 6 // large
 	cultivation_max = 5
-	wallSpeed = 4 // fast, proceeds regions 4 times at once
 
 	maze = ds_grid_create(Width, Height)
 	ds_grid_clear(maze, 0)
@@ -248,4 +259,5 @@ function BlobbyMaze(Width, Height) constructor {
 	}
 
 	region_orgarnizate()
+	//dirt_cover()
 }

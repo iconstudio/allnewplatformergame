@@ -1,7 +1,6 @@
 #region Generals
 #macro SECOND_TO_STEP 100 // room_speed (fps)
 #macro STEP_TO_SECOND 0.01
-#macro SECONDS *SECOND_TO_STEP
 
 globalvar configuration;
 configuration = os_get_config()
@@ -197,7 +196,5 @@ surface_resize(application_surface, XELL_WIDTH, XELL_HEIGHT)
 #endregion
 
 randomize()
-
-test_maze = new BlobbyMaze(GAME_BOARD_NUMBER_S, GAME_BOARD_NUMBER_S)
 
 alarm[0] = 1

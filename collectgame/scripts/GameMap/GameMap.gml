@@ -52,7 +52,7 @@ function xell() constructor {
 
 /// @function make_xell(x_index, y_index)
 function make_xell(U, V) {
-	var thexell = new xell(U, V)
+	var thexell = new xell()
 	thexell.x = U * XELL_WIDTH
 	thexell.y = V * XELL_HEIGHT
 	return thexell
@@ -60,7 +60,7 @@ function make_xell(U, V) {
 
 /// @function make_special_xell(contents, x_index, y_index)
 function make_special_xell(Content, U, V) {
-	var thexell = new xell(U, V)
+	var thexell = new xell()
 	thexell.x = U * XELL_WIDTH
 	thexell.y = V * XELL_HEIGHT
 	return thexell
