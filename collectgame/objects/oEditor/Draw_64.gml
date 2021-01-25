@@ -41,14 +41,11 @@ var i, j, Cell
 for (j = 0; j < GAME_BOARD_NUMBER_S; ++j) {
 	for (i = 0; i < GAME_BOARD_NUMBER_S; ++i) {
 		Cell = tool_info[j, i]
-		//if 1 < Cell.level and current_time mod 5000 == 0
-		//	show_debug_message(string(Cell))
-
 		caption = string(Cell.level)
 		draw_set_color(Cell.color)
 		draw_rectangle(dx, dy, dx + 20, dy + 20, false)
-		draw_set_color($808080)
-		draw_text(dx + 10, dy + 10, caption)
+		draw_set_color(0)
+		//draw_text(dx + 10, dy + 10, caption)
 		dx += 20
 	}
 	dx = editor_port_x

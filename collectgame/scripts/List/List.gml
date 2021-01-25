@@ -1,7 +1,3 @@
-/// @function 
-function _Container_Null() constructor { static toString = function() { return "%NULL%" } }
-#macro NULL _Container_Null
-
 /// @function iterator_destroy(iterator)
 function iterator_destroy(Target_iterator) { Target_iterator._Data = 0; delete Target_iterator }
 
@@ -140,27 +136,30 @@ function List() constructor {
 	/// @function erase_at(index)
 	static erase_at = function(Index) {
 		if _Capacity <= 0 or _Size <= 0 or is_undefined(Index) or is_nan(Index)
-			return NULL
+			return undefined
 
-		var Result = NULL, RIndex
+		var Result = undefined, RIndex
 		if is_struct(Index)
 			RIndex = Index._Index
 		else
 			RIndex = Index
 
 		if RIndex < 0 or _Size <= RIndex
-			return NULL
+			return undefined
 		Result = _Data[RIndex]
 		_Size--
 		_Serial_change()
+		//for (var i = 0; i < _Size; ++i)
+		//	_Data[i] = _Data[i]
 		array_delete(_Data, RIndex, 1)
+		array_push(_Data, undefined)
 		return Result
 	}
 
 	/// @function erase(begin, end)
 	static erase = function(First, Last) {
 		if _Size <= 0
-			return NULL
+			return undefined
 
 		var FirstIndex = (is_struct(First) ? First._Index : First)
 		var LastIndex = (is_struct(Last) ? Last._Index : Last)
@@ -176,8 +175,18 @@ function List() constructor {
 			return undefined
 		} else {
 			array_delete(_Data, FirstIndex, Count)
+			//repeat Count array_push(_Data, undefined)
 			_Capacity -= Count
 			return (new Iterator(self).set_index(FirstIndex))
+		}
+	}
+
+	/// @function pop_front()
+	static pop_front = function() {
+		if 0 < _Size {
+			return erase_at(0)
+		} else {
+			return undefined
 		}
 	}
 
@@ -185,11 +194,10 @@ function List() constructor {
 	static pop_back = function() {
 		if 0 < _Size {
 			_Serial_change()
-			var Result = _Data[_Size - 1]
-			_Size--
+			var Result = _Data[--_Size]
 			return Result
 		} else {
-			return NULL
+			return undefined
 		}
 	}
 
@@ -500,9 +508,9 @@ function List() constructor {
 
 	/// @function 
 	static _Check_range = function(First, Last) {
-		//if First < 0 or Last < 0 or _Size <= First or _Size < Last
-		//	throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nOut of bound."
-		//else
+		if First < 0 or Last < 0 or _Size < First
+			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nOut of bound of " + string(_Size) + "."
+		else
 		if Last < First
 			throw "An error occured when erasing on range(" + string(First) + ", " + string(Last) + ")\nFirst is greater then Last."
 	}
