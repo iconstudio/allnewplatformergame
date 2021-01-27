@@ -1,14 +1,17 @@
 /// @function MazeRoute(x, y)
 function MazeRoute(X, Y) constructor {
-	//static toString = function() { return "Route(" + string(x) + ", " + string(y) + "): " + string(level) }
+	static toString = function() { return "Route(" + string(x) + ", " + string(y) + "): " + string(level) }
 
 	x = X
 	y = Y
 
-	color = 0
-	derivations = undefined
 	finished = false
+	derivations = undefined
 	level = 0
+
+	color = 0
+	category = ROOM_CATEGORY.NORMAL
+	type = 0
 	bit = 0
 }
 
@@ -118,7 +121,7 @@ function MazeGenerator(Width, Height) constructor {
 					var Sub_derive_size = Sub_derive.get_size()
 					var Limit = irandom_range(blob_size_min, blob_size_max)
 					var Check_on_limit = (Limit <= Sub_derive_size)
-					
+
 					Neighbor = Sprout_list[irandom(Sprout_size - 1)]
 					Neighbor.level = Seed.level
 					Neighbor.derivations = Sub_derive // #org_derive
@@ -258,8 +261,6 @@ function MazeGenerator(Width, Height) constructor {
 			fence()
 		} until territory.get_size() == 0
 
-		//repeat 2
-			//cleanup()
 		var Dup_count = 0
 		do {
 			Dup_count = cleanup()
@@ -284,7 +285,6 @@ function MazeGenerator(Width, Height) constructor {
 					}
 
 					var threshold = maze_width * 0.5
-					
 					if X < threshold * 0.5 {
 						SibProc.SibReal = X * 2 + irandom(40)
 					} else if X < threshold {

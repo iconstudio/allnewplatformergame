@@ -1,5 +1,5 @@
 /// @description Update
-if state == SCENE_STATE.GAME {
+if state == GAME_SCENE_STATES.GAME {
 	var player_dir_x = 0, player_dir_y = 0
 	if global.player_x < view_x
 		player_dir_x = -1
@@ -11,8 +11,8 @@ if state == SCENE_STATE.GAME {
 	else if view_y + XELL_HEIGHT <= global.player_y
 		player_dir_y = 1
 
-	if player_dir_x == 0 or player_dir_y == 0 {
-		board_meet(player_board_pos[0] + player_dir_x, player_board_pos[1] + player_dir_y)
+	if player_dir_x != 0 or player_dir_y != 0 {
+		transition_to(player_board_pos[0] + player_dir_x, player_board_pos[1] + player_dir_y)
 
 		//var trans_x = view_x + player_dir_x * XELL_WIDTH
 		//var trans_y = view_y + player_dir_y * XELL_HEIGHT

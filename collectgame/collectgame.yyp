@@ -36,7 +36,6 @@
     {"id":{"name":"sJar","path":"sprites/sJar/sJar.yy",},"order":20,},
     {"id":{"name":"Sprite23","path":"sprites/Sprite23/Sprite23.yy",},"order":22,},
     {"id":{"name":"sPlayerMask","path":"sprites/sPlayerMask/sPlayerMask.yy",},"order":2,},
-    {"id":{"name":"BlobbyMaze","path":"scripts/BlobbyMaze/BlobbyMaze.yy",},"order":2,},
     {"id":{"name":"oCollectible","path":"objects/oCollectible/oCollectible.yy",},"order":4,},
     {"id":{"name":"sLadder","path":"sprites/sLadder/sLadder.yy",},"order":18,},
     {"id":{"name":"sTest2","path":"sprites/sTest2/sTest2.yy",},"order":5,},
