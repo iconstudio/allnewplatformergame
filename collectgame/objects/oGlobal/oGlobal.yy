@@ -4,7 +4,10 @@
   "visible": true,
   "spriteMaskId": null,
   "persistent": true,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "oIgnore",
+    "path": "objects/oIgnore/oIgnore.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
