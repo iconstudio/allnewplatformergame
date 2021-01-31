@@ -4,10 +4,7 @@
   "visible": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": {
-    "name": "oIgnore",
-    "path": "objects/oIgnore/oIgnore.yy",
-  },
+  "parentObjectId": null,
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -20,15 +17,17 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oMainMenu","path":"objects/oMainMenu/oMainMenu.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Game System",
-    "path": "folders/Game System.yy",
+    "name": "Main Menu",
+    "path": "folders/Main Menu.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oCamera",
+  "name": "oMainMenu",
   "tags": [],
   "resourceType": "GMObject",
 }

@@ -24,11 +24,11 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Game System",
-    "path": "folders/Game System.yy",
+    "name": "System",
+    "path": "folders/System.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oCamera",
+  "name": "oDummy",
   "tags": [],
   "resourceType": "GMObject",
 }

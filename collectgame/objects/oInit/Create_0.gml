@@ -168,16 +168,16 @@ global.GAME_LAYERS = [
 #macro PORT_SCALE 2
 #macro PORT_WIDTH 640
 #macro PORT_HEIGHT 640
-#macro APP_WIDTH 1280
+#macro APP_WIDTH 960
 #macro APP_HEIGHT 960
+
+#macro GUI_WIDTH APP_WIDTH
+#macro GUI_HEIGHT APP_HEIGHT
+window_set_size(APP_WIDTH, APP_HEIGHT)
 global.app_position = [
 	(APP_WIDTH - PORT_WIDTH) * 0.5,
 	(APP_HEIGHT - PORT_HEIGHT) * 0.25
 ]
-
-window_set_min_width(APP_WIDTH)
-window_set_min_height(APP_HEIGHT)
-window_set_size(APP_WIDTH, APP_HEIGHT)
 
 var i, cam
 for (i = room_first; room_exists(i); i = room_next(i)) {

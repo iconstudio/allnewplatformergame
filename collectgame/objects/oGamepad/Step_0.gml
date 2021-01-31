@@ -3,10 +3,8 @@ if index == -1
 	exit
 
 var check_axis_h = gamepad_axis_value(index, gp_axislh)
-show_debug_message("left axis h: " + string(check_axis_h))
 var check_axis_v = gamepad_axis_value(index, gp_axislv)
 global.io_left |= gamepad_button_check(index, gp_padl) or check_axis_h < -threshold
-show_debug_message("gp left")
 global.io_right |= gamepad_button_check(index, gp_padr) or threshold < check_axis_h
 global.io_up |= gamepad_button_check(index, gp_padu) or check_axis_v < -threshold
 global.io_down |= gamepad_button_check(index, gp_padd) or threshold < check_axis_v

@@ -1,4 +1,8 @@
 /// @description Input Update
+global.io_mouse_left = device_mouse_check_button(0, mb_left)
+global.io_mouse_pressed_left = device_mouse_check_button_pressed(0, mb_left)
+global.io_mouse_released_left = device_mouse_check_button_released(0, mb_left)
+
 global.io_left = keyboard_check(vk_left)
 global.io_right = keyboard_check(vk_right)
 global.io_up = keyboard_check(vk_up)

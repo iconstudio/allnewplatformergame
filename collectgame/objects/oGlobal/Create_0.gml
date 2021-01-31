@@ -1,4 +1,18 @@
 /// @description Initialization
+global.qui_master = new QuiEntry(true)
+global.qui_master.set_size(GUI_WIDTH, GUI_HEIGHT)
+
+global.qui_mx = 0
+global.qui_my = 0
+global.qui_cursor = undefined
+global.qui_focused = undefined
+global.qui_everything = new List()
+global.qui_interacts = new List()
+
+global.io_mouse_left = false
+global.io_mouse_pressed_left = false
+global.io_mouse_released_left = false
+
 global.io_left = false
 global.io_right = false
 global.io_up = false
@@ -47,7 +61,6 @@ key_c = ord("C")
 key_v = ord("V")
 key_comma = ord(",")
 key_dot = ord(".")
-
 
 globalvar view_x, view_y;
 global.player_x = 0

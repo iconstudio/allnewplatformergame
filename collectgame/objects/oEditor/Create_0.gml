@@ -18,6 +18,3 @@ key_minus = ord("-")
 
 editor_surface = -1
 event_user(1)
-
-test_maze = new MazeGenerator(GAME_BOARD_NUMBER_S, GAME_BOARD_NUMBER_S)
-test_maze.generate()

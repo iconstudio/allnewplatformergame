@@ -1,4 +1,3 @@
-instance_create_layer(0, 0, layer, oGlobal)
-instance_create_layer(0, 0, layer, oGamepad)
+display_set_gui_maximize()
 
-alarm[1] = 1
+alarm[1] = 10

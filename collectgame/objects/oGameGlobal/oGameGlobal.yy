@@ -32,8 +32,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "System",
-    "path": "folders/System.yy",
+    "name": "Game System",
+    "path": "folders/Game System.yy",
   },
   "resourceVersion": "1.0",
   "name": "oGameGlobal",

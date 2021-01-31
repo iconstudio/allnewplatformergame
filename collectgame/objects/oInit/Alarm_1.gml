@@ -10,6 +10,7 @@ switch configuration {
 	break
 }
 
-display_set_gui_maximize()
+instance_create_layer(0, 0, layer, oGlobal)
+instance_create_layer(0, 0, layer, oGamepad)
 
 alarm[2] = 1
