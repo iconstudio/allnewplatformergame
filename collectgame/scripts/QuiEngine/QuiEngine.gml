@@ -3,7 +3,8 @@
 #macro QUI_BUTTON_HEIGHT 40
 #macro QUI_TEXT_MARGIN 6
 #macro QUI_TITLEBAR_MARGIN 8
-#macro QUI_TITLEBAR_HEIGHT 32
+#macro QUI_TITLEBAR_HEIGHT 40
+#macro QUI_WINDOW_SHRINK 5
 enum QUI_STATES {
 	OPENING,
 	IDLE,
@@ -12,6 +13,8 @@ enum QUI_STATES {
 
 /// @function QuiEntry(expandable, interactible)
 function QuiEntry(CanExpand, CanInteract) constructor {
+	static toString = function() { return "QuiObject" }
+
 	tr_state = QUI_STATES.OPENING
 	tr_count = 0
 
@@ -144,6 +147,8 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 
 /// @function QuiContainer(x, y, width, height)
 function QuiContainer(X, Y, Width, Height): QuiEntry(true, false) constructor {
+	static toString = function() { return "Container" }
+
 	x = X
 	y = Y
 	size_x = Width
@@ -158,12 +163,12 @@ function show_qui_popup(Title, Description) {
 	if 2 < argument_count {
 		Panel.size_x = argument[2]
 		if 3 < argument_count
-			Panel.size_y = argument[3]
+			Panel.sisze_y = argument[3]
 	}
 
 	var MaxWidth = Panel.size_x
 	var Content = new QuiLabel(Description, 0, QUI_TITLEBAR_HEIGHT, 0, 0, MaxWidth - QUI_TEXT_MARGIN * 2)
-	var OkButton = new QuiButton("Ok", 50, Panel.size_y - QUI_BUTTON_HEIGHT - QUI_TITLEBAR_HEIGHT - QUI_TEXT_MARGIN, method(self, function() { Qui_close(self) }), 0.5, 0.5)
+	var OkButton = new QuiButton("Ok", MaxWidth * 0.5, Panel.size_y - QUI_BUTTON_HEIGHT - QUI_TITLEBAR_HEIGHT - QUI_TEXT_MARGIN, method(self, function() { Qui_close(self) }), 0.5, 0.5)
 	var Titlebar = new QuiTitlebar(Title, Panel, MaxWidth)
 	Panel.make_then(OkButton, Content, Titlebar)
 
@@ -175,6 +180,9 @@ function show_qui_popup(Title, Description) {
 
 /// @function QuiTitlebar(title, window, width)
 function QuiTitlebar(Caption, Panel, Width): QuiEntry(false, false) constructor {
+	static toString = function() { return "Titlebar: " + string(caption) }
+
+	image_alpha = 1
 	image_blend = $E0801A
 
 	pressed = false
@@ -209,6 +217,7 @@ function QuiTitlebar(Caption, Panel, Width): QuiEntry(false, false) constructor 
 	}
 
 	static draw = function() {
+		draw_set_alpha(draw_get_alpha() * image_alpha)
 		draw_set_color(image_blend)
 		draw_rectangle(0, 0, size_x, size_y, false)
 		draw_set_color($ffffff)
@@ -221,6 +230,8 @@ function QuiTitlebar(Caption, Panel, Width): QuiEntry(false, false) constructor 
 
 /// @function QuiWindow(x, y, width, height)
 function QuiWindow(X, Y, Width, Height): QuiEntry(true, false) constructor {
+	static toString = function() { return "Window (" + string(size_x) + ", " + string(size_y) + ")" }
+
 	image_alpha = 1
 	image_blend = $ffffff
 
@@ -232,15 +243,17 @@ function QuiWindow(X, Y, Width, Height): QuiEntry(true, false) constructor {
 	static draw = function() {
 		draw_set_alpha(draw_get_alpha() * image_alpha)
 		draw_set_color(image_blend)
-		draw_rectangle(0, 0, size_x, size_y, false)
+		draw_splice(sWindowSplices, 5, 0, -QUI_WINDOW_SHRINK, -QUI_WINDOW_SHRINK, size_x + QUI_WINDOW_SHRINK * 2, size_y + QUI_WINDOW_SHRINK * 2)
 	}
 }
 
 /// @function QuiLabel(caption, x, y, [align_x=0], [align_y=0], [seperate_width=default])
 function QuiLabel(Caption, X, Y): QuiEntry(false, false) constructor {
+	static toString = function() { return "Label: " + string(caption) }
+
 	caption = Caption 
 	image_alpha = 1
-	image_blend = 0
+	image_blend = $ffffff
 
 	x = X
 	y = Y
@@ -271,6 +284,8 @@ function QuiLabel(Caption, X, Y): QuiEntry(false, false) constructor {
 
 /// @function QuiButton(caption, x, y, [predicate], [ax=0], [ay=0])
 function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
+	static toString = function() { return "Button: " + string(caption) }
+
 	pressed = false
 	caption = Caption
 	image_alpha = 1
@@ -308,18 +323,19 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 	}
 
 	static draw = function() {
-		var Alpha = draw_get_alpha()
+		var Alpha = draw_get_alpha() * image_alpha
+		draw_set_alpha(Alpha)
 		draw_set_color(image_blend)
 		if self == global.qui_cursor {
 			if pressed
-				draw_sprite_stretched_ext(sButtonSplices, 2, 0, 0, size_x, size_y, image_blend, image_alpha * Alpha)
+				draw_sprite_stretched_ext(sButtonSplices, 2, 0, 0, size_x, size_y, image_blend, Alpha)
 			else
 				draw_splice(sButtonSplices, 5, 1, 0, 0, size_x, size_y)
 		} else {
 			if pressed
 				draw_splice(sButtonSplices, 5, 3, 0, 0, size_x, size_y)
 			else
-				draw_sprite_stretched_ext(sButtonSplices, 0, 0, 0, size_x, size_y, image_blend, image_alpha * Alpha)
+				draw_sprite_stretched_ext(sButtonSplices, 0, 0, 0, size_x, size_y, image_blend, Alpha)
 		}
 		draw_set_color(0)
 		draw_set_font(fontQuiText)
@@ -328,7 +344,6 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 		draw_text(size_x * 0.5, size_y * 0.5, caption)
 	}
 }
-
 
 /// @function QuiStaticTextButton(caption, x, y, predicate, [ax=0], [ay=0])
 function QuiStaticTextButton(Caption, X, Y, Pred, Anchx, Anchy): QuiEntry(true, true) constructor {
@@ -413,11 +428,12 @@ function Qui_draw(Item) {
 		}
 
 		if expandable {
-			with children_list
+			with children_list {
 				foreach(0, get_size(), Qui_draw)
+			}
 		}
 		draw_set_alpha(Alpha)
-		draw_set_alpha(Color)
+		draw_set_color(Color)
 	}
 }
 
