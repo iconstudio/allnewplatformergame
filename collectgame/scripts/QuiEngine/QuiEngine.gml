@@ -288,6 +288,9 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 
 	pressed = false
 	caption = Caption
+
+	sprite_index = sButtonSplices
+	edge = 5
 	image_alpha = 1
 	image_blend = $ffffff
 
@@ -328,14 +331,14 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 		draw_set_color(image_blend)
 		if self == global.qui_cursor {
 			if pressed
-				draw_sprite_stretched_ext(sButtonSplices, 2, 0, 0, size_x, size_y, image_blend, Alpha)
+				draw_sprite_stretched_ext(sprite_index, 2, 0, 0, size_x, size_y, image_blend, Alpha)
 			else
-				draw_splice(sButtonSplices, 5, 1, 0, 0, size_x, size_y)
+				draw_splice(sprite_index, edge, 1, 0, 0, size_x, size_y)
 		} else {
 			if pressed
-				draw_splice(sButtonSplices, 5, 3, 0, 0, size_x, size_y)
+				draw_splice(sprite_index, edge, 3, 0, 0, size_x, size_y)
 			else
-				draw_sprite_stretched_ext(sButtonSplices, 0, 0, 0, size_x, size_y, image_blend, Alpha)
+				draw_sprite_stretched_ext(sprite_index, 0, 0, 0, size_x, size_y, image_blend, Alpha)
 		}
 		draw_set_color(0)
 		draw_set_font(fontQuiText)
@@ -347,6 +350,12 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 
 /// @function QuiStaticTextButton(caption, x, y, predicate, [ax=0], [ay=0])
 function QuiStaticTextButton(Caption, X, Y, Pred, Anchx, Anchy): QuiEntry(true, true) constructor {
+}
+
+// TODO
+/// @function Qui_create(item)
+function Qui_create(Item) {
+	
 }
 
 /// @function Qui_prefix(child, x, y)

@@ -14,9 +14,12 @@ var Rectangler = function(): QuiEntry(false, true) constructor {
 	}
 }
 
+MainEntryButton = function(Caption): QuiButton(Caption, 0, 0) constructor {
+	
+}
+
 with global.qui_master {
-	add_entry(new Rectangler()).make_then(new Rectangler()).make_then(new Rectangler()).make_then(new Rectangler())
-	//add_entry(new QuiPopup("Test Title", "Test Label", -1))
+	
 }
 
 show_qui_popup("Test Title", "Test Label")
