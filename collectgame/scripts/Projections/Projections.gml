@@ -67,8 +67,8 @@ function draw_transform_add_translation(Xt, Yt, Zt) {
 	matrix_set(matrix_world, mr)
 }
 
-/// @function draw_transform_set_identiy()
-function draw_transform_set_identiy() {
+/// @function draw_transform_set_identity()
+function draw_transform_set_identity() {
 	matrix_set(matrix_world, matrix_build_identity())
 }
 
@@ -89,5 +89,17 @@ function draw_transform_set_translation(Xt, Yt, Zt) {
 	m[13] = Yt
 	m[14] = Zt
 
+	matrix_set(matrix_world, m)
+}
+
+/// @function draw_transform_stack_push()
+function draw_transform_stack_push() {
+	matrix_stack_push(matrix_get(matrix_world))
+}
+
+/// @function draw_transform_stack_pop()
+function draw_transform_stack_pop() {
+	var m = matrix_stack_top()
+	matrix_stack_pop()
 	matrix_set(matrix_world, m)
 }

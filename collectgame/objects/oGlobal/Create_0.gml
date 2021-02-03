@@ -1,13 +1,12 @@
 /// @description Initialization
 global.qui_master = new QuiEntry(true)
+global.qui_master.tr_state = QUI_STATES.IDLE
 global.qui_master.set_size(GUI_WIDTH, GUI_HEIGHT)
 
 global.qui_mx = 0
 global.qui_my = 0
 global.qui_cursor = undefined
-global.qui_focused = undefined
-global.qui_everything = new List()
-global.qui_interacts = new List()
+//global.qui_everything = new List()
 
 global.io_mouse_left = false
 global.io_mouse_pressed_left = false

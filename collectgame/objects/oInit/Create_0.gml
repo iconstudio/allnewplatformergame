@@ -176,8 +176,8 @@ global.app_position = [
 	(APP_HEIGHT - PORT_HEIGHT) * 0.25
 ]
 
-#macro GUI_WIDTH 640
-#macro GUI_HEIGHT 640
+#macro GUI_WIDTH APP_WIDTH
+#macro GUI_HEIGHT APP_HEIGHT
 
 var i, cam
 for (i = room_first; room_exists(i); i = room_next(i)) {

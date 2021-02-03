@@ -1,11 +1,12 @@
 #macro QUI_TR_PERIOD 20 // 0.2 second
 #macro QUI_TILE_MARGIN 20
-#macro QUI_BUTTON_HEIGHT 40
+#macro QUI_BUTTON_HEIGHT 50
 #macro QUI_TEXT_MARGIN 6
 #macro QUI_TITLEBAR_MARGIN 8
 #macro QUI_TITLEBAR_HEIGHT 40
 #macro QUI_WINDOW_SHRINK 5
 enum QUI_STATES {
+	STOP = -1,
 	OPENING,
 	IDLE,
 	CLOSING
@@ -40,6 +41,7 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 	anchor_y = 0
 
 	// predicates
+	static close = undefined
 	static update = undefined
 	static draw = undefined
 
@@ -103,27 +105,41 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 
 	/// @function focus()
 	static focus = function() {
-		var ID = self
 		with parent
-			child_focused = ID
+			child_focused = other
 	}
 
 	/// @function set_position(x, y)
 	static set_position = function(X, Y) {
 		x = X
 		y = Y
+		return self
+	}
+
+	/// @function set_x(pos)
+	static set_x = function(X) {
+		x = X
+		return self
+	}
+
+	/// @function set_y(pos)
+	static set_y = function(Y) {
+		y = Y
+		return self
 	}
 
 	/// @function set_size(width, height)
 	static set_size = function(Width, Height) {
 		size_x = Width
 		size_y = Height
+		return self
 	}
 
 	/// @function set_anchor(anchor_horizontal, anchor_vertical)
 	static set_anchor = function(Anchx, Anchy) {
 		anchor_x = Anchx
 		anchor_y = Anchy
+		return self
 	}
 
 	/// @function destroy()
@@ -183,7 +199,7 @@ function QuiTitlebar(Caption, Panel, Width): QuiEntry(false, false) constructor 
 	static toString = function() { return "Titlebar: " + string(caption) }
 
 	image_alpha = 1
-	image_blend = $E0801A
+	image_blend = $ffffff//$E0801A
 
 	pressed = false
 	caption = Caption
@@ -218,13 +234,13 @@ function QuiTitlebar(Caption, Panel, Width): QuiEntry(false, false) constructor 
 
 	static draw = function() {
 		draw_set_alpha(draw_get_alpha() * image_alpha)
+		//draw_set_color(image_blend)
+		//draw_rectangle(0, 0, size_x, size_y, false)
 		draw_set_color(image_blend)
-		draw_rectangle(0, 0, size_x, size_y, false)
-		draw_set_color($ffffff)
 		draw_set_font(fontQuiTitle)
-		draw_set_halign(0)
+		draw_set_halign(1)
 		draw_set_valign(1)
-		draw_text(QUI_TITLEBAR_MARGIN, size_y * 0.5, caption)
+		draw_text(size_x * 0.5, size_y * 0.5, caption)
 	}
 }
 
@@ -284,7 +300,7 @@ function QuiLabel(Caption, X, Y): QuiEntry(false, false) constructor {
 
 /// @function QuiButton(caption, x, y, [predicate], [ax=0], [ay=0])
 function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
-	static toString = function() { return "Button: " + string(caption) }
+	static toString = function() { return "Button of " + sprite_get_name(sprite_index) + ": " + string(caption) }
 
 	pressed = false
 	caption = Caption
@@ -352,12 +368,6 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 function QuiStaticTextButton(Caption, X, Y, Pred, Anchx, Anchy): QuiEntry(true, true) constructor {
 }
 
-// TODO
-/// @function Qui_create(item)
-function Qui_create(Item) {
-	
-}
-
 /// @function Qui_prefix(child, x, y)
 function Qui_prefix(Item, X, Y) {
 	with Item {
@@ -369,6 +379,8 @@ function Qui_prefix(Item, X, Y) {
 		Sy = drawn_y
 		Lx = Sx + size_x
 		Ly = Sy + size_y
+		if tr_state != QUI_STATES.IDLE
+			return undefined
 
 		if point_in_rectangle(global.qui_mx, global.qui_my, Sx, Sy, Lx, Ly) {
 			var Picked = undefined, Result = undefined
@@ -390,8 +402,8 @@ function Qui_prefix(Item, X, Y) {
 			else
 				return Picked
 		}
-		return undefined
 	}
+	return undefined
 }
 
 /// @function Qui_update(child, x, y)
@@ -404,6 +416,24 @@ function Qui_update(Item, X, Y) {
 		var Sy = Y + y - size_y * anchor_y
 		drawn_x = Sx
 		drawn_y = Sy
+		if tr_state == QUI_STATES.OPENING {
+			if tr_count < QUI_TR_PERIOD {
+				tr_count++
+			} else {
+				tr_state = QUI_STATES.IDLE
+				tr_count = 0
+			}
+		} else if tr_state == QUI_STATES.CLOSING {
+			if tr_count < QUI_TR_PERIOD {
+				tr_count--
+			} else {
+				tr_count = 0
+				if is_undefined(close)
+					Qui_destroy(self)
+				else
+					close()
+			}
+		}
 
 		if !visible
 			exit
@@ -431,9 +461,10 @@ function Qui_draw(Item) {
 
 		var Alpha = draw_get_alpha(), Color = draw_get_color()
 		if !is_undefined(draw) {
+			draw_transform_stack_push()
 			draw_transform_set_translation(drawn_x, drawn_y, 0)
 			draw()
-			draw_transform_set_identiy()
+			draw_transform_stack_pop()
 		}
 
 		if expandable {
@@ -443,6 +474,13 @@ function Qui_draw(Item) {
 		}
 		draw_set_alpha(Alpha)
 		draw_set_color(Color)
+	}
+}
+
+/// @function Qui_awake(item)
+function Qui_awake(Item) {
+	with global.qui_master {
+		add_entry(Item)
 	}
 }
 
