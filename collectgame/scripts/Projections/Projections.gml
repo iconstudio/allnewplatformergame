@@ -1,4 +1,3 @@
-
 /// @function draw_transform_add_rotation_x(angle)
 function draw_transform_add_rotation_x(Angle) {
 	var c = dcos(Angle)
@@ -44,6 +43,18 @@ function draw_transform_add_rotation_z(Angle) {
 	matrix_set(matrix_world, mr)
 }
 
+/// @function draw_transform_add_scaling(xs, ys, zs)
+function draw_transform_add_scaling(Xs, Ys, Zs) {
+	var m = matrix_build_identity()
+	m[0] = Xs
+	m[5] = Ys
+	m[10] = Zs
+
+	var mw = matrix_get(matrix_world)
+	var mr = matrix_multiply(mw, m)
+	matrix_set(matrix_world, mr)
+}
+
 /// @function draw_transform_add_translation(xt, yt, zt)
 function draw_transform_add_translation(Xt, Yt, Zt) {
 	var m = matrix_build_identity()
@@ -59,6 +70,16 @@ function draw_transform_add_translation(Xt, Yt, Zt) {
 /// @function draw_transform_set_identiy()
 function draw_transform_set_identiy() {
 	matrix_set(matrix_world, matrix_build_identity())
+}
+
+/// @function draw_transform_set_scaling(xs, ys, zs)
+function draw_transform_set_scaling(Xs, Ys, Zs) {
+	var m = matrix_build_identity()
+	m[0] = Xs
+	m[5] = Ys
+	m[10] = Zs
+
+	matrix_set(matrix_world, m)
 }
 
 /// @function draw_transform_set_translation(xt, yt, zt)
