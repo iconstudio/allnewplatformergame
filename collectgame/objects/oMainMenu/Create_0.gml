@@ -14,7 +14,7 @@ var Rectangler = function(): QuiEntry(false, true) constructor {
 	}
 }
 
-MainEntryButton = function(Caption): QuiButton(Caption, 0, 0) constructor {
+MainEntryButton = function(Caption, Pred): QuiButton(Caption, 0, 0, Pred, 0.5, 0.5) constructor {
 	
 }
 
