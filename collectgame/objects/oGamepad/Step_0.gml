@@ -13,21 +13,25 @@ global.io_pressed_left |= gamepad_button_check_pressed(index, gp_padl)
 if !stick_hvalue_thresh and check_axis_h < -threshold {
 	stick_hvalue_thresh = true
 	global.io_pressed_left = true
+	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 }
 global.io_pressed_right |= gamepad_button_check_pressed(index, gp_padr)
 if !stick_hvalue_thresh and threshold < check_axis_h {
 	stick_hvalue_thresh = true
 	global.io_pressed_right = true
+	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 }
 global.io_pressed_up |= gamepad_button_check_pressed(index, gp_padu)
 if !stick_vvalue_thresh and check_axis_v < -threshold {
 	stick_vvalue_thresh = true
 	global.io_pressed_up = true
+	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 }
 global.io_pressed_down |= gamepad_button_check_pressed(index, gp_padd)
 if !stick_vvalue_thresh and threshold < check_axis_v {
 	stick_vvalue_thresh = true
 	global.io_pressed_down = true
+	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 }
 global.io_pressed_jump |= gamepad_button_check_pressed(index, gp_face1)
 global.io_released_jump |= gamepad_button_check_released(index, gp_face1)

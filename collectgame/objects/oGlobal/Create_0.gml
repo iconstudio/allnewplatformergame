@@ -6,6 +6,8 @@ global.qui_master.set_size(GUI_WIDTH, GUI_HEIGHT)
 global.qui_mx = 0
 global.qui_my = 0
 global.qui_cursor = undefined
+global.qui_focused = undefined
+global.qui_io_last = QUI_IO_STATES.KEYBOARD
 //global.qui_everything = new List()
 
 global.io_mouse_left = false

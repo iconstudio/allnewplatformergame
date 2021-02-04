@@ -5,12 +5,9 @@
 #macro QUI_TITLEBAR_MARGIN 8
 #macro QUI_TITLEBAR_HEIGHT 40
 #macro QUI_WINDOW_SHRINK 5
-enum QUI_STATES {
-	STOP = -1,
-	OPENING,
-	IDLE,
-	CLOSING
-}
+enum QUI_STATES { STOP = -1, OPENING, IDLE, CLOSING }
+	
+enum QUI_IO_STATES { NOTHING = -1, KEYBOARD, MOUSE }
 
 /// @function QuiEntry(expandable, interactible)
 function QuiEntry(CanExpand, CanInteract) constructor {
@@ -22,7 +19,8 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 	// logic
 	expandable = CanExpand
 	children_list = CanExpand ? new List() : undefined
-	focus_level = NONE
+	focus_level = 0
+	phase = 0
 
 	// flags
 	enabled = true
@@ -42,6 +40,7 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 
 	// predicates
 	static close = undefined
+	static destroy = undefined
 	static update = undefined
 	static draw = undefined
 
@@ -135,6 +134,18 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 		return self
 	}
 
+	/// @function set_width(value)
+	static set_width = function(Value) {
+		size_x = Value
+		return self
+	}
+
+	/// @function set_height(value)
+	static set_height = function(Value) {
+		size_y = Value
+		return self
+	}
+
 	/// @function set_anchor(anchor_horizontal, anchor_vertical)
 	static set_anchor = function(Anchx, Anchy) {
 		anchor_x = Anchx
@@ -142,22 +153,15 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 		return self
 	}
 
-	/// @function destroy()
-	static destroy = function() {
+	/// @function clear_itself()
+	static clear_itself = function() {
+		if !is_undefined(destroy)
+			destroy()
 		if expandable {
 			with children_list
-				foreach(0, get_size(), function(Child) {
-					with Child
-						destroy()
-				})
+				foreach(0, get_size(), function(Child) { Child.clear_children() })
 		}
-
-		var ID = self
-		with parent.children_list {
-			remove(0, get_size(), ID)
-		}
-
-		delete children_list
+		return self
 	}
 }
 
@@ -184,14 +188,12 @@ function show_qui_popup(Title, Description) {
 
 	var MaxWidth = Panel.size_x
 	var Content = new QuiLabel(Description, 0, QUI_TITLEBAR_HEIGHT, 0, 0, MaxWidth - QUI_TEXT_MARGIN * 2)
-	var OkButton = new QuiButton("Ok", MaxWidth * 0.5, Panel.size_y - QUI_BUTTON_HEIGHT - QUI_TITLEBAR_HEIGHT - QUI_TEXT_MARGIN, method(self, function() { Qui_close(self) }), 0.5, 0.5)
+	var OkButton = new QuiButton("Ok", MaxWidth * 0.5, Panel.size_y - QUI_BUTTON_HEIGHT - QUI_TITLEBAR_HEIGHT - QUI_TEXT_MARGIN, undefined, 0.5, 0.5)
+	OkButton.predicate = method(OkButton, function() { Qui_close(parent) })
 	var Titlebar = new QuiTitlebar(Title, Panel, MaxWidth)
 	Panel.make_then(OkButton, Content, Titlebar)
 
-	with global.qui_master
-		add_entry(Panel)
-
-	return Panel
+	return Qui_awake(global.qui_master, Panel)
 }
 
 /// @function QuiTitlebar(title, window, width)
@@ -327,17 +329,44 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 	}
 
 	static update = function() {
-		if self == global.qui_cursor {
-			if global.io_mouse_pressed_left {
-				show_debug_message("pressed a button")
-				pressed = true
-			} else if global.io_mouse_released_left {
-				if !is_undefined(predicate)
-					predicate()
-				pressed = false
+		if global.qui_io_last == QUI_IO_STATES.MOUSE {
+			if self == global.qui_cursor {
+				if !pressed {
+					if global.io_mouse_pressed_left
+						pressed = true
+				} else { // pressed
+					if global.io_mouse_released_left {
+						if !is_undefined(predicate)
+							predicate()
+						pressed = false
+					}
+				}
+				if global.io_pressed_back
+					pressed = false
+				if !pressed
+					phase = 1
+				else
+					phase = 2
+			} else {
+				if global.io_pressed_back
+					pressed = false
+				if pressed and !global.io_mouse_left
+					pressed = false
+
+				if !pressed
+					phase = 0
+				else
+					phase = 3
 			}
-		} else if !global.io_mouse_left {
-			pressed = false
+		} else {
+			var check = (global.io_pressed_right or global.io_pressed_down) - (global.io_pressed_left or global.io_pressed_up)
+			if check == 1 {
+				if !is_undefined(brother_next)
+					brother_next.focus()
+			} else if check == -1 {
+				if !is_undefined(brother_before)
+					brother_before.focus()
+			}
 		}
 	}
 
@@ -345,17 +374,27 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 		var Alpha = draw_get_alpha() * image_alpha
 		draw_set_alpha(Alpha)
 		draw_set_color(image_blend)
-		if self == global.qui_cursor {
-			if pressed
-				draw_sprite_stretched_ext(sprite_index, 2, 0, 0, size_x, size_y, image_blend, Alpha)
-			else
-				draw_splice(sprite_index, edge, 1, 0, 0, size_x, size_y)
-		} else {
-			if pressed
-				draw_splice(sprite_index, edge, 3, 0, 0, size_x, size_y)
-			else
+		switch phase {
+			case 0:
 				draw_sprite_stretched_ext(sprite_index, 0, 0, 0, size_x, size_y, image_blend, Alpha)
+		        break
+
+			case 1:
+				draw_splice(sprite_index, edge, 1, 0, 0, size_x, size_y)
+		        break
+
+			case 2:
+				draw_sprite_stretched_ext(sprite_index, 2, 0, 0, size_x, size_y, image_blend, Alpha)
+		        break
+
+			case 3:
+				draw_splice(sprite_index, edge, 3, 0, 0, size_x, size_y)
+		        break
+
+			default:
+				break
 		}
+
 		draw_set_color(0)
 		draw_set_font(fontQuiText)
 		draw_set_halign(1)
@@ -368,8 +407,23 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 function QuiStaticTextButton(Caption, X, Y, Pred, Anchx, Anchy): QuiEntry(true, true) constructor {
 }
 
-/// @function Qui_prefix(child, x, y)
-function Qui_prefix(Item, X, Y) {
+/// @function Qui_control(child)
+function Qui_control(Item) {
+	with Item {
+		if !enabled or paused or !visible or size_x == 0 or size_y == 0
+			return undefined
+
+		if !is_undefined(parent) {
+			return Qui_control(parent)
+		}
+	}
+}
+
+/// @function Qui_prefix(child, x, y, focus_level)
+function Qui_prefix(Item, X, Y, FcLvl) {
+	if is_undefined(Item)
+		return undefined
+
 	with Item {
 		if !enabled or !visible or size_x == 0 or size_y == 0
 			return undefined
@@ -379,17 +433,19 @@ function Qui_prefix(Item, X, Y) {
 		Sy = drawn_y
 		Lx = Sx + size_x
 		Ly = Sy + size_y
+		focus_level = FcLvl
 		if tr_state != QUI_STATES.IDLE
 			return undefined
 
 		if point_in_rectangle(global.qui_mx, global.qui_my, Sx, Sy, Lx, Ly) {
 			var Picked = undefined, Result = undefined
+			//if interactive focus()
 			if expandable {
 				var i, Child
 				with children_list {
 					for (i = get_size(); 0 < i; --i) {
 						Child = at(i - 1)
-						Result = Qui_prefix(Child, Sx, Sy)
+						Result = Qui_prefix(Child, Sx, Sy, FcLvl + 1)
 						if !is_undefined(Result) and is_undefined(Picked) {
 							Picked = Result
 						}
@@ -408,20 +464,27 @@ function Qui_prefix(Item, X, Y) {
 
 /// @function Qui_update(child, x, y)
 function Qui_update(Item, X, Y) {
+	if is_undefined(Item)
+		exit
+
 	with Item {
-		if !enabled or paused // does not interact, but interrupts the cursor
+		if !enabled or !visible // does not interact, but interrupts the cursor
 			exit
 
 		var Sx = X + x - size_x * anchor_x
 		var Sy = Y + y - size_y * anchor_y
 		drawn_x = Sx
 		drawn_y = Sy
+		focus_level = 0
+
+		if paused
+			exit
+
 		if tr_state == QUI_STATES.OPENING {
 			if tr_count < QUI_TR_PERIOD {
 				tr_count++
 			} else {
 				tr_state = QUI_STATES.IDLE
-				tr_count = 0
 			}
 		} else if tr_state == QUI_STATES.CLOSING {
 			if tr_count < QUI_TR_PERIOD {
@@ -434,9 +497,6 @@ function Qui_update(Item, X, Y) {
 					close()
 			}
 		}
-
-		if !visible
-			exit
 
 		if expandable {
 			var i, Child
@@ -477,16 +537,20 @@ function Qui_draw(Item) {
 	}
 }
 
-/// @function Qui_awake(item)
-function Qui_awake(Item) {
-	with global.qui_master {
+/// @function Qui_awake(host, item)
+function Qui_awake(Host, Item) {
+	with Host {
 		add_entry(Item)
 	}
+	return Item
 }
 
 /// @function Qui_open(item)
 function Qui_open(Item) {
-	Item.tr_state = QUI_STATES.OPENING
+	with Item {
+		tr_state = QUI_STATES.OPENING
+		tr_count = 0
+	}
 }
 
 /// @function Qui_close(item)
@@ -496,6 +560,19 @@ function Qui_close(Item) {
 
 /// @function Qui_destroy(item)
 function Qui_destroy(Item) {
-	Item.destroy()
+	with Item {
+		tr_state = QUI_STATES.STOP
+		enabled = false
+		expandable = false
+		clear_itself()
+		delete children_list
+
+		if !is_undefined(parent) {
+			with parent.children_list {
+				remove(0, get_size(), Item)
+			}
+		}
+	}
+
 	delete Item
 }
