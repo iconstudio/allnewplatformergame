@@ -24,7 +24,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Generator",
-    "path": "folders/Generator.yy",
+    "path": "folders/Scripts/Generator.yy",
   },
   "resourceVersion": "1.0",
   "name": "oRandomExample",
