@@ -1,6 +1,6 @@
 {
   "ConfigValues": {
-    "Desktop": {"option_windows_use_x64":"true","option_windows_disable_sandbox":"true","option_windows_steam_use_alternative_launcher":"true","option_windows_enable_steam":"false","option_windows_interpolate_pixels":"false","option_windows_display_cursor":"true",},
+    "Desktop": {"option_windows_use_x64":"true","option_windows_disable_sandbox":"true","option_windows_steam_use_alternative_launcher":"true","option_windows_enable_steam":"false","option_windows_interpolate_pixels":"true","option_windows_display_cursor":"true",},
   },
   "option_windows_display_name": "Created with GameMaker Studio 2",
   "option_windows_executable_name": "${project_name}.exe",
