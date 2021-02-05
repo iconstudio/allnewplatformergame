@@ -164,9 +164,7 @@ global.GAME_LAYERS = [
 ]
 #endregion
 
-#region Graphics
-surface_depth_disable(false)
-
+#region Resoultions
 #macro PORT_SCALE 2
 #macro PORT_WIDTH 640
 #macro PORT_HEIGHT 640
@@ -191,10 +189,21 @@ for (i = room_first; room_exists(i); i = room_next(i)) {
 }
 room_set_width(roomGame, GAME_BOARD_NUMBER_S * XELL_WIDTH)
 room_set_height(roomGame, GAME_BOARD_NUMBER_S * XELL_HEIGHT)
+#endregion
+
+#region Graphics
+surface_depth_disable(false)
 
 application_surface_enable(true)
 application_surface_draw_enable(false)
 surface_resize(application_surface, XELL_WIDTH, XELL_HEIGHT)
+
+global.shGlow_sample = shader_get_sampler_index(shaderGlow, "s_glow_surface")
+global.shGlow_pw = shader_get_uniform(shaderGlow, "u_glow_blur_sigma")
+global.shGlow_resolution = shader_get_uniform(shaderGlow, "u_glow_resolution")
+shader_set(shaderGlow)
+
+shader_reset()
 #endregion
 
 randomize()

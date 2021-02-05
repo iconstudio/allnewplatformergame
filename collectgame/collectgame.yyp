@@ -1,6 +1,7 @@
 {
   "resources": [
     {"id":{"name":"oEditor","path":"objects/oEditor/oEditor.yy",},"order":0,},
+    {"id":{"name":"shaderGlow","path":"shaders/shaderGlow/shaderGlow.yy",},"order":12,},
     {"id":{"name":"oIgnore","path":"objects/oIgnore/oIgnore.yy",},"order":1,},
     {"id":{"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},"order":17,},
     {"id":{"name":"sWindowSplices","path":"sprites/sWindowSplices/sWindowSplices.yy",},"order":5,},
@@ -103,12 +104,12 @@
     {"folderPath":"folders/Sprites.yy","order":5,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sounds.yy","order":13,"resourceVersion":"1.0","name":"Sounds","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts.yy","order":0,"resourceVersion":"1.0","name":"Scripts","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Shaders.yy","order":12,"resourceVersion":"1.0","name":"Shaders","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Shaders.yy","order":11,"resourceVersion":"1.0","name":"Shaders","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects.yy","order":7,"resourceVersion":"1.0","name":"Objects","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Rooms.yy","order":11,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Rooms.yy","order":10,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/System.yy","order":1,"resourceVersion":"1.0","name":"System","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Blocks.yy","order":8,"resourceVersion":"1.0","name":"Blocks","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/ChunkEditor.yy","order":10,"resourceVersion":"1.0","name":"ChunkEditor","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/ChunkEditor.yy","order":9,"resourceVersion":"1.0","name":"ChunkEditor","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Tile Sets.yy","order":14,"resourceVersion":"1.0","name":"Tile Sets","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Tiles.yy","order":6,"resourceVersion":"1.0","name":"Tiles","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Generator.yy","order":0,"resourceVersion":"1.0","name":"Generator","tags":[],"resourceType":"GMFolder",},
