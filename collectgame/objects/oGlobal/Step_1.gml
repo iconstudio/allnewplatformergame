@@ -11,47 +11,43 @@ if global.qui_my != cgy {
 	global.qui_io_last = QUI_IO_STATES.MOUSE
 }
 
-var check_prev = device_mouse_check_button(0, mb_left)
-if global.io_mouse_left != check_prev {
-	global.io_mouse_left = check_prev
+var check_key = device_mouse_check_button_pressed(0, mb_left)
+if check_key {
+	if configuration == "Mobile"
+		global.qui_io_last = QUI_IO_STATES.MOUSE
+}
+global.io_mouse_pressed_left = check_key
+
+var check_prev = check_key
+check_key = device_mouse_check_button(0, mb_left)
+if check_key and check_prev
 	global.qui_io_last = QUI_IO_STATES.MOUSE
-}
+global.io_mouse_left = check_key
 
-check_prev = device_mouse_check_button_pressed(0, mb_left)
-if global.io_mouse_pressed_left != check_prev {
-	global.io_mouse_pressed_left = check_prev
+check_key = device_mouse_check_button_released(0, mb_left)
+if check_key
 	global.qui_io_last = QUI_IO_STATES.MOUSE
-}
+global.io_mouse_released_left = check_key
 
-check_prev = device_mouse_check_button_released(0, mb_left)
-if global.io_mouse_released_left != check_prev {
-	global.io_mouse_released_left = check_prev
-	global.qui_io_last = QUI_IO_STATES.MOUSE
-}
-
-check_prev = keyboard_check(vk_left)
-if global.io_left != check_prev {
-	global.io_left = check_prev
+check_key = keyboard_check(vk_left)
+if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
-}
+global.io_left = check_key
 
-check_prev = keyboard_check(vk_right)
-if global.io_right != check_prev {
-	global.io_right = check_prev
+check_key = keyboard_check(vk_right)
+if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
-}
+global.io_right = check_key
 
-check_prev = keyboard_check(vk_up)
-if global.io_up != check_prev {
-	global.io_up = check_prev
+check_key = keyboard_check(vk_up)
+if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
-}
+global.io_up = check_key
 
-check_prev = keyboard_check(vk_down)
-if global.io_down != check_prev {
-	global.io_down = check_prev
+check_key = keyboard_check(vk_down)
+if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
-}
+global.io_down = check_key
 
 global.io_pressed_left = keyboard_check_pressed(vk_left) or keyboard_check_pressed(vk_numpad4)
 global.io_pressed_right = keyboard_check_pressed(vk_right) or keyboard_check_pressed(vk_numpad6)

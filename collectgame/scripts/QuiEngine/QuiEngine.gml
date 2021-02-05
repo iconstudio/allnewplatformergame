@@ -40,10 +40,12 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 
 	// predicates
 	static close = undefined
+	static control = undefined
 	static destroy = undefined
 	static update = undefined
 	static draw = undefined
 
+	// families
 	parent = undefined
 	child_focused = undefined
 	child_first = undefined
@@ -192,8 +194,10 @@ function show_qui_popup(Title, Description) {
 	OkButton.predicate = method(OkButton, function() { Qui_close(parent) })
 	var Titlebar = new QuiTitlebar(Title, Panel, MaxWidth)
 	Panel.make_then(OkButton, Content, Titlebar)
+	Qui_awake(global.qui_master, Panel)
+	Panel.focus()
 
-	return Qui_awake(global.qui_master, Panel)
+	return Panel
 }
 
 /// @function QuiTitlebar(title, window, width)
@@ -332,8 +336,10 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 		if global.qui_io_last == QUI_IO_STATES.MOUSE {
 			if self == global.qui_cursor {
 				if !pressed {
-					if global.io_mouse_pressed_left
+					if global.io_mouse_pressed_left {
 						pressed = true
+						focus()
+					}
 				} else { // pressed
 					if global.io_mouse_released_left {
 						if !is_undefined(predicate)
@@ -343,29 +349,40 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 				}
 				if global.io_pressed_back
 					pressed = false
-				if !pressed
-					phase = 1
-				else
+				if pressed
 					phase = 2
+				else
+					phase = 1
 			} else {
 				if global.io_pressed_back
 					pressed = false
-				if pressed and !global.io_mouse_left
+				if pressed and ((!global.io_mouse_left and configuration == "Mobile") or global.io_mouse_released_left)
 					pressed = false
 
-				if !pressed
-					phase = 0
-				else
+				if pressed or (parent.child_focused == self)
 					phase = 3
+				else
+					phase = 0
 			}
-		} else {
+		} else if global.qui_focused == self {
 			var check = (global.io_pressed_right or global.io_pressed_down) - (global.io_pressed_left or global.io_pressed_up)
 			if check == 1 {
 				if !is_undefined(brother_next)
 					brother_next.focus()
+				pressed = false
+				phase = 0
 			} else if check == -1 {
 				if !is_undefined(brother_before)
 					brother_before.focus()
+				pressed = false
+				phase = 0
+			} else {
+				phase = 1
+				if global.io_pressed_yes {
+					if !is_undefined(predicate)
+						predicate()
+					phase = 2
+				}
 			}
 		}
 	}
@@ -403,19 +420,25 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 	}
 }
 
-/// @function QuiStaticTextButton(caption, x, y, predicate, [ax=0], [ay=0])
-function QuiStaticTextButton(Caption, X, Y, Pred, Anchx, Anchy): QuiEntry(true, true) constructor {
-}
-
 /// @function Qui_control(child)
 function Qui_control(Item) {
 	with Item {
 		if !enabled or paused or !visible or size_x == 0 or size_y == 0
 			return undefined
 
-		if !is_undefined(parent) {
-			return Qui_control(parent)
+		if expandable {
+			var i, Child, Seek = Item.child_focused
+			with children_list {
+				for (i = 0; i  < get_size(); ++i) {
+					Child = at(i)
+					if Seek == Child {
+						return Qui_control(Child)
+						break
+					}
+				}
+			}
 		}
+		return self
 	}
 }
 
@@ -439,7 +462,6 @@ function Qui_prefix(Item, X, Y, FcLvl) {
 
 		if point_in_rectangle(global.qui_mx, global.qui_my, Sx, Sy, Lx, Ly) {
 			var Picked = undefined, Result = undefined
-			//if interactive focus()
 			if expandable {
 				var i, Child
 				with children_list {
