@@ -165,6 +165,8 @@ global.GAME_LAYERS = [
 #endregion
 
 #region Graphics
+surface_depth_disable(false)
+
 #macro PORT_SCALE 2
 #macro PORT_WIDTH 640
 #macro PORT_HEIGHT 640
