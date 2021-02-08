@@ -359,7 +359,7 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 				if pressed and ((!global.io_mouse_left and configuration == "Mobile") or global.io_mouse_released_left)
 					pressed = false
 
-				if pressed or (parent.child_focused == self)
+				if pressed
 					phase = 3
 				else
 					phase = 0
@@ -384,6 +384,8 @@ function QuiButton(Caption, X, Y): QuiEntry(false, true) constructor {
 					phase = 2
 				}
 			}
+		} else {
+			phase = 0
 		}
 	}
 

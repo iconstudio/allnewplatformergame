@@ -49,10 +49,10 @@ if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 global.io_down = check_key
 
-global.io_pressed_left = keyboard_check_pressed(vk_left) or keyboard_check_pressed(vk_numpad4)
-global.io_pressed_right = keyboard_check_pressed(vk_right) or keyboard_check_pressed(vk_numpad6)
-global.io_pressed_up = keyboard_check_pressed(vk_up) or keyboard_check_pressed(vk_numpad8)
-global.io_pressed_down = keyboard_check_pressed(vk_down) or keyboard_check_pressed(vk_numpad2)
+global.io_pressed_left = keyboard_check_pressed(vk_left)
+global.io_pressed_right = keyboard_check_pressed(vk_right)
+global.io_pressed_up = keyboard_check_pressed(vk_up)
+global.io_pressed_down = keyboard_check_pressed(vk_down)
 if keyboard_check_pressed(vk_numpad1) {
 	global.io_pressed_left = true
 	global.io_pressed_down = true
@@ -67,13 +67,21 @@ if keyboard_check_pressed(vk_numpad1) {
 	global.io_pressed_up = true
 }
 
-global.io_pressed_jump = keyboard_check_pressed(vk_space)
+var check_space = keyboard_check_pressed(vk_space)
+
+global.io_pressed_x = keyboard_check_pressed(key_x)
+global.io_pressed_c = keyboard_check_pressed(key_c)
+
+global.io_pressed_jump = check_space
 global.io_released_jump = keyboard_check_released(vk_space)
 
-var check_comma = keyboard_check_pressed(key_comma)
-var check_dot = keyboard_check_pressed(key_dot)
+global.io_pressed_menu = keyboard_check_pressed(vk_escape)
 
-global.io_pressed_menu = keyboard_check_pressed(vk_escape) or keyboard_check_pressed(vk_backspace)
-global.io_pressed_yes = keyboard_check_pressed(vk_enter) or keyboard_check_pressed(vk_space) or check_comma or global.io_pressed_x
-global.io_pressed_no = keyboard_check_pressed(vk_escape) or keyboard_check_pressed(vk_backspace) or check_dot or global.io_pressed_c
+global.io_yes = keyboard_check(vk_enter)
+check_key = keyboard_check_pressed(vk_enter)
+if check_key
+	global.qui_io_last = QUI_IO_STATES.KEYBOARD
+global.io_pressed_yes = check_key
+
+global.io_pressed_no = keyboard_check_pressed(vk_escape)
 global.io_pressed_back = global.io_pressed_no

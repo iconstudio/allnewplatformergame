@@ -167,9 +167,9 @@ global.GAME_LAYERS = [
 #region Resoultions
 #macro PORT_SCALE 2
 #macro PORT_WIDTH 640
-#macro PORT_HEIGHT 640
+#macro PORT_HEIGHT 480
 #macro APP_WIDTH 960
-#macro APP_HEIGHT 960
+#macro APP_HEIGHT 720
 window_set_size(APP_WIDTH, APP_HEIGHT)
 global.app_position = [
 	(APP_WIDTH - PORT_WIDTH) * 0.5,

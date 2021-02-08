@@ -51,6 +51,7 @@ global.io_pressed_skill_4 = false
 global.io_pressed_status = false
 global.io_pressed_inventory = false
 
+global.io_yes = false
 global.io_pressed_menu = false
 global.io_pressed_yes = false
 global.io_pressed_no = false
@@ -67,3 +68,4 @@ globalvar view_x, view_y;
 global.player_x = 0
 global.player_y = 0
 
+event_user(0)
