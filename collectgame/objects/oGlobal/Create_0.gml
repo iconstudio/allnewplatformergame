@@ -2,6 +2,11 @@
 global.qui_master = new QuiEntry(true)
 global.qui_master.tr_state = QUI_STATES.IDLE
 global.qui_master.set_size(GUI_WIDTH, GUI_HEIGHT)
+with global.qui_master {
+	close = function() {
+		game_end()
+	}
+}
 
 global.qui_mx = 0
 global.qui_my = 0

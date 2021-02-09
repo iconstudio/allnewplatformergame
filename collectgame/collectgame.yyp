@@ -1,6 +1,7 @@
 {
   "resources": [
     {"id":{"name":"oEditor","path":"objects/oEditor/oEditor.yy",},"order":0,},
+    {"id":{"name":"MainMenu","path":"scripts/MainMenu/MainMenu.yy",},"order":0,},
     {"id":{"name":"shaderGlow","path":"shaders/shaderGlow/shaderGlow.yy",},"order":12,},
     {"id":{"name":"oIgnore","path":"objects/oIgnore/oIgnore.yy",},"order":1,},
     {"id":{"name":"sDoorExit","path":"sprites/sDoorExit/sDoorExit.yy",},"order":17,},

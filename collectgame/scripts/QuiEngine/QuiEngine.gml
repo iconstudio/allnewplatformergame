@@ -5,7 +5,7 @@
 #macro QUI_TITLEBAR_MARGIN 8
 #macro QUI_TITLEBAR_HEIGHT 40
 #macro QUI_WINDOW_SHRINK 5
-enum QUI_STATES { STOP = -1, OPENING, IDLE, CLOSING }
+enum QUI_STATES { STOP = -1, AWAIT, OPENING, IDLE, CLOSING }
 	
 enum QUI_IO_STATES { NOTHING = -1, KEYBOARD, MOUSE }
 
@@ -15,6 +15,7 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 
 	tr_state = QUI_STATES.OPENING
 	tr_count = 0
+	tr_period = QUI_TR_PERIOD
 
 	// logic
 	expandable = CanExpand
@@ -73,8 +74,8 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 					}
 					child_last = Last_entry
 
-					if is_undefined(child_focused)
-						child_focused = Last_entry
+					//if is_undefined(child_focused)
+					//	child_focused = Last_entry
 				}
 				Last_entry.parent = self
 				children_list.push_back(Last_entry)
@@ -92,8 +93,8 @@ function QuiEntry(CanExpand, CanInteract) constructor {
 				}
 				child_last = Last_entry
 
-				if is_undefined(child_focused)
-					child_focused = Last_entry
+				//if is_undefined(child_focused)
+				//	child_focused = Last_entry
 			}
 			Last_entry.parent = self
 			children_list.push_back(Last_entry)
@@ -458,7 +459,7 @@ function Qui_prefix(Item, X, Y, FcLvl) {
 		Lx = Sx + size_x
 		Ly = Sy + size_y
 		focus_level = FcLvl
-		if tr_state != QUI_STATES.IDLE
+		if tr_state == QUI_STATES.OPENING or tr_state == QUI_STATES.CLOSING or tr_state == QUI_STATES.STOP
 			return undefined
 
 		if point_in_rectangle(global.qui_mx, global.qui_my, Sx, Sy, Lx, Ly) {
@@ -504,13 +505,13 @@ function Qui_update(Item, X, Y) {
 			exit
 
 		if tr_state == QUI_STATES.OPENING {
-			if tr_count < QUI_TR_PERIOD {
+			if tr_count < tr_period {
 				tr_count++
 			} else {
 				tr_state = QUI_STATES.IDLE
 			}
 		} else if tr_state == QUI_STATES.CLOSING {
-			if tr_count < QUI_TR_PERIOD {
+			if 0 < tr_count {
 				tr_count--
 			} else {
 				tr_count = 0
