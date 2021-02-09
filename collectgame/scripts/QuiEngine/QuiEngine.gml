@@ -435,7 +435,6 @@ function Qui_control(Item) {
 					Child = at(i)
 					if Seek == Child {
 						return Qui_control(Child)
-						break
 					}
 				}
 			}
