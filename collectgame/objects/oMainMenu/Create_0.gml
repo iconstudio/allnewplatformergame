@@ -4,6 +4,28 @@ global.main_menu_id = id
 event_user(0)
 event_user(1)
 event_user(2)
+
+menu_raw = [
+	["Start"],
+	["Journey"],
+	["Setting"],
+	["Exit"],
+]
+menu_count = array_length(menu_raw)
+menu_item_width = GUI_WIDTH / menu_count
+menu_item_height = GUI_HEIGHT * 0.8
+menu_y = (GUI_HEIGHT - menu_item_height) * 0.5
+
+var i, Item, Caption, Entry
+for (i = 0; i < menu_count; ++i) {
+	Item = menu_raw[i]
+	Caption = Item[0]
+
+	Entry = new MainMenuSlideshow(Caption, -1, i * menu_item_width, other.menu_y)
+	Qui_awake(global.qui_master, Entry)
+}
+
+
 /*
 page_main = new MainEntryPage()
 Qui_awake(global.qui_master, page_main)
