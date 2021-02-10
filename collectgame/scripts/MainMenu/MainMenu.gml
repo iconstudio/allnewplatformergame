@@ -5,6 +5,22 @@
 #macro MAIN_MENU_CONTENT_W (GUI_WIDTH - MAIN_MENU_W)
 #macro MAIN_MENU_Y (GUI_HEIGHT - MAIN_MENU_H) * 0.5
 
+
+/// @function MainMenuRaw(expandable, caption, predicate)
+function MainMenuRaw(CanExpand, Caption, Pred) constructor {
+	children = CanExpand ? new List() : undefined
+	caption = Caption
+	predicate = Pred
+
+	static add_entry = function(item) {
+		if !is_undefined(children) {
+			children.push_back(item)
+			return item
+		}
+		return undefined
+	}
+}
+
 /// @function MainMenuInnerPage(slide)
 function MainMenuInnerPage(Slide): QuiContainer(0, 0, MAIN_MENU_CONTENT_W, MAIN_MENU_H) constructor {
 	tr_state = QUI_STATES.AWAIT

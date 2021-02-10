@@ -1,4 +1,23 @@
 /// @description Init the menu
+menu_raw = [
+	["Start", undefined, [
+		
+	]],
+
+	["Journey", undefined, [
+		
+	]],
+
+	["Setting", undefined, [
+		
+	]],
+
+	["Exit", undefined, [
+		
+	]]
+]
+
+/*
 var cx = 0
 menu_start = new MainMenuSlideshow("Start", -1, cx, MAIN_MENU_Y, true)
 with menu_start {
