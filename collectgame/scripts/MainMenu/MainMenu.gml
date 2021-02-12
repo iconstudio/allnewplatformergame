@@ -168,7 +168,7 @@ function MainMenuSlideshow(Caption, Logo, X, Y, ContentAvailable): QuiEntry(true
 		        break
 
 			case 1:
-				draw_splice(sButtonSplices, 5, 1, 0, 0, size_x, size_y)
+				draw_sprite_stretched_ext(sButtonSplices, 1, 0, 0, size_x, size_y, image_blend, Alpha)
 		        break
 
 			case 2:
@@ -176,7 +176,7 @@ function MainMenuSlideshow(Caption, Logo, X, Y, ContentAvailable): QuiEntry(true
 		        break
 
 			case 3:
-				draw_splice(sButtonSplices, 5, 3, 0, 0, size_x, size_y)
+				draw_sprite_stretched_ext(sButtonSplices, 2, 0, 0, size_x, size_y, image_blend, Alpha)
 		        break
 
 			default:

@@ -55,7 +55,6 @@
     {"id":{"name":"oInit","path":"objects/oInit/oInit.yy",},"order":0,},
     {"id":{"name":"sTagEye","path":"sprites/sTagEye/sTagEye.yy",},"order":13,},
     {"id":{"name":"oPlatform","path":"objects/oPlatform/oPlatform.yy",},"order":2,},
-    {"id":{"name":"Nineslice","path":"scripts/Nineslice/Nineslice.yy",},"order":1,},
     {"id":{"name":"sStone","path":"sprites/sStone/sStone.yy",},"order":21,},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},"order":3,},
     {"id":{"name":"Physics","path":"scripts/Physics/Physics.yy",},"order":3,},
@@ -127,7 +126,7 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "23.1.1.244",
+    "IDEVersion": "23.1.1.249",
   },
   "resourceVersion": "1.4",
   "name": "collectgame",
