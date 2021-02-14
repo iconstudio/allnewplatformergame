@@ -5,7 +5,7 @@ mode = GAME_MANAGER_MODES.READY
 game_state = READY
 
 test_maze = new MazeGenerator(GAME_BOARD_NUMBER_S, GAME_BOARD_NUMBER_S)
-test_maze.generate()
+//test_maze.generate()
 
 initial_seed = random_get_seed()
 maze = array_create(GAME_BOARD_NUMBER_S)

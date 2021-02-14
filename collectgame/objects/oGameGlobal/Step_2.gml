@@ -1,5 +1,7 @@
 /// @description Update
-if state == GAME_SCENE_STATES.GAME {
+exit
+
+if state == GAME_MANAGER_MODES.START_NEW_GAME {
 	var player_dir_x = 0, player_dir_y = 0
 	if global.player_x < view_x
 		player_dir_x = -1

@@ -1,7 +1,7 @@
 /// @description Test drawing
 draw_set_halign(1)
 draw_set_valign(1)
-
+/*
 var i, j, data, dx, dy, color, dist = 0
 for (j = 0; j < GAME_BOARD_NUMBER_S; ++j) {
 	for (i = 0; i < GAME_BOARD_NUMBER_S; ++i) {
