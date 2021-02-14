@@ -17,7 +17,7 @@ menu_raw = [
 	]]
 ]
 
-//*
+/*
 var cx = 0
 menu_start = new MainMenuSlideshow("Start", -1, cx, MAIN_MENU_Y, true)
 with menu_start {
