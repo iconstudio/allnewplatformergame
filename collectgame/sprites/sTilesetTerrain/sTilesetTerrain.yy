@@ -67,9 +67,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"bcffd895-8a6a-46c8-916f-251a862264e5","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "Tiles",
-    "path": "folders/Tiles.yy",
+    "name": "Blocks",
+    "path": "folders/Blocks.yy",
   },
   "resourceVersion": "1.0",
   "name": "sTilesetTerrain",

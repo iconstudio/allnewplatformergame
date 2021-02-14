@@ -146,9 +146,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"55979bfb-a44c-4db7-a2f5-ea76e142e49e","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Player",
+    "path": "folders/Player.yy",
   },
   "resourceVersion": "1.0",
   "name": "sPlayerMaskView",
