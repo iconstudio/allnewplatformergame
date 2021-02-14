@@ -68,14 +68,18 @@ if keyboard_check_pressed(vk_numpad1) {
 }
 
 var check_space = keyboard_check_pressed(vk_space)
+var check_escape = keyboard_check_pressed(vk_escape)
 
+global.io_z = keyboard_check(key_z)
 global.io_pressed_x = keyboard_check_pressed(key_x)
 global.io_pressed_c = keyboard_check_pressed(key_c)
 
+global.io_hook = global.io_z
+global.io_pressed_dash = global.io_pressed_x
 global.io_pressed_jump = check_space
 global.io_released_jump = keyboard_check_released(vk_space)
 
-global.io_pressed_menu = keyboard_check_pressed(vk_escape)
+global.io_pressed_menu = check_escape
 
 global.io_yes = keyboard_check(vk_enter)
 check_key = keyboard_check_pressed(vk_enter)
@@ -83,5 +87,5 @@ if check_key
 	global.qui_io_last = QUI_IO_STATES.KEYBOARD
 global.io_pressed_yes = check_key
 
-global.io_pressed_no = keyboard_check_pressed(vk_escape)
+global.io_pressed_no = check_escape
 global.io_pressed_back = global.io_pressed_no

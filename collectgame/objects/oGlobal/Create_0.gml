@@ -53,6 +53,9 @@ global.io_pressed_skill_2 = false
 global.io_pressed_skill_3 = false
 global.io_pressed_skill_4 = false
 
+global.io_hook = false
+global.io_pressed_hook = false
+global.io_pressed_dash = false
 global.io_pressed_status = false
 global.io_pressed_inventory = false
 
