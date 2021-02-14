@@ -55,7 +55,8 @@ globalvar FRICTION_HORIZONTAL, FRICTION_VERTICAL;
 #macro TERMINAL_SPEED_VERTICAL KILOMETER_PER_HOUR(140)
 #macro SLOPE_RATIO 0.7071067811 // sqrt(2) / 2
 #macro SLOPE_MOUNT_VALUE 3
-#macro COYOTE_GROUND_PERIOD seconds(0.07)
+#macro COYOTE_WALL_PERIOD seconds(0.05)
+#macro COYOTE_GROUND_PERIOD seconds(0.06)
 
 enum TERRAIN_TYPE {
 	GROUND = 0,
@@ -92,6 +93,18 @@ enum PHYSICS_MASS {
 #endregion
 
 #region Game
+enum ENTITY_STATES {
+	IDLE = 0, STUNNED = 90, DEAD = 99
+}
+
+enum PLAYER_ACTION_MODES {
+	IDLE, SPRING, LADDER, HANG
+}
+
+enum TAG_TYPES { CIRCLE, EYE, GLYPH, FIRE, DIAMOND }
+#endregion
+
+#region Game Logic
 enum GAME_MANAGER_MODES {
 	READY = 0,
 	START_NEW_GAME,
@@ -104,8 +117,6 @@ enum GAME_MANAGER_MODES {
 
 enum ROOM_CATEGORY { NOTHING = 0, NORMAL = 1, SHOP, VILLAGE, TOWN, LAIR, }
 
-enum TAG_TYPES { CIRCLE, EYE, GLYPH, FIRE, DIAMOND }
-
 enum BOARD_CELL_STATES { NOTHING = -1, DISABLED, ENABLED }
 
 enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99 }
@@ -114,10 +125,10 @@ enum BOARD_CELL_CATEGORIES { NOTHING = -1, NORMAL, TRAP, SHOP, LAIR, BORDER = 99
 #macro BLOCK_FINE_W 40
 #macro BLOCK_FINE_H 40
 #macro BLOCK_SIZE 16
-#macro BLOCK_W 20
-#macro BLOCK_H 20
-#macro XELL_WIDTH BLOCK_W * BLOCK_SIZE
-#macro XELL_HEIGHT BLOCK_H * BLOCK_SIZE
+#macro BLOCKS_H_NUMBER 20
+#macro BLOCKS_V_NUMBER 15
+#macro XELL_WIDTH BLOCKS_H_NUMBER * BLOCK_SIZE
+#macro XELL_HEIGHT BLOCKS_V_NUMBER * BLOCK_SIZE
 
 #macro GAME_BOARD_NUMBER_S 35
 #macro GAME_BOARD_NUMBER_H 17
@@ -165,15 +176,17 @@ global.GAME_LAYERS = [
 #endregion
 
 #region Resoultions
-#macro PORT_SCALE 2
-#macro PORT_WIDTH 640
-#macro PORT_HEIGHT 480
-#macro APP_WIDTH 960
-#macro APP_HEIGHT 720
+#macro VIEW_WIDTH 320
+#macro VIEW_HEIGHT 240
+#macro PORT_SCALE 1
+#macro PORT_WIDTH VIEW_WIDTH * PORT_SCALE
+#macro PORT_HEIGHT VIEW_WIDTH * PORT_SCALE
+#macro APP_WIDTH PORT_WIDTH * 1.5
+#macro APP_HEIGHT PORT_HEIGHT * 1.5
 window_set_size(APP_WIDTH, APP_HEIGHT)
 global.app_position = [
-	(APP_WIDTH - PORT_WIDTH) * 0.5,
-	(APP_HEIGHT - PORT_HEIGHT) * 0.25
+	PORT_WIDTH * 0.25, //(APP_WIDTH - PORT_WIDTH) * 0.5,
+	PORT_HEIGHT * 0.125 //APP_HEIGHT - PORT_HEIGHT) * 0.25
 ]
 
 #macro GUI_WIDTH APP_WIDTH
@@ -183,12 +196,12 @@ var i, cam
 for (i = room_first; room_exists(i); i = room_next(i)) {
 	room_set_view_enabled(i, true)
 
-	cam = camera_create_view(0, 0, XELL_WIDTH, XELL_HEIGHT, 0, oPlayer, -1, -1, XELL_WIDTH * 0.5, XELL_HEIGHT * 0.5)
+	cam = camera_create_view(0, 0, VIEW_WIDTH, VIEW_HEIGHT, 0, oPlayer, -1, -1, VIEW_WIDTH * 0.5, VIEW_HEIGHT * 0.5)
 	room_set_camera(i, 0, cam)
 	room_set_viewport(i, 0, true, 0, 0, PORT_WIDTH, PORT_HEIGHT)
 }
-room_set_width(roomGame, GAME_BOARD_NUMBER_S * XELL_WIDTH)
-room_set_height(roomGame, GAME_BOARD_NUMBER_S * XELL_HEIGHT)
+//room_set_width(roomGame, GAME_BOARD_NUMBER_S * XELL_WIDTH)
+//room_set_height(roomGame, GAME_BOARD_NUMBER_S * XELL_HEIGHT)
 #endregion
 
 #region Graphics

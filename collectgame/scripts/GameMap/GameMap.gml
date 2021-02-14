@@ -24,8 +24,8 @@ function xell() constructor {
 			if block_char == "\n" or block_char == " "
 				continue
 
-			cx = x + (i - floor(i / BLOCK_W) * BLOCK_W) * BLOCK_SIZE
-			cy = y + floor(i / BLOCK_W) * BLOCK_SIZE
+			cx = x + (i - floor(i / BLOCKS_H_NUMBER) * BLOCKS_H_NUMBER) * BLOCK_SIZE
+			cy = y + floor(i / BLOCKS_H_NUMBER) * BLOCK_SIZE
 		}
 	}
 
