@@ -44,18 +44,6 @@ if velocity_x != 0 {
 		img_xscale = move_dir
 }
 
-if 0 < wall_coyote_duation {
-	if --wall_coyote_duation < 0
-		wall_coyote_duation = 0
-}	
-
 if global.io_pressed_jump {
-	var condition = (grounded_state == TERRAIN_TYPE.GROUND)
-
-	var wall_side_check = false
-	condition |= (0 < wall_coyote_duation)
-
-	if condition and wall_coyote_duation == 0
-		jump()
+	jump()
 }
-

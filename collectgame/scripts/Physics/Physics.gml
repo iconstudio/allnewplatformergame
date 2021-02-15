@@ -12,7 +12,6 @@ function Physics() {
 	slope_mountable = true
 	ground_coyote_time = 0
 	ground_coyote_period = 0
-	wall_coyote_duation = 0
 
 	velocity_x = 0
 	velocity_y = 0
@@ -22,15 +21,14 @@ function Physics() {
 	function Physics_update() {
 		var CollideResult_x = NONE, Sign_x = sign(velocity_x)
 		if velocity_x != 0 {
-			if !slope_mountable {
+			//if !slope_mountable {
 				CollideResult_x = horizontal_precedure(velocity_x)
-			} else {
-				CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
-			}
+			//} else {
+			//	CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
+			//}
 
 			if CollideResult_x != NONE {
 				push()
-				wall_coyote_duation = COYOTE_WALL_PERIOD
 			}
 		}
 
@@ -56,9 +54,6 @@ function Physics() {
 			if velocity_y < TERMINAL_SPEED_VERTICAL
 				velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
 		}
-
-		if 0 < wall_coyote_duation
-			wall_coyote_duation--
 
 		if velocity_y != 0 {
 			var CollideResult = vertical_precedure(velocity_y)
@@ -214,23 +209,25 @@ function move_x(Vector) {
 	if 0 < Vector {
 		if Part != 0
 			move_contact_solid(0, Part)
-		if check_solid_horizontal(1)
-			return RIGHT
-
+		
 		Distance -= Part
 		if Distance != 0 and !check_solid_horizontal(Distance)
 			x += Distance
+
 		move_outside_solid(180, 1)
+		if check_solid_horizontal(1)
+			return RIGHT
 	} else {
 		if Part != 0
 			move_contact_solid(180, Part)
-		if check_solid_horizontal(-1)
-			return LEFT
 
 		Distance -= Part
 		if Distance != 0 and !check_solid_horizontal(-Distance)
 			x -= Distance
+
 		move_outside_solid(0, 1)
+		if check_solid_horizontal(-1)
+			return LEFT
 	}
 	return NONE
 }

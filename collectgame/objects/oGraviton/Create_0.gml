@@ -13,7 +13,7 @@ ceiling = function() {
 	if velocity_y < -POP_SPEED_VERTICAL
 		velocity_y = -POP_SPEED_VERTICAL
 	else
-		velocity_y *= 0.9
+		velocity_y *= 0.85
 	y = floor(y)
 	move_outside_solid(270, -1)
 }
