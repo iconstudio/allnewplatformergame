@@ -3,7 +3,7 @@ switch configuration {
 	case "Default":
 	case "Desktop":
 		window_center()
-		window_set_position(window_get_x(), 40)
+		//window_set_position(window_get_x(), 40)
 	break
 
 	default:

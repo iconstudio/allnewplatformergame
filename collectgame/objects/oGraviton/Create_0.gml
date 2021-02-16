@@ -22,7 +22,7 @@ ceiling = function() {
 thud = function() {
 	velocity_y = 0
 	y = floor(y)
-	move_outside_solid(90, -1)
+	//move_outside_solid(90, -1)
 }
 
 actions = []
