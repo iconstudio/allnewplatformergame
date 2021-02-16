@@ -5,50 +5,12 @@ function seconds(Time) {
 	return (Time) * SECOND_TO_STEP
 }
 
+/// @function make_speed(speed)
+function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
+
 /// @function duet
 function duet(condition, value_true, value_false) {
 	return condition ? value_true : value_false
-}
-
-/// @function draw_splice(sprite, border, index, x, y, width, height)
-function draw_splice(Sprite, Border, Ind, X, Y, Width, Height) {
-	if Width == 0 or Height == 0
-		exit
-
-	var bordersize = Border / sprite_get_width(Sprite)
-	var x1 = X
-	var x2 = X + Border
-	var x3 = X + Width - Border
-	var x4 = X + Width
-	var y1 = Y
-	var y2 = Y + Border
-	var y3 = Y + Height - Border
-	var y4 = Y + Height
-
-	draw_primitive_begin_texture(pr_trianglestrip, sprite_get_texture(Sprite, Ind))
-	draw_vertex_texture(x1, y1, 0, 0)
-	draw_vertex_texture(x1, y2, 0, bordersize)
-	draw_vertex_texture(x2, y1, bordersize, 0)
-	draw_vertex_texture(x2, y2, bordersize, bordersize)
-	draw_vertex_texture(x3, y1, 1 - bordersize, 0)
-	draw_vertex_texture(x3, y2, 1 - bordersize, bordersize)
-	draw_vertex_texture(x4, y1, 1, 0)
-	draw_vertex_texture(x4, y2, 1, bordersize)
-	draw_vertex_texture(x4, y3, 1, 1 - bordersize)
-	draw_vertex_texture(x3, y2, 1 - bordersize, bordersize)
-	draw_vertex_texture(x3, y3, 1 - bordersize, 1 - bordersize)
-	draw_vertex_texture(x2, y2, bordersize, bordersize)
-	draw_vertex_texture(x2, y3, bordersize, 1 - bordersize)
-	draw_vertex_texture(x1, y2, 0, bordersize)
-	draw_vertex_texture(x1, y3, 0, 1 - bordersize)
-	draw_vertex_texture(x1, y4, 0, 1)
-	draw_vertex_texture(x2, y3, bordersize, 1 - bordersize)
-	draw_vertex_texture(x2, y4, bordersize, 1)
-	draw_vertex_texture(x3, y3, 1 - bordersize, 1 - bordersize)
-	draw_vertex_texture(x3, y4, 1 - bordersize, 1)
-	draw_vertex_texture(x4, y3, 1, 1 - bordersize)
-	draw_vertex_texture(x4, y4, 1, 1)
-	draw_primitive_end()
 }
 
 /// @function compare_equal(a, b)

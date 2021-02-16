@@ -9,14 +9,16 @@ Collection = ds_list_create()
 
 move_key_anchor = RIGHT
 move_dir = 0
-move_speed = KILOMETER_PER_HOUR(40)
+move_speed = KILOMETER_PER_HOUR(30)
 move_accel = KILOMETER_PER_HOUR(3)
+move_forbid_period = seconds(0.3)
+move_forbid_period_wall = seconds(0.5)
 move_forbid_time = 0
 
 jump_speed = KILOMETER_PER_HOUR(80)
-jump_speed_h_neutral = KILOMETER_PER_HOUR(30)
+jump_speed_h_neutral = KILOMETER_PER_HOUR(40)
 jump_speed_h_wall = KILOMETER_PER_HOUR(60)
-jump_period = seconds(0.05)
+jump_period = seconds(0.35)
 jump_time = jump_period
 
 jump = function() {
@@ -25,6 +27,8 @@ jump = function() {
 	Condition_Ground = (Grounded and action_status == PLAYER_ACTION_MODES.IDLE)
 	if Condition_Ground {
 		jump_on_ground()
+		//move_forbid_time = move_forbid_period
+		jump_time = jump_period
 		exit
 	}
 
@@ -33,6 +37,7 @@ jump = function() {
 	Condition_Neutral = (!Moving and Wall_in_front and action_status == PLAYER_ACTION_MODES.IDLE)
 	if Condition_Neutral {
 		jump_on_neutral()
+		jump_time = jump_period
 		exit
 	}
 
@@ -47,6 +52,8 @@ jump = function() {
 				img_xscale *= -1
 		}
 		jump_on_wall()
+		move_forbid_time = move_forbid_period_wall
+		jump_time = jump_period
 	}
 }
 

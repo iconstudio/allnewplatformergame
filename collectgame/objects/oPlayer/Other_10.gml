@@ -14,27 +14,31 @@ or (!global.io_pressed_left and global.io_right and was_right) {
 	move_key_anchor = RIGHT
 }
 
-var mover = move_key_anchor
-if mover != 0 {
-	if mover == LEFT {
-		if 0 < velocity_x and velocity_x < move_speed {
-			velocity_x = 0
-		} else if -move_speed < velocity_x {
-			velocity_x -= move_accel
-			if velocity_x < -move_speed
-				velocity_x = -move_speed
+if 0 < move_forbid_time {
+	move_forbid_time--
+} else {
+	var mover = move_key_anchor
+	if mover != 0 {
+		if mover == LEFT {
+			if 0 < velocity_x and velocity_x < move_speed {
+				velocity_x = 0
+			} else if -move_speed < velocity_x {
+				velocity_x -= move_accel
+				if velocity_x < -move_speed
+					velocity_x = -move_speed
+			}
+		} else { // RIGHT
+			if -move_speed < velocity_x and velocity_x < 0 {
+				velocity_x = 0
+			} else if velocity_x < move_speed {
+				velocity_x += move_accel
+				if move_speed < velocity_x
+					velocity_x = move_speed
+			}
 		}
-	} else { // RIGHT
-		if -move_speed < velocity_x and velocity_x < 0 {
-			velocity_x = 0
-		} else if velocity_x < move_speed {
-			velocity_x += move_accel
-			if move_speed < velocity_x
-				velocity_x = move_speed
-		}
-	}
-	move_dir = mover
-	friction_x = 0
+		move_dir = mover
+		friction_x = 0
+}
 }
 
 if velocity_x != 0 {
@@ -44,6 +48,8 @@ if velocity_x != 0 {
 		img_xscale = move_dir
 }
 
-if global.io_pressed_jump {
+if 0 < jump_time {
+	jump_time--
+} if global.io_pressed_jump {
 	jump()
 }

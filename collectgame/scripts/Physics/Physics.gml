@@ -112,9 +112,6 @@ function Physics() {
 	}
 }
 
-/// @function make_speed(speed)
-function make_speed(Speed) { return Speed * PIXEL_PER_STEP }
-
 /// @function check_solid_by(vector_x, vector_y)
 function check_solid_by(Distance_x, Distance_y) {
 	return place_meeting(x + Distance_x, y + Distance_y, oSolid)
@@ -163,9 +160,9 @@ function check_vertical(Distance) {
 function check_solid_box_horizontal(Vector_x, Vector_y) {
 	var result = false
 	if Vector_x < 0
-		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_top + Vector_y, bbox_left, bbox_bottom + Vector_y, oSolid, true, true))
+		result = (noone != collision_rectangle(bbox_left + Vector_x, bbox_top + Vector_y + 1, bbox_left, bbox_bottom + Vector_y, oSolid, true, true))
 	else
-		result = (noone != collision_rectangle(bbox_right, bbox_top + Vector_y, bbox_right + Vector_x, bbox_bottom + Vector_y, oSolid, true, true))
+		result = (noone != collision_rectangle(bbox_right, bbox_top + Vector_y + 1, bbox_right + Vector_x, bbox_bottom + Vector_y, oSolid, true, true))
 	return result
 }
 
@@ -205,29 +202,21 @@ function move_x(Vector) {
 		return NONE
 
 	var Distance = abs(Vector)
-	var Part = floor(Distance)
+	var Part = floor(Distance * 4) / 4
 	if 0 < Vector {
-		if Part != 0
+		if Part != 0 {
 			move_contact_solid(0, Part)
-		
-		Distance -= Part
-		if Distance != 0 and !check_solid_horizontal(Distance)
-			x += Distance
-
-		move_outside_solid(180, 1)
-		if check_solid_horizontal(1)
-			return RIGHT
+			move_outside_solid(180, 1)
+			if check_solid_horizontal(1)
+				return RIGHT
+		}
 	} else {
-		if Part != 0
+		if Part != 0 {
 			move_contact_solid(180, Part)
-
-		Distance -= Part
-		if Distance != 0 and !check_solid_horizontal(-Distance)
-			x -= Distance
-
-		move_outside_solid(0, 1)
-		if check_solid_horizontal(-1)
-			return LEFT
+			move_outside_solid(0, 1)
+			if check_solid_horizontal(-1)
+				return LEFT
+		}
 	}
 	return NONE
 }
@@ -238,27 +227,27 @@ function move_y(Vector) {
 		return NONE
 
 	var Distance = abs(Vector)
+	var Part = floor(Distance * 4) / 4
 	if 0 < Vector {
 		if check_block_box_vertical(0, Vector) {
-			for (; 1 <= Distance; Distance--) {
-				if check_vertical(1)
+			for (; 1 <= Part; Part--) {
+				if check_vertical(1) {
+					move_outside_solid(90, 1)
 					return DOWN
+				}
 				y++
 			}
-			Distance = frac(Distance)
-			if !check_vertical(Distance)
-				y += Distance
 			return DOWN
 		} else {
-			y += Vector
+			y += Part
 			return NONE
 		}
 	} else {
 		if check_solid_box_vertical(0, Vector) {
-			move_contact_solid(90, Distance)
+			move_contact_solid(90, Part)
 			return UP
 		} else {
-			y += Vector
+			y -= Part
 			return NONE
 		}
 	}
