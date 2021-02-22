@@ -103,9 +103,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"53ecf3c9-44ca-4083-b817-96c06dab7d12","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Traps",
+    "path": "folders/Traps.yy",
   },
   "resourceVersion": "1.0",
   "name": "sSpringUp",
