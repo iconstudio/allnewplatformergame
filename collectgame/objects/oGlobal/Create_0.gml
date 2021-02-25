@@ -28,6 +28,7 @@ global.io_pressed_right = false
 global.io_pressed_up = false
 global.io_pressed_down = false
 
+global.io_pressed_fulljump = false
 global.io_pressed_jump = false
 global.io_released_jump = false
 
