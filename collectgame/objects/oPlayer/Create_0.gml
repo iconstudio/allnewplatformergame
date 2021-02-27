@@ -2,22 +2,22 @@
 event_inherited()
 
 action_status = PLAYER_ACTION_MODES.IDLE
+action_time = 0
+action_spring_period = seconds(0.04)
 
 ground_coyote_period = COYOTE_GROUND_PERIOD
-
-Collection = ds_list_create()
 
 move_key_anchor = RIGHT
 move_dir = 0
 move_speed = KILOMETER_PER_HOUR(30)
 move_accel = KILOMETER_PER_HOUR(3)
-move_forbid_period = seconds(0.3)
-move_forbid_period_wall = seconds(0.5)
+move_forbid_period = seconds(0.01)
+move_forbid_period_wall = seconds(0.04)
 move_forbid_time = 0
 
 jump_speed = KILOMETER_PER_HOUR(80)
-jump_speed_h_neutral = KILOMETER_PER_HOUR(40)
-jump_speed_h_wall = KILOMETER_PER_HOUR(60)
+jump_speed_h_neutral = KILOMETER_PER_HOUR(20)
+jump_speed_h_wall = KILOMETER_PER_HOUR(40)
 jump_period = seconds(0.35)
 jump_time = jump_period
 
@@ -27,8 +27,6 @@ jump = function() {
 	Condition_Ground = (Grounded and action_status == PLAYER_ACTION_MODES.IDLE)
 	if Condition_Ground {
 		jump_on_ground()
-		//move_forbid_time = move_forbid_period
-		jump_time = jump_period
 		exit
 	}
 
@@ -37,11 +35,10 @@ jump = function() {
 	Condition_Neutral = (!Moving and Wall_in_front and action_status == PLAYER_ACTION_MODES.IDLE)
 	if Condition_Neutral {
 		jump_on_neutral()
-		jump_time = jump_period
 		exit
 	}
 
-	var Hanging = (action_status == PLAYER_ACTION_MODES.HANG or action_status == PLAYER_ACTION_MODES.LADDER)
+	var Hanging = (action_status == PLAYER_ACTION_MODES.HOOK or action_status == PLAYER_ACTION_MODES.LADDER)
 	var Wall_on_left = check_solid_horizontal(-1)
 	var Wall_on_right = check_solid_horizontal(1)
 	var Wall_check = (Wall_on_left or Wall_on_right)
@@ -53,7 +50,6 @@ jump = function() {
 		}
 		jump_on_wall()
 		move_forbid_time = move_forbid_period_wall
-		jump_time = jump_period
 	}
 }
 
