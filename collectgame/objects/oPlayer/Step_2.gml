@@ -1,4 +1,4 @@
-/// @description Update
+/// @description Update the coords
 event_inherited()
 
 global.player_x = x
