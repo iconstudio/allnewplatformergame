@@ -1,13 +1,6 @@
 function Physics() {
-	set_mass = function(Mass) {
-		mass = Mass
-		mass_ratio = (Mass + 2) * 0.25
-		slope_mountable = (Mass != PHYSICS_MASS.TINY)
-	}
-
 	grounded_state = TERRAIN_TYPE.GROUND
 	mass = PHYSICS_MASS.NORMAL
-	mass_ratio = 0.5
 
 	slope_mountable = true
 	ground_coyote_time = 0
@@ -17,97 +10,98 @@ function Physics() {
 	velocity_y = 0
 	friction_x = 0
 	friction_y = 0
+}
 
-	function Physics_update() {
-		var CollideResult_x = NONE, Sign_x = sign(velocity_x)
-		if velocity_x != 0 {
-			//if !slope_mountable {
-				CollideResult_x = horizontal_precedure(velocity_x)
-			//} else {
-			//	CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
-			//}
+/// @function Physics_update()
+function Physics_update() {
+	var CollideResult_x = NONE, Sign_x = sign(velocity_x)
+	if velocity_x != 0 {
+		//if !slope_mountable {
+			CollideResult_x = horizontal_precedure(velocity_x)
+		//} else {
+		//	CollideResult_x = horizontal_precedure(velocity_x, velocity_y)
+		//}
 
-			if CollideResult_x != NONE {
-				push()
-			}
+		if CollideResult_x != NONE {
+			push()
 		}
+	}
 
-		var check_bottom = check_vertical(1)
-		if !check_bottom {
-			if grounded_state != TERRAIN_TYPE.AIR {
-				if 0 < ground_coyote_period {
-					if ground_coyote_time < ground_coyote_period {
-						ground_coyote_time++
-					} else {
-						ground_coyote_time = 0
-						grounded_state = TERRAIN_TYPE.AIR
-					}
-			
+	var check_bottom = check_vertical(1)
+	if !check_bottom {
+		if grounded_state != TERRAIN_TYPE.AIR {
+			if 0 < ground_coyote_period {
+				if ground_coyote_time < ground_coyote_period {
+					ground_coyote_time++
 				} else {
+					ground_coyote_time = 0
 					grounded_state = TERRAIN_TYPE.AIR
 				}
-			}
-		} else {
-			grounded_state = TERRAIN_TYPE.GROUND
-		}
-		if grounded_state == TERRAIN_TYPE.AIR {
-			if velocity_y < TERMINAL_SPEED_VERTICAL
-				velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
-		}
-
-		if velocity_y != 0 {
-			var CollideResult = vertical_precedure(velocity_y)
-
-			if CollideResult == NONE {
-		
+			
 			} else {
-				if velocity_y < 0 {
-					ceiling()
-				} else {
-					thud()
-				}
+				grounded_state = TERRAIN_TYPE.AIR
 			}
 		}
-		if velocity_x != 0 {
-			try {
-				event_user(10)
-				if 0 != friction_x {
-					if 0 < velocity_x {
-						if friction_x < velocity_x
-							velocity_x = max(velocity_x - friction_x, 0)
-						else
-							velocity_x = 0
-					} else {
-						if friction_x < abs(velocity_x)
-							velocity_x = min(velocity_x + friction_x, 0)
-						else
-							velocity_x = 0
-					}
-				}
-			} catch(e) {
-				friction_x = 0
-			}
-		}
+	} else {
+		grounded_state = TERRAIN_TYPE.GROUND
+	}
+	if grounded_state == TERRAIN_TYPE.AIR {
+		if velocity_y < TERMINAL_SPEED_VERTICAL
+			velocity_y = min(velocity_y + GRAVITY, TERMINAL_SPEED_VERTICAL)
+	}
 
-		if velocity_y != 0 {
-			try {
-				friction_y = FRICTION_VERTICAL[grounded_state]
-				if 0 != friction_y {
-					if 0 < velocity_y and GRAVITY <= velocity_y {
-						if friction_y < velocity_y
-							velocity_y = max(velocity_y - friction_y, 0)
-						else
-							velocity_y = 0
-					} else if velocity_y < 0 {
-						if friction_y < abs(velocity_y)
-							velocity_y = min(velocity_y + friction_y, 0)
-						else
-							velocity_y = 0
-					}
-				}
-			} catch(e) {
-				friction_y = 0
+	if velocity_y != 0 {
+		var CollideResult = vertical_precedure(velocity_y)
+
+		if CollideResult == NONE {
+		
+		} else {
+			if velocity_y < 0 {
+				ceiling()
+			} else {
+				thud()
 			}
+		}
+	}
+	if velocity_x != 0 {
+		try {
+			event_user(10)
+			if 0 != friction_x {
+				if 0 < velocity_x {
+					if friction_x < velocity_x
+						velocity_x = max(velocity_x - friction_x, 0)
+					else
+						velocity_x = 0
+				} else {
+					if friction_x < abs(velocity_x)
+						velocity_x = min(velocity_x + friction_x, 0)
+					else
+						velocity_x = 0
+				}
+			}
+		} catch(e) {
+			friction_x = 0
+		}
+	}
+
+	if velocity_y != 0 {
+		try {
+			friction_y = FRICTION_VERTICAL[grounded_state]
+			if 0 != friction_y {
+				if 0 < velocity_y and GRAVITY <= velocity_y {
+					if friction_y < velocity_y
+						velocity_y = max(velocity_y - friction_y, 0)
+					else
+						velocity_y = 0
+				} else if velocity_y < 0 {
+					if friction_y < abs(velocity_y)
+						velocity_y = min(velocity_y + friction_y, 0)
+					else
+						velocity_y = 0
+				}
+			}
+		} catch(e) {
+			friction_y = 0
 		}
 	}
 }
