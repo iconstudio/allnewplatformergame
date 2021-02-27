@@ -28,7 +28,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Blocks",
-    "path": "folders/Blocks.yy",
+    "path": "folders/Tiles/Blocks.yy",
   },
   "resourceVersion": "1.0",
   "name": "oSolid",

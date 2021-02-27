@@ -69,8 +69,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "Blocks",
-    "path": "folders/Blocks.yy",
+    "name": "Tiles",
+    "path": "folders/Tiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sTilesetTerrain",
