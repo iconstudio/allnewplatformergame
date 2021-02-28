@@ -1,6 +1,8 @@
 /// @description Controls
 var Wall_on_left = check_solid_horizontal(-1)
 var Wall_on_right = check_solid_horizontal(1)
+var Wall_on_front = check_solid_horizontal(img_xscale)
+var Wall_on_back = check_solid_horizontal(-img_xscale)
 
 var was_left = move_key_anchor == LEFT, was_right = move_key_anchor == RIGHT
 move_key_anchor = NONE
@@ -19,10 +21,18 @@ or (!global.io_pressed_left and global.io_right and was_right) {
 
 switch action_status {
 	case PLAYER_ACTION_MODES.IDLE:
+		if global.io_hook and Wall_on_front {
+			action_status = PLAYER_ACTION_MODES.HOOK
+			img_xscale *= -1
+			velocity_x = 0
+			velocity_y = 0
+			break
+		}
+		
 		if velocity_x != 0 {
 			if 0 < move_forbid_time {
 				move_forbid_time--
-			} else {
+			} else if !Wall_on_front {
 				var mover = move_key_anchor
 				if mover != 0 {
 					if mover == LEFT {
@@ -64,6 +74,13 @@ switch action_status {
 	break
 
 	case PLAYER_ACTION_MODES.HOOK:
+		velocity_x = 0
+		velocity_y = 0
+		if !Wall_on_back {
+			action_status = PLAYER_ACTION_MODES.IDLE
+			break
+		}
+
 		if global.io_pressed_jump
 			jump()
 	break
