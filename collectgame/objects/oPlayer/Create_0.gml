@@ -9,13 +9,13 @@ ground_coyote_period = COYOTE_GROUND_PERIOD
 
 move_key_anchor = RIGHT
 move_dir = 0
-move_speed = KILOMETER_PER_HOUR(30)
+move_speed = KILOMETER_PER_HOUR(28)
 move_accel = KILOMETER_PER_HOUR(3)
 move_forbid_period = seconds(0.01)
 move_forbid_period_wall = seconds(0.04)
 move_forbid_time = 0
 
-jump_speed = KILOMETER_PER_HOUR(80)
+jump_speed = KILOMETER_PER_HOUR(65)
 jump_speed_h_neutral = KILOMETER_PER_HOUR(20)
 jump_speed_h_wall = KILOMETER_PER_HOUR(40)
 jump_period = seconds(0.35)
