@@ -1,4 +1,4 @@
- /// @description Initialization
+/// @description Initialization
 event_inherited()
 
 action_status = PLAYER_ACTION_MODES.IDLE
